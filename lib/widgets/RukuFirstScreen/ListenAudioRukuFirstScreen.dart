@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
+import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.dart';
+import 'package:surah_yaseen/widgets/RukuFirstScreen/ListenAudioRukuFirstAudioPlayer.dart';
+import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
+import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
+import '../../Colors/colors.dart';
+import '../../constants/app_strings.dart';
+import 'VersePageContainerArabicRukuFirst.dart';
+
+class ListenAudioRukuFirstScreen extends StatefulWidget {
+  const ListenAudioRukuFirstScreen({super.key});
+
+  @override
+  State<ListenAudioRukuFirstScreen> createState() => _ListenAudioScreenState();
+}
+
+class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
+  // Audio file path for Ruku 1
+
+  int _currentPage = 1;
+  final int _totalPages = 2; // Total number of pages for Arabic verses
+
+  final Map<int, String> yaseen_verses = {
+    0: "يس",
+    1: "وَالْقُرْآنِ الْحَكِيمِ",
+    2: "إِنَّكَ لَمِنَ الْمُرْسَلِينَ",
+    3: "عَلَىٰ صِرَاطٍ مُّسْتَقِيمٍ",
+    4: "تَنزِيلَ الْعَزِيزِ الرَّحِيمِ",
+    5: "لِتُنذِرَ قَوْمًا مَّا أُنذِرَ آبَاؤُهُمْ فَهُمْ غَافِلُونَ",
+    6: "لَقَدْ حَقَّ الْقَوْلُ عَلَىٰ أَكْثَرِهِمْ فَهُمْ لَا يُؤْمِنُونَ",
+    7: "إِنَّا جَعَلْنَا فِي أَعْنَاقِهِمْ أَغْلَالًا فَهِيَ إِلَى الْأَذْقَانِ فَهُم مُّقْمَحُونَ",
+    8: "وَجَعَلْنَا مِن بَيْنِ أَيْدِيهِمْ سَدًّا وَمِنْ خَلْفِهِمْ سَدًّا فَأَغْشَيْنَاهُمْ فَهُمْ لَا يُبْصِرُونَ",
+    9: "وَسَوَاءٌ عَلَيْهِمْ أَأَنذَرْتَهُمْ أَمْ لَمْ تُنذِرْهُمْ لَا يُؤْمِنُونَ",
+    10: "إِنَّمَا تُنذِرُ مَنِ اتَّبَعَ الذِّكْرَ وَخَشِيَ الرَّحْمَٰنَ بِالْغَيْبِ ۖ فَبَشِّرْهُ بِمَغْفِرَةٍ وَأَجْرٍ كَرِيمٍ",
+    11: "إِنَّا نَحْنُ نُحْيِي الْمَوْتَىٰ وَنَكْتُبُ مَا قَدَّمُوا وَآثَارَهُمْ ۚ وَكُلَّ شَيْءٍ أَحْصَيْنَاهُ فِي إِمَامٍ مُّبِينٍ",
+  };
+
+  void _handlePageChanged(int newPage) {
+    setState(() {
+      _currentPage = newPage;
+    });
+  }
+
+  void _goToNextPage() {
+    if (_currentPage < _totalPages) {
+      setState(() {
+        _currentPage++;
+      });
+    }
+  }
+
+  void _goToPrevPage() {
+    if (_currentPage > 1) {
+      setState(() {
+        _currentPage--;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: AppColors.lightColorSec,
+      body: Stack(
+        children: [
+          const TopBackground(),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+                vertical: 20,
+              ),
+              child: Column(
+                children: [
+                  const TopBarListenAudioScreen(),
+                  const DividerBar(),
+                  const SurahTitle(),
+                  const SizedBox(height: 90),
+
+                  ArabicVerseContainerRukuFirst(
+                    rukuNumber: 1, // Example ruku number
+                    startVerseIndex: 1 + ((_currentPage - 1) * 6), // Calculate start verse based on current page
+                    lastVerseIndex: 12, // Last verse index
+                    versesPerPage: 6, // Number of verses per page
+                    currentPage: _currentPage, // Current page from state
+                    totalPages: _totalPages, // Total number of pages
+                    isListeningAudio: true, // This is audio mode
+                    onPrevPage: _goToPrevPage, // Use the method to go to previous page
+                    onNextPage: _goToNextPage, // Use the method to go to next page
+                  ),
+                  SizedBox(height: 10),
+                  // Audio player at the bottom
+                  ListenAudioRukuFirstAudioPlayer(
+                    title: AppStrings.listenAudioScreenString.Rukutitle,
+                    verses: yaseen_verses,
+                    startVerse: 0,
+                    endVerse: 11,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

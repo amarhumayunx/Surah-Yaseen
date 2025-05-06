@@ -1,0 +1,35 @@
+flutter_native_splash:
+  # Set the background color for the splash screen
+  color: "#FFFFFF"  # Background color for both light and dark mode
+  image: assets/images/surahiconhd.png  # Splash screen image
+
+  # Dark mode configurations
+  color_dark: "#FFFFFF"  # Background color for dark mode
+  image_dark: assets/images/surahiconhd.png   # Image for dark mode
+
+  # Android 12+ specific configurations
+  android_12:
+    image: assets/images/surahiconhd.png   # Display the same image for Android 12+
+    color: "#FFFFFF"  # Background color for Android 12+
+    image_dark: assets/images/surahiconhd.png  # Use the same image for dark mode on Android 12+
+    color_dark: "#FFFFFF"  # Same background color for dark mode on Android 12+
+
+  # Platform-specific configurations
+  color_android: "#FFFFFF"  # Background color for standard Android
+  color_dark_android: "#FFFFFF"  # Dark mode background color for Android
+  color_ios: "#FFFFFF"  # Set background color to white for iOS
+  color_dark_ios: "#FFFFFF"  # Dark mode background color for iOS
+
+  # Adjust image fill settings
+  android_gravity: center  # Use 'center' or 'fill' to control image position on Android
+  ios_content_mode: center  # Set content mode to 'center' for iOS (center the image without scaling)
+  web_image_mode: center  # Ensure the image fills the screen on web
+
+  # Set screen orientation on Android
+  android_screen_orientation: portrait  # Portrait mode for Android
+
+  # Enable fullscreen splash on Android and iOS
+  fullscreen: true
+
+  # iOS-specific settings
+  ios: true  # Enable splash screen for iOS

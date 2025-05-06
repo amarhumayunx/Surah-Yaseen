@@ -1,0 +1,128 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
+import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.dart';
+import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
+import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
+import '../../Colors/colors.dart';
+import 'ListenAudioRukuFiveAudioPlayer.dart';
+import 'VersePageContainerArabicRukuFiveth.dart';
+
+class ListenAudioRukuFiveScreen extends StatefulWidget {
+  const ListenAudioRukuFiveScreen({super.key});
+
+  @override
+  State<ListenAudioRukuFiveScreen> createState() => _ListenAudioScreenState();
+}
+
+class _ListenAudioScreenState extends State<ListenAudioRukuFiveScreen> {
+  // Audio file path for Ruku 5
+  final String audioPath = 'asset:///assets/audio/surahyaseenrukufive68to83.mp3';
+
+  final Map<int, String> yaseen_verses = {
+    68: "وَمَنْ نُعَمِّرْهُ نُنَكِّسْهُ فِي الْخَلْقِ ۖ أَفَلَا يَعْقِلُونَ",
+    69: "وَمَا عَلَّمْنَاهُ الشِّعْرَ وَمَا يَنْبَغِي لَهُ ۚ إِنْ هُوَ إِلَّا ذِكْرٌ وَقُرْآنٌ مُبِينٌ",
+    70: "لِيُنْذِرَ مَنْ كَانَ حَيًّا وَيَحِقَّ الْقَوْلُ عَلَى الْكَافِرِينَ",
+    71: "أَوَلَمْ يَرَوْا أَنَّا خَلَقْنَا لَهُمْ مِمَّا عَمِلَتْ أَيْدِينَا أَنْعَامًا فَهُمْ لَهَا مَالِكُونَ",
+    72: "وَذَلَّلْنَاهَا لَهُمْ فَمِنْهَا رَكُوبُهُمْ وَمِنْهَا يَأْكُلُونَ",
+    73: "وَلَهُمْ فِيهَا مَنَافِعُ وَمَشَارِبُ ۖ أَفَلَا يَشْكُرُونَ",
+    74: "وَاتَّخَذُوا مِنْ دُونِ اللَّهِ آلِهَةً لَعَلَّهُمْ يُنْصَرُونَ",
+    75: "لَا يَسْتَطِيعُونَ نَصْرَهُمْ وَهُمْ لَهُمْ جُنْدٌ مُحْضَرُونَ",
+    76: "فَلَا يَحْزُنْكَ قَوْلُهُمْ ۘ إِنَّا نَعْلَمُ مَا يُسِرُّونَ وَمَا يُعْلِنُونَ",
+    77: "أَوَلَمْ يَرَ الْإِنْسَانُ أَنَّا خَلَقْنَاهُ مِنْ نُطْفَةٍ فَإِذَا هُوَ خَصِيمٌ مُبِينٌ",
+    78: "وَضَرَبَ لَنَا مَثَلًا وَنَسِيَ خَلْقَهُ ۖ قَالَ مَنْ يُحْيِي الْعِظَامَ وَهِيَ رَمِيمٌ",
+    79: "قُلْ يُحْيِيهَا الَّذِي أَنْشَأَهَا أَوَّلَ مَرَّةٍ ۖ وَهُوَ بِكُلِّ خَلْقٍ عَلِيمٌ",
+    80: "الَّذِي جَعَلَ لَكُمْ مِنَ الشَّجَرِ الْأَخْضَرِ نَارًا فَإِذَا أَنْتُمْ مِنْهُ تُوقِدُونَ",
+    81: "أَوَلَيْسَ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ بِقَادِرٍ عَلَىٰ أَنْ يَخْلُقَ مِثْلَهُمْ ۚ بَلَىٰ وَهُوَ الْخَلَّاقُ الْعَلِيمُ",
+    82: "إِنَّمَا أَمْرُهُ إِذَا أَرَادَ شَيْئًا أَنْ يَقُولَ لَهُ كُنْ فَيَكُونُ",
+    83: "فَسُبْحَانَ الَّذِي بِيَدِهِ مَلَكُوتُ كُلِّ شَيْءٍ وَإِلَيْهِ تُرْجَعُونَ"
+  };
+
+  int _currentPage = 1;
+  final int _totalPages = 3; // Total number of pages for Arabic verses
+
+  void _handlePageChanged(int newPage) {
+    setState(() {
+      _currentPage = newPage;
+    });
+  }
+
+  void _goToNextPage() {
+    if (_currentPage < _totalPages) {
+      setState(() {
+        _currentPage++;
+      });
+    }
+  }
+
+  void _goToPrevPage() {
+    if (_currentPage > 1) {
+      setState(() {
+        _currentPage--;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: AppColors.lightColorSec,
+      body: Stack(
+        children: [
+          const TopBackground(),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+                vertical: 20,
+              ),
+              child: Column(
+                children: [
+                  const TopBarListenAudioScreen(),
+                  const SizedBox(height: 20),
+                  const DividerBar(),
+                  const SurahTitle(),
+                  const SizedBox(height: 70),
+
+                  // Verse Container
+                  ArabicVerseContainerRukuFiveth(
+                    rukuNumber: 5, // Example ruku number
+                    startVerseIndex: 68 + ((_currentPage - 1) * 6), // Calculate start verse based on current page
+                    lastVerseIndex: 83, // Last verse index
+                    versesPerPage: 6, // Number of verses per page
+                    currentPage: _currentPage, // Current page from state
+                    totalPages: _totalPages, // Total number of pages
+                    isListeningAudio: true, // This is audio mode
+                    onPrevPage: _goToPrevPage, // Use the method to go to previous page
+                    onNextPage: _goToNextPage, // Use the method to go to next page
+                  ),
+                  SizedBox(height: 10),
+                  ListenAudioRukuFivethAudioPlayer(
+                    title: 'Ruku 5',
+                    verses: yaseen_verses,
+                    startVerse: 68,
+                    endVerse: 83,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
