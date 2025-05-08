@@ -18,8 +18,6 @@ class ListenAudioRukuFourthScreen extends StatefulWidget {
 
 class _ListenAudioScreenState extends State<ListenAudioRukuFourthScreen> {
 
-  final String audioPath = 'asset:///assets/audio/surahyaseenrukufour51to67.mp3';
-
   final Map<int, String> yaseen_verses = {
     51: "وَنُفِخَ فِي الصُّورِ فَإِذَا هُمْ مِنَ الْأَجْدَاثِ إِلَىٰ رَبِّهِمْ يَنْسِلُونَ",
     52: "قَالُوا يَا وَيْلَنَا مَنْ بَعَثَنَا مِنْ مَرْقَدِنَا ۜ ۗ هَٰذَا مَا وَعَدَ الرَّحْمَٰنُ وَصَدَقَ الْمُرْسَلُونَ",
@@ -42,6 +40,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFourthScreen> {
 
   int _currentPage = 1;
   final int _totalPages = 3; // Total number of pages for Arabic verses
+  int _activeVerseIndex = -1;
 
   void _handlePageChanged(int newPage) {
     setState(() {
@@ -63,6 +62,21 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFourthScreen> {
         _currentPage--;
       });
     }
+  }
+
+  // New method to handle active verse changes from audio player
+  void _handleActiveVerseChanged(int verseIndex) {
+    setState(() {
+      _activeVerseIndex = verseIndex;
+
+      // Auto-navigate to the page containing the active verse if needed
+      int versesPerPage = 6;
+      int targetPage = (verseIndex / versesPerPage).floor() + 1;
+
+      if (_currentPage != targetPage && targetPage <= _totalPages && targetPage > 0) {
+        _currentPage = targetPage;
+      }
+    });
   }
 
   @override
@@ -111,6 +125,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFourthScreen> {
                     isListeningAudio: true, // This is audio mode
                     onPrevPage: _goToPrevPage, // Use the method to go to previous page
                     onNextPage: _goToNextPage, // Use the method to go to next page
+                    activeVerseIndex: _activeVerseIndex,
                   ),
                   SizedBox(height: 10),
                   ListenAudioRukuFourthAudioPlayer(
@@ -118,6 +133,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFourthScreen> {
                     verses: yaseen_verses,
                     startVerse: 51,
                     endVerse: 67,
+                    onActiveVerseChanged: _handleActiveVerseChanged,
                   ),
                   // Add more widgets like audio player or list here if needed
                 ],

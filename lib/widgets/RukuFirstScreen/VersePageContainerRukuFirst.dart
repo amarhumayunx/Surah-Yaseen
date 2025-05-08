@@ -1,3 +1,4 @@
+import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -403,16 +404,15 @@ class _VersePageContainerState extends State<VersePageContainer> {
                         children: [
                           Text(
                             arabicText,
-                            style: TextStyle(
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
-                              fontSize: isInDialog ?
-                              (24 + (_fontSizeValue * 8)) : // For dialog box
-                              (widget.isFullScreen ?
-                              (24 + (_fontSizeValue * 8)) : // For fullscreen
-                              (24 + (_fontSizeValue * 8))), // For regular view
+                            style: ArabicTextStyle(
+                              arabicFont: ArabicFont.lateef, // Use the family name from pubspec.yaml
+                              fontSize: isInDialog
+                                  ? (24 + (_fontSizeValue * 8)) // For dialog box
+                                  : (widget.isFullScreen
+                                  ? (24 + (_fontSizeValue * 8)) // For fullscreen
+                                  : (24 + (_fontSizeValue * 8))), // For regular view
                               color: AppColors.PrimaryColor,
-                              height: 1.5,
-                              fontWeight: FontWeight.w500,
+                              height: 1,
                             ),
                             textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
@@ -421,15 +421,15 @@ class _VersePageContainerState extends State<VersePageContainer> {
                           Text(
                             englishText,
                             style: TextStyle(
+                              fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontSize: isInDialog ?
-                              (18 + (_fontSizeValue * 8)) : // For dialog box
+                              (13 + (_fontSizeValue * 8)) : // For dialog box
                               (widget.isFullScreen ?
-                              (18 + (_fontSizeValue * 8)) : // For fullscreen
-                              (14 + (_fontSizeValue * 8))),
+                              (13 + (_fontSizeValue * 8)) : // For fullscreen
+                              (13 + (_fontSizeValue * 8))),
                               color: widget.isFullScreen || isInDialog
                                   ? AppColors.BarColor
                                   : AppColors.BarColor,
-                              fontWeight: FontWeight.w400,
                               height: 1.3,
                             ),
                             textAlign: TextAlign.left,
@@ -568,12 +568,11 @@ class _VersePageContainerState extends State<VersePageContainer> {
                               children: [
                                 Text(
                                   arabicText,
-                                  style: TextStyle(
-                                    fontFamily: GoogleFonts.merriweather().fontFamily,
+                                  style: ArabicTextStyle(
+                                    arabicFont: ArabicFont.lateef,
                                     fontSize: 24 + (_fontSizeValue * 8),
                                     color: AppColors.PrimaryColor,
                                     height: 1.5,
-                                    fontWeight: FontWeight.w500,
                                   ),
                                   textAlign: TextAlign.right,
                                   textDirection: TextDirection.rtl,
@@ -582,9 +581,9 @@ class _VersePageContainerState extends State<VersePageContainer> {
                                 Text(
                                   englishText,
                                   style: TextStyle(
-                                    fontSize: 18 + (_fontSizeValue * 8),
+                                    fontFamily: GoogleFonts.merriweather().fontFamily,
+                                    fontSize: 13 + (_fontSizeValue * 8),
                                     color: AppColors.BarColor,
-                                    fontWeight: FontWeight.w400,
                                     height: 1.3,
                                   ),
                                   textAlign: TextAlign.left,

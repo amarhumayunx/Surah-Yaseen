@@ -17,10 +17,11 @@ class ListenAudioRukuFirstScreen extends StatefulWidget {
 }
 
 class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
-  // Audio file path for Ruku 1
-
   int _currentPage = 1;
   final int _totalPages = 2; // Total number of pages for Arabic verses
+
+  // Track the active verse being spoken
+  int _activeVerseIndex = -1;
 
   final Map<int, String> yaseen_verses = {
     0: "يس",
@@ -37,11 +38,6 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
     11: "إِنَّا نَحْنُ نُحْيِي الْمَوْتَىٰ وَنَكْتُبُ مَا قَدَّمُوا وَآثَارَهُمْ ۚ وَكُلَّ شَيْءٍ أَحْصَيْنَاهُ فِي إِمَامٍ مُّبِينٍ",
   };
 
-  void _handlePageChanged(int newPage) {
-    setState(() {
-      _currentPage = newPage;
-    });
-  }
 
   void _goToNextPage() {
     if (_currentPage < _totalPages) {
@@ -57,6 +53,21 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
         _currentPage--;
       });
     }
+  }
+
+  // New method to handle active verse changes from audio player
+  void _handleActiveVerseChanged(int verseIndex) {
+    setState(() {
+      _activeVerseIndex = verseIndex;
+
+      // Auto-navigate to the page containing the active verse if needed
+      int versesPerPage = 6;
+      int targetPage = (verseIndex / versesPerPage).floor() + 1;
+
+      if (_currentPage != targetPage && targetPage <= _totalPages && targetPage > 0) {
+        _currentPage = targetPage;
+      }
+    });
   }
 
   @override
@@ -94,23 +105,26 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
                   const SizedBox(height: 90),
 
                   ArabicVerseContainerRukuFirst(
-                    rukuNumber: 1, // Example ruku number
-                    startVerseIndex: 1 + ((_currentPage - 1) * 6), // Calculate start verse based on current page
-                    lastVerseIndex: 12, // Last verse index
-                    versesPerPage: 6, // Number of verses per page
-                    currentPage: _currentPage, // Current page from state
-                    totalPages: _totalPages, // Total number of pages
-                    isListeningAudio: true, // This is audio mode
-                    onPrevPage: _goToPrevPage, // Use the method to go to previous page
-                    onNextPage: _goToNextPage, // Use the method to go to next page
+                    rukuNumber: 1,
+                    startVerseIndex: 1 + ((_currentPage - 1) * 6),
+                    lastVerseIndex: 12,
+                    versesPerPage: 6,
+                    currentPage: _currentPage,
+                    totalPages: _totalPages,
+                    isListeningAudio: true,
+                    onPrevPage: _goToPrevPage,
+                    onNextPage: _goToNextPage,
+                    activeVerseIndex: _activeVerseIndex, // Pass the active verse index
                   ),
                   SizedBox(height: 10),
-                  // Audio player at the bottom
+
+                  // Pass a callback to the audio player to update active verse
                   ListenAudioRukuFirstAudioPlayer(
                     title: AppStrings.listenAudioScreenString.Rukutitle,
                     verses: yaseen_verses,
                     startVerse: 0,
-                    endVerse: 11,
+                    endVerse: 12,
+                    onActiveVerseChanged: _handleActiveVerseChanged, // New callback
                   ),
                 ],
               ),

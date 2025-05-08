@@ -7,15 +7,16 @@ import 'package:surah_yaseen/widgets/RukuSecondScreen/VersePageContainerArabicRu
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
+import '../../constants/app_strings.dart';
 
 class ListenAudioRukuSecondScreen extends StatefulWidget {
   const ListenAudioRukuSecondScreen({super.key});
 
   @override
-  State<ListenAudioRukuSecondScreen> createState() => _ListenAudioScreenState();
+  State<ListenAudioRukuSecondScreen> createState() => _ListenAudioRukuSecondScreenState();
 }
 
-class _ListenAudioScreenState extends State<ListenAudioRukuSecondScreen> {
+class _ListenAudioRukuSecondScreenState extends State<ListenAudioRukuSecondScreen> {
 
   final Map<int, String> yaseen_verses = {
     13: "وَاضْرِبْ لَهُمْ مَثَلًا أَصْحَابَ الْقَرْيَةِ إِذْ جَاءَهَا الْمُرْسَلُونَ",
@@ -33,21 +34,29 @@ class _ListenAudioScreenState extends State<ListenAudioRukuSecondScreen> {
     25: "إِنِّي آمَنْتُ بِرَبِّكُمْ فَاسْمَعُونِ",
     26: "قِيلَ ادْخُلِ الْجَنَّةَ ۖ قَالَ يَا لَيْتَ قَوْمِي يَعْلَمُونَ",
     27: "بِمَا غَفَرَ لِي رَبِّي وَجَعَلَنِي مِنَ الْمُكْرَمِينَ ۞",
-    28: " وَمَا أَنْزَلْنَا عَلَىٰ قَوْمِهِ مِنْ بَعْدِهِ مِنْ جُنْدٍ مِنَ السَّمَاءِ وَمَا كُنَّا مُنْزِلِينَ",
+    28: "وَمَا أَنْزَلْنَا عَلَىٰ قَوْمِهِ مِنْ بَعْدِهِ مِنْ جُنْدٍ مِنَ السَّمَاءِ وَمَا كُنَّا مُنْزِلِينَ",
     29: "إِنْ كَانَتْ إِلَّا صَيْحَةً وَاحِدَةً فَإِذَا هُمْ خَامِدُونَ",
     30: "يَا حَسْرَةً عَلَى الْعِبَادِ ۚ مَا يَأْتِيهِمْ مِنْ رَسُولٍ إِلَّا كَانُوا بِهِ يَسْتَهْزِئُونَ",
     31: "أَلَمْ يَرَوْا كَمْ أَهْلَكْنَا قَبْلَهُمْ مِنَ الْقُرُونِ أَنَّهُمْ إِلَيْهِمْ لَا يَرْجِعُونَ",
     32: "وَإِنْ كُلٌّ لَمَّا جَمِيعٌ لَدَيْنَا مُحْضَرُونَ",
   };
 
-
   int _currentPage = 1;
   final int _totalPages = 4; // Total number of pages for Arabic verses
+  int _activeVerseIndex = -1; // Set initial active verse to the first verse (13)
+  final int _versesPerPage = 6; // Define as a constant for consistency
 
-  void _handlePageChanged(int newPage) {
-    setState(() {
-      _currentPage = newPage;
-    });
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
   }
 
   void _goToNextPage() {
@@ -66,17 +75,18 @@ class _ListenAudioScreenState extends State<ListenAudioRukuSecondScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
-    );
+  // New method to handle active verse changes from audio player
+  void _handleActiveVerseChanged(int verseIndex) {
+    setState(() {
+      _activeVerseIndex = verseIndex;
+
+      // Auto-navigate to the page containing the active verse if needed
+      int targetPage = ((verseIndex - 13) / _versesPerPage).floor() + 1;
+
+      if (_currentPage != targetPage && targetPage <= _totalPages && targetPage > 0) {
+        _currentPage = targetPage;
+      }
+    });
   }
 
   @override
@@ -103,24 +113,25 @@ class _ListenAudioScreenState extends State<ListenAudioRukuSecondScreen> {
 
                   // Verse Container
                   ArabicVerseContainerRukuSecond(
-                    rukuNumber: 2, // Example ruku number
-                    startVerseIndex: 13 + ((_currentPage - 1) * 6), // Calculate start verse based on current page
-                    lastVerseIndex: 32, // Last verse index
-                    versesPerPage: 6, // Number of verses per page
-                    currentPage: _currentPage, // Current page from state
-                    totalPages: _totalPages, // Total number of pages
-                    isListeningAudio: true, // This is audio mode
-                    onPrevPage: _goToPrevPage, // Use the method to go to previous page
-                    onNextPage: _goToNextPage, // Use the method to go to next page
+                    rukuNumber: 2,
+                    startVerseIndex: 13 + ((_currentPage - 1) * _versesPerPage), // Use the constant
+                    lastVerseIndex: 32,
+                    versesPerPage: _versesPerPage, // Use the constant
+                    currentPage: _currentPage,
+                    totalPages: _totalPages,
+                    isListeningAudio: true,
+                    onPrevPage: _goToPrevPage,
+                    onNextPage: _goToNextPage,
+                    activeVerseIndex: _activeVerseIndex,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10), // Use const for static sizes
                   ListenAudioRukuSecondAudioPlayer(
-                    title: 'Ruku 2',
+                    title: AppStrings.listenAudioScreenString.Rukutitle2,
                     verses: yaseen_verses,
                     startVerse: 13,
                     endVerse: 32,
+                    onActiveVerseChanged: _handleActiveVerseChanged,
                   ),
-                  // Add more widgets like audio player or list here if needed
                 ],
               ),
             ),

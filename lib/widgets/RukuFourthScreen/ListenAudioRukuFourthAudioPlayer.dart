@@ -13,6 +13,8 @@ class ListenAudioRukuFourthAudioPlayer extends StatefulWidget {
   final Map<int, String> verses;
   final int startVerse;
   final int endVerse;
+  final Function(int)?
+  onActiveVerseChanged; // Callback to notify parent about active verse
 
   const ListenAudioRukuFourthAudioPlayer({
     Key? key,
@@ -20,14 +22,15 @@ class ListenAudioRukuFourthAudioPlayer extends StatefulWidget {
     required this.verses,
     this.startVerse = 51,
     this.endVerse = 67,
+    this.onActiveVerseChanged,
   }) : super(key: key);
 
   @override
   State<ListenAudioRukuFourthAudioPlayer> createState() =>
-      _ListenAudioRukuFirstAudioPlayerState();
+      _ListenAudioRukuFourthAudioPlayerState();
 }
 
-class _ListenAudioRukuFirstAudioPlayerState
+class _ListenAudioRukuFourthAudioPlayerState
     extends State<ListenAudioRukuFourthAudioPlayer>
     with WidgetsBindingObserver {
   // TTS Engine
@@ -37,7 +40,7 @@ class _ListenAudioRukuFirstAudioPlayerState
   // TTS Parameters - optimized for Quranic recitation
   double volume = 1.0;
   double pitch = 1.0;
-  double rate = 0.25;
+  double rate = 0.5;
   String? language;
   double currentPosition = 0.0;
   double totalDuration = 0.0;
@@ -52,7 +55,8 @@ class _ListenAudioRukuFirstAudioPlayerState
   int currentVerseIndex = 0;
   List<int> verseKeys = [];
   List<String> verseTexts = [];
-  List<double> verseEstimatedDurations = []; // Store estimated durations per verse
+  List<double> verseEstimatedDurations =
+  []; // Store estimated durations per verse
 
   // UI state management
   bool isSpeaking = false;
@@ -60,7 +64,6 @@ class _ListenAudioRukuFirstAudioPlayerState
   bool hasLanguageSupport = false;
   bool isProcessing = false;
   bool showTroubleshooting = false; // Control visibility of troubleshooting button
-  bool isSpeakingVerse = false;
 
   @override
   void initState() {
@@ -93,11 +96,13 @@ class _ListenAudioRukuFirstAudioPlayerState
       // Set language preference - try Arabic first, then fall back to default
       if (hasArabic) {
         var arabicLangs =
-        languages.where(
+        languages
+            .where(
               (lang) =>
           lang.toString().toLowerCase().contains('ar') ||
               lang.toString().toLowerCase().contains('arab'),
-        ).toList();
+        )
+            .toList();
 
         // Prefer full Arabic over dialect variants if available
         String arabicCode = arabicLangs.firstWhere(
@@ -135,31 +140,25 @@ class _ListenAudioRukuFirstAudioPlayerState
       flutterTts.setCompletionHandler(() {
         print("TTS completed speaking verse $currentVerseIndex");
 
+        // Don't reset isSpeaking flag yet if moving to next verse
+        bool isLastVerse = currentVerseIndex >= verseTexts.length - 1;
+
         setState(() {
           isProcessing = false;
-          isSpeaking = false;
-          isSpeakingVerse = false;
-          ttsState = TtsState.stopped;
+
+          // Only set isSpeaking to false if we're at the last verse
+          if (isLastVerse) {
+            isSpeaking = false;
+          }
         });
 
-        // Only proceed to next verse if we're not at the end
-        if (currentVerseIndex < verseTexts.length - 1) {
-          // Add a pause between verses (1 second)
-          Future.delayed(Duration(seconds: 1), () {
-            if (mounted) {
-              setState(() {
-                currentVerseIndex++;
-                ttsState = TtsState.stopped;
-                isSpeakingVerse = false; // Reset speaking state
-              });
-              // Use a timer to ensure we don't get stuck in a loop
-              Timer(Duration(milliseconds: 100), () {
-                if (mounted) {
-                  _speakCurrentVerse();
-                }
-              });
-            }
-          });
+        // Start speaking next verse outside setState to prevent UI jumps
+        if (!isLastVerse) {
+          // DO NOT increment the verse index here yet
+          // We'll do that in _speakCurrentVerse after notifying about the new verse
+
+          // Call _speakCurrentVerse but with explicit next index
+          _speakNextVerse();
         } else {
           setState(() {
             ttsState = TtsState.stopped;
@@ -175,7 +174,6 @@ class _ListenAudioRukuFirstAudioPlayerState
           ttsState = TtsState.stopped;
           isSpeaking = false;
           isProcessing = false;
-          isSpeakingVerse = false; // Reset speaking state on error
 
           // Show troubleshooting button when there's an error
           showTroubleshooting = true;
@@ -197,7 +195,6 @@ class _ListenAudioRukuFirstAudioPlayerState
           ttsState = TtsState.stopped;
           isSpeaking = false;
           isProcessing = false;
-          isSpeakingVerse = false; // Reset speaking state on cancel
         });
       });
 
@@ -237,7 +234,6 @@ class _ListenAudioRukuFirstAudioPlayerState
 
   void _initVerses() {
     print("Initializing verses from map with ${widget.verses.length} entries");
-    print("Start verse: ${widget.startVerse}, End verse: ${widget.endVerse}");
 
     // Guard against empty verses map
     if (widget.verses.isEmpty) {
@@ -255,21 +251,21 @@ class _ListenAudioRukuFirstAudioPlayerState
     verseKeys.sort();
     print("Sorted verse keys: $verseKeys");
 
-    // Start with all verses
-    List<int> filteredKeys = [];
+    // FILTER THE KEYS FIRST based on actual verse numbers (not indices)
+    if (widget.startVerse > 0 || widget.endVerse > 0) {
+      verseKeys = verseKeys.where((key) {
+        return key >= widget.startVerse &&
+            (widget.endVerse <= 0 || key <= widget.endVerse);
+      }).toList();
 
-    // Only keep verses within requested range (inclusive)
-    for (int key in verseKeys) {
-      if (key >= widget.startVerse && key <= widget.endVerse) {
-        filteredKeys.add(key);
+      print("Filtered verse keys based on range ${widget.startVerse}-${widget.endVerse}: $verseKeys");
+
+      if (verseKeys.isEmpty) {
+        print("WARNING: No verses found in the specified range ${widget.startVerse}-${widget.endVerse}!");
       }
     }
 
-    // Update verse keys to filtered set
-    verseKeys = filteredKeys;
-    print("Filtered verse keys (${verseKeys.length}): $verseKeys");
-
-    // Get the verse texts for filtered keys
+    // Now get the verse texts for the FILTERED keys
     verseTexts = verseKeys.map((key) => widget.verses[key]!).toList();
 
     // Validate verse texts aren't empty
@@ -278,8 +274,8 @@ class _ListenAudioRukuFirstAudioPlayerState
       print("WARNING: Some verses have empty text!");
     }
 
-    // Set starting verse index
-    currentVerseIndex = 0; // Always start at first filtered verse
+    // Always start at the first verse in our filtered list
+    currentVerseIndex = 0;
 
     // Print the actual verses for debugging
     for (int i = 0; i < verseTexts.length; i++) {
@@ -360,11 +356,15 @@ class _ListenAudioRukuFirstAudioPlayerState
                 currentPosition +
                     (elapsedSeconds * (currentVerseDuration / 3.0));
 
-            // Ensure we don't overshoot the current verse
+            // Ensure we don't overshoot the current verse's duration
             if (newPosition <=
                 currentVerseStartPosition + currentVerseDuration) {
               currentPosition = newPosition;
               lastPosition = currentPosition;
+            } else {
+              // If we've reached the end of the current verse, we'll let the completion handler
+              // handle the transition to the next verse
+              _stopProgressTimer();
             }
           }
         });
@@ -515,99 +515,93 @@ class _ListenAudioRukuFirstAudioPlayerState
     }
   }
 
+  Future<void> _speakNextVerse() async {
+    // First increment our verse index
+    int nextVerseIndex = currentVerseIndex + 1;
+
+    // Then notify parent about the active verse change BEFORE starting to speak
+    if (widget.onActiveVerseChanged != null && nextVerseIndex < verseKeys.length) {
+      widget.onActiveVerseChanged!(verseKeys[nextVerseIndex]);
+    }
+
+    // Now update our internal state
+    setState(() {
+      currentVerseIndex = nextVerseIndex;
+    });
+
+    // Finally speak the verse
+    _speakCurrentVerse();
+  }
+
   Future<void> _speakFromStart() async {
     print("Speaking from start");
 
-    // Stop any ongoing speech
-    await flutterTts.stop();
-
+    // FIRST set currentVerseIndex to 0
     setState(() {
       currentVerseIndex = 0;
-      ttsState = TtsState.stopped;
-      isSpeakingVerse = false;
-      currentPosition = 0.0;
     });
 
-    // Use a timer to ensure clean state transition
-    Timer(Duration(milliseconds: 100), () {
-      if (mounted) {
-        _speakCurrentVerse();
-      }
-    });
+    // THEN notify parent about the active verse that will be active (verse 0)
+    if (widget.onActiveVerseChanged != null && verseKeys.isNotEmpty) {
+      widget.onActiveVerseChanged!(verseKeys[0]);
+    }
+
+    // Finally, start speaking
+    _speakCurrentVerse();
   }
 
   Future<void> _speakCurrentVerse() async {
     if (!isTtsInitialized) {
-      print("TTS not initialized");
-      return;
-    }
-
-    if (isSpeakingVerse) {
-      print("Already speaking a verse, waiting for completion");
-      return;
-    }
-
-    if (currentVerseIndex >= verseTexts.length) {
-      print("ERROR: currentVerseIndex ($currentVerseIndex) out of range (${verseTexts.length})");
+      print("TTS not initialized, cannot speak verse");
       setState(() {
         isProcessing = false;
-        isSpeaking = false;
-        isSpeakingVerse = false;
-        ttsState = TtsState.stopped;
       });
       return;
     }
 
-    String textToSpeak = verseTexts[currentVerseIndex];
-    print(
-      "Speaking verse $currentVerseIndex (key: ${verseKeys[currentVerseIndex]}): ${textToSpeak.substring(0, min(20, textToSpeak.length))}...",
-    );
+    if (currentVerseIndex < verseTexts.length) {
+      String textToSpeak = verseTexts[currentVerseIndex];
+      print(
+        "Speaking verse $currentVerseIndex: ${textToSpeak.substring(0, min(20, textToSpeak.length))}...",
+      );
 
-    if (textToSpeak.trim().isEmpty) {
-      print("WARNING: Empty verse text, skipping...");
-      if (currentVerseIndex < verseTexts.length - 1) {
-        setState(() {
-          currentVerseIndex++;
-          isSpeakingVerse = false;
-        });
-        _speakCurrentVerse();
-      } else {
+      if (textToSpeak.trim().isEmpty) {
+        print("WARNING: Empty verse text, skipping...");
+        _speakNextVerse(); // Use our new method
+        return;
+      }
+
+      // Start progress timer before speaking
+      _startProgressTimer();
+
+      // Add tajweed pause after each verse
+      textToSpeak = textToSpeak + "، ";
+
+      // Update state before speaking
+      setState(() {
+        isSpeaking = true;
+      });
+
+      // Actually speak the text
+      var result = await flutterTts.speak(textToSpeak);
+      print("Speak result: $result");
+
+      if (result != 1) {
+        print("Failed to speak, error code: $result");
         setState(() {
           isProcessing = false;
+          ttsState = TtsState.stopped;
+          isSpeaking = false;
+          showTroubleshooting = true;
         });
       }
-      return;
-    }
-
-    // Start progress timer before speaking
-    _startProgressTimer();
-
-    // Add tajweed pause after each verse
-    textToSpeak = textToSpeak + "، ";
-
-    // Update state before speaking
-    setState(() {
-      isSpeaking = true;
-      isProcessing = true;
-      isSpeakingVerse = true;
-      ttsState = TtsState.playing;
-    });
-
-    // Stop any ongoing speech before starting new one
-    await flutterTts.stop();
-
-    // Actually speak the text
-    var result = await flutterTts.speak(textToSpeak);
-    print("Speak result: $result");
-
-    if (result != 1) {
-      print("Failed to speak, error code: $result");
+    } else {
+      print(
+        "Attempted to speak verse $currentVerseIndex but only have ${verseTexts.length} verses",
+      );
       setState(() {
         isProcessing = false;
-        ttsState = TtsState.stopped;
         isSpeaking = false;
-        isSpeakingVerse = false;
-        showTroubleshooting = true;
       });
     }
   }
@@ -622,7 +616,7 @@ class _ListenAudioRukuFirstAudioPlayerState
   }
 
   Future<void> _resume() async {
-    // Use the speak method instead of continue to ensure it works consistently
+    // FlutterTts has a continue method
     if (await flutterTts.isLanguageAvailable(language ?? "en-US")) {
       var result = await flutterTts.speak(verseTexts[currentVerseIndex]);
       print("Resume result: $result");
@@ -638,13 +632,18 @@ class _ListenAudioRukuFirstAudioPlayerState
     var result = await flutterTts.stop();
     print("Stop result: $result");
     _stopProgressTimer();
+
+    // IMPORTANT: First notify parent about resetting to the first verse
+    if (widget.onActiveVerseChanged != null && verseKeys.isNotEmpty) {
+      widget.onActiveVerseChanged!(verseKeys[0]);
+    }
+
     setState(() {
       ttsState = TtsState.stopped;
       isSpeaking = false;
       currentPosition = 0.0;
       currentVerseIndex = 0;
       isProcessing = false;
-      isSpeakingVerse = false;
     });
   }
 
@@ -658,20 +657,30 @@ class _ListenAudioRukuFirstAudioPlayerState
     // Stop current playback
     flutterTts.stop();
 
-    setState(() {
-      // Move to next verse
-      if (currentVerseIndex < verseTexts.length - 1) {
-        currentVerseIndex++;
+    // Calculate the next verse index
+    int nextVerseIndex = currentVerseIndex + 1;
+    if (nextVerseIndex < verseTexts.length) {
+      // IMPORTANT: First notify parent about the new active verse before updating state
+      if (widget.onActiveVerseChanged != null && nextVerseIndex < verseKeys.length) {
+        widget.onActiveVerseChanged!(verseKeys[nextVerseIndex]);
+      }
+
+      // Then update our internal state
+      setState(() {
+        currentVerseIndex = nextVerseIndex;
         // Update position based on current verse
         _updatePositionToCurrentVerse();
-      }
-      isProcessing = false;
-      isSpeakingVerse = false;
-    });
+        isProcessing = false;
+      });
 
-    // If was playing, continue playing from new verse
-    if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
-      _speakCurrentVerse();
+      // If was playing, continue playing from new verse
+      if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
+        _speakCurrentVerse();
+      }
+    } else {
+      setState(() {
+        isProcessing = false;
+      });
     }
   }
 
@@ -685,20 +694,30 @@ class _ListenAudioRukuFirstAudioPlayerState
     // Stop current playback
     flutterTts.stop();
 
-    setState(() {
-      // Move to previous verse
-      if (currentVerseIndex > 0) {
-        currentVerseIndex--;
+    // Calculate the previous verse index
+    int prevVerseIndex = currentVerseIndex - 1;
+    if (prevVerseIndex >= 0) {
+      // IMPORTANT: First notify parent about the new active verse before updating state
+      if (widget.onActiveVerseChanged != null && prevVerseIndex < verseKeys.length) {
+        widget.onActiveVerseChanged!(verseKeys[prevVerseIndex]);
+      }
+
+      // Then update our internal state
+      setState(() {
+        currentVerseIndex = prevVerseIndex;
         // Update position based on current verse
         _updatePositionToCurrentVerse();
-      }
-      isProcessing = false;
-      isSpeakingVerse = false;
-    });
+        isProcessing = false;
+      });
 
-    // If was playing, continue playing from new verse
-    if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
-      _speakCurrentVerse();
+      // If was playing, continue playing from new verse
+      if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
+        _speakCurrentVerse();
+      }
+    } else {
+      setState(() {
+        isProcessing = false;
+      });
     }
   }
 
@@ -743,11 +762,15 @@ class _ListenAudioRukuFirstAudioPlayerState
         targetVerseIndex = verseTexts.length - 1;
       }
 
+      // IMPORTANT: First notify parent about the new active verse before updating state
+      if (widget.onActiveVerseChanged != null && targetVerseIndex < verseKeys.length) {
+        widget.onActiveVerseChanged!(verseKeys[targetVerseIndex]);
+      }
+
       setState(() {
         currentVerseIndex = targetVerseIndex;
         _updatePositionToCurrentVerse();
         isProcessing = false;
-        isSpeakingVerse = false;
       });
 
       if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
@@ -769,10 +792,6 @@ class _ListenAudioRukuFirstAudioPlayerState
         ? (currentPosition / totalDuration).clamp(0.0, 1.0)
         : 0.0;
 
-    String currentVerseIndicator = verseKeys.isNotEmpty && currentVerseIndex < verseKeys.length
-        ? "Verse ${verseKeys[currentVerseIndex]}"
-        : "";
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -791,23 +810,6 @@ class _ListenAudioRukuFirstAudioPlayerState
             ),
           ),
         ),
-
-        // Current verse indicator
-        if (currentVerseIndicator.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 35.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                currentVerseIndicator,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.PrimaryColor,
-                ),
-              ),
-            ),
-          ),
-
         // Language support indicator
         if (!hasLanguageSupport)
           Padding(
@@ -908,6 +910,7 @@ class _ListenAudioRukuFirstAudioPlayerState
       ],
     );
   }
+
 
   Widget _iconControlButton(
       Widget icon,

@@ -1,3 +1,4 @@
+import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,8 @@ class ArabicVerseContainerRukuSecond extends StatefulWidget {
   final int versesPerPage;
   final int currentPage;
   final int totalPages;
-  final bool isListeningAudio; // New property to check if user is listening to audio
+  final bool isListeningAudio;
+  final int activeVerseIndex; // New property to track active verse being played
   final Function(int)? onPageChanged;
   final VoidCallback? onPrevPage;
   final VoidCallback? onNextPage;
@@ -28,7 +30,8 @@ class ArabicVerseContainerRukuSecond extends StatefulWidget {
     required this.versesPerPage,
     required this.currentPage,
     required this.totalPages,
-    this.isListeningAudio = false, // Default is reading mode (not listening to audio)
+    this.isListeningAudio = false,
+    this.activeVerseIndex = 0, // Default to no active verse
     this.onPageChanged,
     this.onPrevPage,
     this.onNextPage,
@@ -42,6 +45,8 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
   int? _longPressedVerseIndex;
   final Color _bookmarkHighlightColor = Color(0xFFF6FAF7); // Soft greenish background
   final Color _bookmarkBorderColor = Color(0xFFCCE7D5); // Green border
+  final Color _activeVerseHighlightColor = Color(0xFFF6F0DE); // Soft yellowish background
+  final Color _activeVerseBorderColor = AppColors.BarColor; // Golden border
 
   @override
   void didUpdateWidget(ArabicVerseContainerRukuSecond oldWidget) {
@@ -112,6 +117,9 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
         final arabicText = arabicEntries[index].value;
         final isSelected = _longPressedVerseIndex == index;
 
+        // Check if this verse is the active verse being spoken
+        final isActiveVerse = widget.activeVerseIndex == actualVerseIndex;
+
         // Check if this verse is already bookmarked
         final isBookmarked = bookmarkProvider.isVerseBookmarked(
             actualVerseIndex,
@@ -125,6 +133,24 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
               actualVerseIndex,
               widget.rukuNumber
           );
+        }
+
+        // Determine container styling based on states
+        Color containerColor;
+        Color borderColor;
+
+        if (isActiveVerse) {
+          // Active verse takes precedence when playing audio
+          containerColor = _activeVerseHighlightColor;
+          borderColor = _activeVerseBorderColor;
+        } else if (isSelected || isBookmarked) {
+          // Normal bookmark styling
+          containerColor = _bookmarkHighlightColor;
+          borderColor = _bookmarkBorderColor;
+        } else {
+          // Default - no special styling
+          containerColor = Colors.transparent;
+          borderColor = Colors.transparent;
         }
 
         return GestureDetector(
@@ -143,13 +169,13 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
           },
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 5),
-            padding: EdgeInsets.all((isSelected || isBookmarked) ? 12 : 0),
-            decoration: (isSelected || isBookmarked)
+            padding: EdgeInsets.all((isSelected || isBookmarked || isActiveVerse) ? 12 : 0),
+            decoration: (isSelected || isBookmarked || isActiveVerse)
                 ? BoxDecoration(
-              color: _bookmarkHighlightColor, // Soft greenish background
+              color: containerColor,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
-                color: _bookmarkBorderColor, // Green border
+                color: borderColor,
                 width: 1.5,
               ),
             )
@@ -159,8 +185,8 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Space for bookmark icon if verse is bookmarked
-                    if (isBookmarked)
+                    // Space for bookmark icon if verse is bookmarked or active verse
+                    if (isBookmarked || isActiveVerse)
                       SizedBox(width: 30),
 
                     // Main content with adjusted width
@@ -170,12 +196,11 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
                         children: [
                           Text(
                             arabicText,
-                            style: TextStyle(
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
+                            style: ArabicTextStyle(
+                              arabicFont: ArabicFont.lateef,
                               fontSize: 24 + (_fontSizeValue * 8),
                               color: AppColors.PrimaryColor,
                               height: 1.5,
-                              fontWeight: FontWeight.w500,
                             ),
                             textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
@@ -188,14 +213,20 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
                   ],
                 ),
 
-                // Bookmark icon that appears when verse is selected or bookmarked
-                if (isSelected || isBookmarked)
+                // Display appropriate icon based on state
+                if (isSelected || isBookmarked || isActiveVerse)
                   Positioned(
                     left: 8,
                     top: 8,
                     child: Container(
                       padding: EdgeInsets.all(4),
-                      child: bookmarkIconType == 'audio'
+                      child: isActiveVerse && !isBookmarked
+                          ? Icon(
+                        Icons.volume_up,
+                        size: 22,
+                        color: AppColors.PrimaryColor,
+                      )
+                          : bookmarkIconType == 'audio'
                           ? Image.asset(
                         AppAssets.headphoneimagebookmark,
                         width: 22,
@@ -220,7 +251,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuSecond> {
   Widget build(BuildContext context) {
     return Container(
       width: 350,
-      height: 300,
+      height: 320,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),

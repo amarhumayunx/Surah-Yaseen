@@ -5,6 +5,7 @@ import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.d
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
+import '../../constants/app_strings.dart';
 import 'ListenAudioRukuFiveAudioPlayer.dart';
 import 'VersePageContainerArabicRukuFiveth.dart';
 
@@ -16,8 +17,6 @@ class ListenAudioRukuFiveScreen extends StatefulWidget {
 }
 
 class _ListenAudioScreenState extends State<ListenAudioRukuFiveScreen> {
-  // Audio file path for Ruku 5
-  final String audioPath = 'asset:///assets/audio/surahyaseenrukufive68to83.mp3';
 
   final Map<int, String> yaseen_verses = {
     68: "وَمَنْ نُعَمِّرْهُ نُنَكِّسْهُ فِي الْخَلْقِ ۖ أَفَلَا يَعْقِلُونَ",
@@ -40,12 +39,8 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFiveScreen> {
 
   int _currentPage = 1;
   final int _totalPages = 3; // Total number of pages for Arabic verses
+  int _activeVerseIndex = -1;
 
-  void _handlePageChanged(int newPage) {
-    setState(() {
-      _currentPage = newPage;
-    });
-  }
 
   void _goToNextPage() {
     if (_currentPage < _totalPages) {
@@ -61,6 +56,21 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFiveScreen> {
         _currentPage--;
       });
     }
+  }
+
+  // New method to handle active verse changes from audio player
+  void _handleActiveVerseChanged(int verseIndex) {
+    setState(() {
+      _activeVerseIndex = verseIndex;
+
+      // Auto-navigate to the page containing the active verse if needed
+      int versesPerPage = 6;
+      int targetPage = (verseIndex / versesPerPage).floor() + 1;
+
+      if (_currentPage != targetPage && targetPage <= _totalPages && targetPage > 0) {
+        _currentPage = targetPage;
+      }
+    });
   }
 
   @override
@@ -109,13 +119,15 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFiveScreen> {
                     isListeningAudio: true, // This is audio mode
                     onPrevPage: _goToPrevPage, // Use the method to go to previous page
                     onNextPage: _goToNextPage, // Use the method to go to next page
+                    activeVerseIndex: _activeVerseIndex
                   ),
                   SizedBox(height: 10),
-                  ListenAudioRukuFivethAudioPlayer(
-                    title: 'Ruku 5',
+                  ListenAudioRukuFiveAudioPlayer(
+                    title: AppStrings.listenAudioScreenString.Rukutitle5,
                     verses: yaseen_verses,
                     startVerse: 68,
                     endVerse: 83,
+                    onActiveVerseChanged: _handleActiveVerseChanged,
                   ),
                 ],
               ),

@@ -9,7 +9,7 @@ import '../../constants/app_strings.dart';
 import '../BookmarkScreen/BookmarkProvider.dart';
 import '../FontSize/FontSizeProvider.dart';
 
-class ArabicVerseContainerRukuFirst extends StatefulWidget {
+class ArabicVerseWithTranslationContainerRukuFourth extends StatefulWidget {
   final int rukuNumber;
   final int startVerseIndex;
   final int lastVerseIndex;
@@ -22,7 +22,7 @@ class ArabicVerseContainerRukuFirst extends StatefulWidget {
   final VoidCallback? onPrevPage;
   final VoidCallback? onNextPage;
 
-  const ArabicVerseContainerRukuFirst({
+  const ArabicVerseWithTranslationContainerRukuFourth({
     Key? key,
     required this.rukuNumber,
     required this.startVerseIndex,
@@ -38,10 +38,10 @@ class ArabicVerseContainerRukuFirst extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ArabicVerseContainerRukuFirst> createState() => _ArabicVerseContainerState();
+  State<ArabicVerseWithTranslationContainerRukuFourth> createState() => _ArabicVerseWithTranslationContainerState();
 }
 
-class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFirst> {
+class _ArabicVerseWithTranslationContainerState extends State<ArabicVerseWithTranslationContainerRukuFourth> {
   int? _longPressedVerseIndex;
   final Color _bookmarkHighlightColor = Color(0xFFF6FAF7); // Soft greenish background
   final Color _bookmarkBorderColor = Color(0xFFCCE7D5); // Green border
@@ -49,7 +49,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFirst> {
   final Color _activeVerseBorderColor = AppColors.BarColor; // Golden border
 
   @override
-  void didUpdateWidget(ArabicVerseContainerRukuFirst oldWidget) {
+  void didUpdateWidget(ArabicVerseWithTranslationContainerRukuFourth oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     // Reset highlight when moving to a different page or verse set
@@ -68,13 +68,19 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFirst> {
   async {
     final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: false);
 
+    // Get English translation
+    String? englishText = "";
+    if (AppStrings.yasinSurahStrings.versesEnglish.containsKey('verse_$verseIndex')) {
+      englishText = AppStrings.yasinSurahStrings.versesEnglish['verse_$verseIndex'];
+    }
+
     // Determine the icon type based on whether the user is listening to audio
     String iconType = widget.isListeningAudio ? 'audio' : 'quran';
 
     // Add the verse to bookmarks with the appropriate icon type
     bool wasAdded = await bookmarkProvider.addVerseBookmark(
       arabicText: arabicText,
-      englishText: "", // Empty since we're only showing Arabic
+      englishText: englishText ?? "", // Pass the English translation
       verseIndex: verseIndex,
       rukuNumber: widget.rukuNumber,
       iconType: iconType, // Pass the icon type
@@ -99,13 +105,21 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFirst> {
     final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: true);
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
+    Map<String, String> versesEnglish = AppStrings.yasinSurahStrings.versesEnglish;
 
     List<MapEntry<String, String>> arabicEntries = [];
+    List<MapEntry<String, String>> englishEntries = [];
 
     for (int i = startIdx; i < startIdx + widget.versesPerPage && i <= widget.lastVerseIndex; i++) {
       String key = 'verse_$i';
       if (versesArabic.containsKey(key)) {
         arabicEntries.add(MapEntry(key, versesArabic[key]!));
+        if (versesEnglish.containsKey(key)) {
+          englishEntries.add(MapEntry(key, versesEnglish[key]!));
+        } else {
+          // If no translation exists, add empty string
+          englishEntries.add(MapEntry(key, ""));
+        }
       }
     }
 
@@ -115,10 +129,11 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFirst> {
       itemBuilder: (context, index) {
         final actualVerseIndex = startIdx + index;
         final arabicText = arabicEntries[index].value;
+        final englishText = englishEntries[index].value;
         final isSelected = _longPressedVerseIndex == index;
 
         // Check if this verse is the active verse being spoken
-        final isActiveVerse = widget.activeVerseIndex + 1 == actualVerseIndex;
+        final isActiveVerse = widget.activeVerseIndex == actualVerseIndex;
 
         // Check if this verse is already bookmarked
         final isBookmarked = bookmarkProvider.isVerseBookmarked(
@@ -194,6 +209,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFirst> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          // Arabic verse text
                           Text(
                             arabicText,
                             style: ArabicTextStyle(
@@ -205,8 +221,25 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFirst> {
                             textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
                           ),
+
+                          // Add space between Arabic and English text
+                          SizedBox(height: 14),
+
+                          // English translation
+                          Text(
+                            englishText,
+                            style: TextStyle(
+                              fontFamily: GoogleFonts.merriweather().fontFamily,
+                              fontSize: 13 + (_fontSizeValue * 8),
+                              color: AppColors.PrimaryColor,
+                              height: 1.3,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+
+                          // Add space between verses
                           if (index < arabicEntries.length - 1)
-                            SizedBox(height: 12),
+                            SizedBox(height: 10),
                         ],
                       ),
                     ),

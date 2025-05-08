@@ -32,7 +32,7 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
           border: Border.all(color: AppColors.BarColor, width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey,
               spreadRadius: 2,
               blurRadius: 5,
               offset: Offset(0, 3),

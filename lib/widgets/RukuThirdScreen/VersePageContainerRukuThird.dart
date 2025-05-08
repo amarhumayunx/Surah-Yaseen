@@ -1,3 +1,4 @@
+import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,8 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
   int? _longPressedVerseIndex;
   final Color _bookmarkHighlightColor = Color(0xFFF6FAF7); // Soft greenish background
   final Color _bookmarkBorderColor = Color(0xFFCCE7D5); // Green border
+  final Color _activeVerseHighlightColor = Color(0xFFF6F0DE); // Soft yellowish background
+  final Color _activeVerseBorderColor = AppColors.BarColor; // Golden border
 
   @override
   void initState() {
@@ -134,7 +137,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black,
                           spreadRadius: 1,
                           blurRadius: 10,
                         ),
@@ -397,16 +400,15 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                         children: [
                           Text(
                             arabicText,
-                            style: TextStyle(
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
+                            style: ArabicTextStyle(
+                              arabicFont: ArabicFont.lateef,
                               fontSize: isInDialog ?
                               (24 + (_fontSizeValue * 8)) : // For dialog box
                               (widget.isFullScreen ?
                               (24 + (_fontSizeValue * 8)) : // For fullscreen
                               (24 + (_fontSizeValue * 8))), // For regular view
                               color: AppColors.PrimaryColor,
-                              height: 1.5,
-                              fontWeight: FontWeight.w500,
+                              height: 1,
                             ),
                             textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
@@ -415,15 +417,15 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                           Text(
                             englishText,
                             style: TextStyle(
+                              fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontSize: isInDialog ?
-                              (18 + (_fontSizeValue * 8)) : // For dialog box
+                              (13 + (_fontSizeValue * 8)) : // For dialog box
                               (widget.isFullScreen ?
-                              (18 + (_fontSizeValue * 8)) : // For fullscreen
-                              (14 + (_fontSizeValue * 8))),
+                              (13 + (_fontSizeValue * 8)) : // For fullscreen
+                              (13 + (_fontSizeValue * 8))),
                               color: widget.isFullScreen || isInDialog
                                   ? AppColors.BarColor
                                   : AppColors.BarColor,
-                              fontWeight: FontWeight.w400,
                               height: 1.3,
                             ),
                             textAlign: TextAlign.left,
@@ -561,29 +563,27 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                               children: [
                                 Text(
                                   arabicText,
-                                  style: TextStyle(
-                                    fontFamily: GoogleFonts.merriweather().fontFamily,
+                                  style: ArabicTextStyle(
+                                    arabicFont: ArabicFont.lateef,
                                     fontSize: 24 + (_fontSizeValue * 8),
                                     color: AppColors.PrimaryColor,
                                     height: 1.5,
-                                    fontWeight: FontWeight.w500,
                                   ),
                                   textAlign: TextAlign.right,
                                   textDirection: TextDirection.rtl,
                                 ),
-                                SizedBox(height: 14),
                                 Text(
                                   englishText,
                                   style: TextStyle(
-                                    fontSize: 18 + (_fontSizeValue * 8),
+                                    fontFamily: GoogleFonts.merriweather().fontFamily,
+                                    fontSize: 13 + (_fontSizeValue * 8),
                                     color: AppColors.BarColor,
-                                    fontWeight: FontWeight.w400,
                                     height: 1.3,
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
                                 if (index < arabicEntries.length - 1)
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 5),
                               ],
                             ),
                           ),
@@ -620,7 +620,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
       width: widget.isFullScreen ? double.infinity : 350,
       height: widget.isFullScreen ? double.infinity : 480,
       decoration: BoxDecoration(
-        color: widget.isFullScreen ? Colors.white.withOpacity(0.95) : Colors.white,
+        color: widget.isFullScreen ? Colors.white : Colors.white,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
           color: widget.isFullScreen ? Colors.transparent : AppColors.BarColor,

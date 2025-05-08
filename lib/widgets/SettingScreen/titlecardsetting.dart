@@ -31,7 +31,7 @@ class TitleCardSetting extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black,
                   spreadRadius: 1,
                   blurRadius: 10,
                   offset: const Offset(0, 4),

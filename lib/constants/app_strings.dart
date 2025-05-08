@@ -17,8 +17,6 @@ class AppStrings {
   static const rukuFourthScreenStrings = RukuFourthScreenStrings();
   static const rukuFivethScreenStrings = RukuFivethScreenStrings();
   static const listenAudioWithTranslationScreenString = ListenAudioWithTranslationScreenString();
-
-
 }
 
 class ExitDialogStrings {

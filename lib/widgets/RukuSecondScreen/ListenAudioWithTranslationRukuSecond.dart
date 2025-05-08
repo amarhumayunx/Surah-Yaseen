@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/ListenAudioWithTranslastionScreenTopbar.dart';
-import 'package:surah_yaseen/widgets/RukuSecondScreen/ListenAudioWithTranslationRukuSecondAudioPlayer.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
+
+import '../../constants/app_strings.dart';
+import 'ListenAudioWithTranslationRukuSecondAudioPlayer.dart';
+import 'VersePageContainerWithTranslationRukuSecond.dart';
 
 class ListenAudioWithTranslationRukuSecond extends StatefulWidget {
   const ListenAudioWithTranslationRukuSecond({super.key});
@@ -15,6 +18,64 @@ class ListenAudioWithTranslationRukuSecond extends StatefulWidget {
 }
 
 class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationRukuSecond> {
+
+  final Map<int, String> yaseen_verses = {
+    13: "وَاضْرِبْ لَهُمْ مَثَلًا أَصْحَابَ الْقَرْيَةِ إِذْ جَاءَهَا الْمُرْسَلُونَ",
+    14: "إِذْ أَرْسَلْنَا إِلَيْهِمُ اثْنَيْنِ فَكَذَّبُوهُمَا فَعَزَّزْنَا بِثَالِثٍ فَقَالُوا إِنَّا إِلَيْكُمْ مُرْسَلُونَ",
+    15: "قَالُوا مَا أَنْتُمْ إِلَّا بَشَرٌ مِثْلُنَا وَمَا أَنْزَلَ الرَّحْمَٰنُ مِنْ شَيْءٍ إِنْ أَنْتُمْ إِلَّا تَكْذِبُونَ",
+    16: "قَالُوا رَبُّنَا يَعْلَمُ إِنَّا إِلَيْكُمْ لَمُرْسَلُونَ",
+    17: "وَمَا عَلَيْنَا إِلَّا الْبَلَاغُ الْمُبِينُ",
+    18: "قَالُوا إِنَّا تَطَيَّرْنَا بِكُمْ ۖ لَئِنْ لَمْ تَنْتَهُوا لَنَرْجُمَنَّكُمْ وَلَيَمَسَّنَّكُمْ مِنَّا عَذَابٌ أَلِيمٌ",
+    19: "قَالُوا طَائِرُكُمْ مَعَكُمْ ۚ أَئِنْ ذُكِّرْتُمْ ۚ بَلْ أَنْتُمْ قَوْمٌ مُسْرِفُونَ",
+    20: "وَجَاءَ مِنْ أَقْصَى الْمَدِينَةِ رَجُلٌ يَسْعَىٰ قَالَ يَا قَوْمِ اتَّبِعُوا الْمُرْسَلِينَ",
+    21: "اتَّبِعُوا مَنْ لَا يَسْأَلُكُمْ أَجْرًا وَهُمْ مُهْتَدُونَ",
+    22: "وَمَا لِيَ لَا أَعْبُدُ الَّذِي فَطَرَنِي وَإِلَيْهِ تُرْجَعُونَ",
+    23: "أَأَتَّخِذُ مِنْ دُونِهِ آلِهَةً إِنْ يُرِدْنِ الرَّحْمَٰنُ بِضُرٍّ لَا تُغْنِ عَنِّي شَفَاعَتُهُمْ شَيْئًا وَلَا يُنْقِذُونِ",
+    24: "إِنِّي إِذًا لَفِي ضَلَالٍ مُبِينٍ",
+    25: "إِنِّي آمَنْتُ بِرَبِّكُمْ فَاسْمَعُونِ",
+    26: "قِيلَ ادْخُلِ الْجَنَّةَ ۖ قَالَ يَا لَيْتَ قَوْمِي يَعْلَمُونَ",
+    27: "بِمَا غَفَرَ لِي رَبِّي وَجَعَلَنِي مِنَ الْمُكْرَمِينَ ۞",
+    28: "وَمَا أَنْزَلْنَا عَلَىٰ قَوْمِهِ مِنْ بَعْدِهِ مِنْ جُنْدٍ مِنَ السَّمَاءِ وَمَا كُنَّا مُنْزِلِينَ",
+    29: "إِنْ كَانَتْ إِلَّا صَيْحَةً وَاحِدَةً فَإِذَا هُمْ خَامِدُونَ",
+    30: "يَا حَسْرَةً عَلَى الْعِبَادِ ۚ مَا يَأْتِيهِمْ مِنْ رَسُولٍ إِلَّا كَانُوا بِهِ يَسْتَهْزِئُونَ",
+    31: "أَلَمْ يَرَوْا كَمْ أَهْلَكْنَا قَبْلَهُمْ مِنَ الْقُرُونِ أَنَّهُمْ إِلَيْهِمْ لَا يَرْجِعُونَ",
+    32: "وَإِنْ كُلٌّ لَمَّا جَمِيعٌ لَدَيْنَا مُحْضَرُونَ",
+  };
+
+  int _currentPage = 1;
+  final int _totalPages = 4;
+  int _activeVerseIndex = -1;
+
+  void _goToNextPage() {
+    if (_currentPage < _totalPages) {
+      setState(() {
+        _currentPage++;
+      });
+    }
+  }
+
+  void _goToPrevPage() {
+    if (_currentPage > 1) {
+      setState(() {
+        _currentPage--;
+      });
+    }
+  }
+
+  // New method to handle active verse changes from audio player
+  void _handleActiveVerseChanged(int verseIndex) {
+    setState(() {
+      _activeVerseIndex = verseIndex;
+
+      // Auto-navigate to the page containing the active verse if needed
+      int versesPerPage = 6;
+      int targetPage = (verseIndex / versesPerPage).floor() + 1;
+
+      if (_currentPage != targetPage && targetPage <= _totalPages && targetPage > 0) {
+        _currentPage = targetPage;
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -44,14 +105,33 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
                     vertical: 20,
                   ),
                   child: Column(
-                      children: const [
+                      children:
+                      [
                         TopBarListenAudioWithTranslationScreen(),
-                        SizedBox(height: 20,),
                         DividerBar(),
                         SurahTitle(),
-                        SizedBox(height: 300,),
-                        ListenAudioWithTranslationRukuSecondAudioPlayer(),
+                        const SizedBox(height: 90),
+                        ArabicVerseWithTranslationContainerRukuSecond(
+                          rukuNumber: 2,
+                          startVerseIndex: 13 + ((_currentPage - 1) * 6),
+                          lastVerseIndex: 32,
+                          versesPerPage: 6,
+                          currentPage: _currentPage,
+                          totalPages: _totalPages,
+                          isListeningAudio: true,
+                          onPrevPage: _goToPrevPage,
+                          onNextPage: _goToNextPage,
+                          activeVerseIndex: _activeVerseIndex,
 
+                        ),
+                        SizedBox(height: 10),
+                        ListenAudioWithTranslationRukuSecondAudioPlayer(
+                          title: AppStrings.listenAudioWithTranslationScreenString.Ruku2title,
+                          verses: yaseen_verses,
+                          startVerse: 13,
+                          endVerse: 32,
+                          onActiveVerseChanged: _handleActiveVerseChanged,
+                        ),
                       ]
                   ),
                 ))

@@ -43,6 +43,8 @@ class _ListenAudioScreenState extends State<ListenAudioRukuThirdScreen> {
   int _currentPage = 1;
   final int _totalPages = 3; // Total number of pages for Arabic verses
 
+  int _activeVerseIndex = -1; // Track the active verse index
+
   void _handlePageChanged(int newPage) {
     setState(() {
       _currentPage = newPage;
@@ -63,6 +65,20 @@ class _ListenAudioScreenState extends State<ListenAudioRukuThirdScreen> {
         _currentPage--;
       });
     }
+  }
+
+  void _handleActiveVerseChanged(int verseIndex) {
+    setState(() {
+      _activeVerseIndex = verseIndex;
+
+      // Auto-navigate to the page containing the active verse if needed
+      int versesPerPage = 3;
+      int targetPage = (verseIndex / versesPerPage).floor() + 1;
+
+      if (_currentPage != targetPage && targetPage <= _totalPages && targetPage > 0) {
+        _currentPage = targetPage;
+      }
+    });
   }
 
   @override
@@ -108,6 +124,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuThirdScreen> {
                     isListeningAudio: true, // This is audio mode
                     onPrevPage: _goToPrevPage, // Use the method to go to previous page
                     onNextPage: _goToNextPage, // Use the method to go to next page
+                    activeVerseIndex: _activeVerseIndex,
                   ),
                   SizedBox(height: 10),
 
@@ -117,6 +134,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuThirdScreen> {
                     verses: yaseen_verses,
                     startVerse: 33,
                     endVerse: 50,
+                    onActiveVerseChanged: _handleActiveVerseChanged,
                   ),
                 ],
               ),

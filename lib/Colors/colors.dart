@@ -11,4 +11,19 @@ class AppColors {
   static Color blackColor = Colors.black;
   static Color whiteColor = Color(0xFF86C1A9);
   static Color darkgreenColor = Color(0xFF227653);
+
+  static const Color primaryGreen = Color(0xFF4A6D51);
+
+  /// Light beige color used for inactive sliders, borders, etc.
+  static const Color lightBeige = Color(0xFFD9D58E);
+
+  /// Error color for warnings and troubleshooting
+  static const Color errorRed = Colors.red;
+
+  /// Dark gray for text
+  static const Color textGray = Color(0xFF616161); // matches Colors.grey.shade700
+
+  /// White color for text on dark backgrounds
+  static const Color textWhite = Colors.white;
+  static const Color AudioPlayerInActiveColor = Color(0xFFCFC378);
 }

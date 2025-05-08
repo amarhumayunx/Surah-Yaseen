@@ -13,6 +13,8 @@ class ListenAudioRukuFirstAudioPlayer extends StatefulWidget {
   final Map<int, String> verses;
   final int startVerse;
   final int endVerse;
+  final Function(int)?
+  onActiveVerseChanged; // Callback to notify parent about active verse
 
   const ListenAudioRukuFirstAudioPlayer({
     Key? key,
@@ -20,6 +22,7 @@ class ListenAudioRukuFirstAudioPlayer extends StatefulWidget {
     required this.verses,
     this.startVerse = 0,
     this.endVerse = 12,
+    this.onActiveVerseChanged,
   }) : super(key: key);
 
   @override
@@ -53,15 +56,14 @@ class _ListenAudioRukuFirstAudioPlayerState
   List<int> verseKeys = [];
   List<String> verseTexts = [];
   List<double> verseEstimatedDurations =
-      []; // Store estimated durations per verse
+  []; // Store estimated durations per verse
 
   // UI state management
   bool isSpeaking = false;
   bool isTtsInitialized = false;
   bool hasLanguageSupport = false;
   bool isProcessing = false;
-  bool showTroubleshooting =
-      false; // Control visibility of troubleshooting button
+  bool showTroubleshooting = false; // Control visibility of troubleshooting button
 
   @override
   void initState() {
@@ -86,26 +88,26 @@ class _ListenAudioRukuFirstAudioPlayerState
 
       // Try to find Arabic language support
       bool hasArabic = languages.any(
-        (lang) =>
-            lang.toString().toLowerCase().contains('ar') ||
+            (lang) =>
+        lang.toString().toLowerCase().contains('ar') ||
             lang.toString().toLowerCase().contains('arab'),
       );
 
       // Set language preference - try Arabic first, then fall back to default
       if (hasArabic) {
         var arabicLangs =
-            languages
-                .where(
-                  (lang) =>
-                      lang.toString().toLowerCase().contains('ar') ||
-                      lang.toString().toLowerCase().contains('arab'),
-                )
-                .toList();
+        languages
+            .where(
+              (lang) =>
+          lang.toString().toLowerCase().contains('ar') ||
+              lang.toString().toLowerCase().contains('arab'),
+        )
+            .toList();
 
         // Prefer full Arabic over dialect variants if available
         String arabicCode = arabicLangs.firstWhere(
-          (lang) =>
-              lang.toString().toLowerCase() == 'ar' ||
+              (lang) =>
+          lang.toString().toLowerCase() == 'ar' ||
               lang.toString().toLowerCase() == 'ara',
           orElse: () => arabicLangs.first.toString(),
         );
@@ -148,21 +150,21 @@ class _ListenAudioRukuFirstAudioPlayerState
           if (isLastVerse) {
             isSpeaking = false;
           }
-
-          // Automatically move to next verse if not at the end
-          if (!isLastVerse) {
-            currentVerseIndex++;
-            // We'll maintain speaking state between verses
-          } else {
-            ttsState = TtsState.stopped;
-            _stopProgressTimer();
-            currentPosition = totalDuration;
-          }
         });
 
         // Start speaking next verse outside setState to prevent UI jumps
         if (!isLastVerse) {
-          _speakCurrentVerse();
+          // DO NOT increment the verse index here yet
+          // We'll do that in _speakCurrentVerse after notifying about the new verse
+
+          // Call _speakCurrentVerse but with explicit next index
+          _speakNextVerse();
+        } else {
+          setState(() {
+            ttsState = TtsState.stopped;
+            _stopProgressTimer();
+            currentPosition = totalDuration;
+          });
         }
       });
 
@@ -340,9 +342,9 @@ class _ListenAudioRukuFirstAudioPlayerState
     }
 
     currentVerseDuration =
-        currentVerseIndex < verseEstimatedDurations.length
-            ? verseEstimatedDurations[currentVerseIndex]
-            : 3.0;
+    currentVerseIndex < verseEstimatedDurations.length
+        ? verseEstimatedDurations[currentVerseIndex]
+        : 3.0;
 
     // Create smoother progress updates (60 updates per second)
     progressTimer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
@@ -352,13 +354,13 @@ class _ListenAudioRukuFirstAudioPlayerState
             // Calculate elapsed time since last update
             double elapsedSeconds =
                 DateTime.now().difference(lastUpdateTime!).inMilliseconds /
-                1000.0;
+                    1000.0;
             lastUpdateTime = DateTime.now();
 
             // Calculate progress within current verse (0.0 to 1.0)
             verseProgress = min(
               (currentPosition - currentVerseStartPosition) /
-                      currentVerseDuration +
+                  currentVerseDuration +
                   (elapsedSeconds / currentVerseDuration),
               1.0,
             );
@@ -366,21 +368,17 @@ class _ListenAudioRukuFirstAudioPlayerState
             // Update current position smoothly
             double newPosition =
                 currentPosition +
-                (elapsedSeconds * (currentVerseDuration / 3.0));
+                    (elapsedSeconds * (currentVerseDuration / 3.0));
 
-            // Ensure we don't overshoot the current verse
+            // Ensure we don't overshoot the current verse's duration
             if (newPosition <=
                 currentVerseStartPosition + currentVerseDuration) {
               currentPosition = newPosition;
               lastPosition = currentPosition;
             } else {
-              // If we've reached the end of the current verse, move to next verse
-              if (currentVerseIndex < verseTexts.length - 1) {
-                currentVerseIndex++;
-                _speakCurrentVerse();
-              } else {
-                _stopProgressTimer();
-              }
+              // If we've reached the end of the current verse, we'll let the completion handler
+              // handle the transition to the next verse
+              _stopProgressTimer();
             }
           }
         });
@@ -439,42 +437,42 @@ class _ListenAudioRukuFirstAudioPlayerState
         context: context,
         builder:
             (context) => AlertDialog(
-              title: Text("TTS Troubleshooting"),
-              content: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("TTS Engine: $engine"),
-                    Text("Current Language: $language"),
-                    Text("Arabic Support: $hasLanguageSupport"),
-                    SizedBox(height: 10),
-                    Text("Available Languages:"),
-                    Text(languages.join(", "), style: TextStyle(fontSize: 12)),
-                    SizedBox(height: 10),
-                    Text(
-                      "If Arabic is not available, please install Arabic language pack in your device's text-to-speech settings.",
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () async {
-                    // Test with simple Arabic text before closing
-                    await flutterTts.speak("بسم الله الرحمن الرحيم");
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Test Arabic"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Close"),
+          title: Text("TTS Troubleshooting"),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("TTS Engine: $engine"),
+                Text("Current Language: $language"),
+                Text("Arabic Support: $hasLanguageSupport"),
+                SizedBox(height: 10),
+                Text("Available Languages:"),
+                Text(languages.join(", "), style: TextStyle(fontSize: 12)),
+                SizedBox(height: 10),
+                Text(
+                  "If Arabic is not available, please install Arabic language pack in your device's text-to-speech settings.",
                 ),
               ],
             ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Test with simple Arabic text before closing
+                await flutterTts.speak("بسم الله الرحمن الرحيم");
+                Navigator.of(context).pop();
+              },
+              child: Text("Test Arabic"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Close"),
+            ),
+          ],
+        ),
       );
 
       print("=== END TROUBLESHOOTING ===");
@@ -531,9 +529,38 @@ class _ListenAudioRukuFirstAudioPlayerState
     }
   }
 
+  Future<void> _speakNextVerse() async {
+    // First increment our verse index
+    int nextVerseIndex = currentVerseIndex + 1;
+
+    // Then notify parent about the active verse change BEFORE starting to speak
+    if (widget.onActiveVerseChanged != null && nextVerseIndex < verseKeys.length) {
+      widget.onActiveVerseChanged!(verseKeys[nextVerseIndex]);
+    }
+
+    // Now update our internal state
+    setState(() {
+      currentVerseIndex = nextVerseIndex;
+    });
+
+    // Finally speak the verse
+    _speakCurrentVerse();
+  }
+
   Future<void> _speakFromStart() async {
     print("Speaking from start");
-    currentVerseIndex = 0;
+
+    // FIRST set currentVerseIndex to 0
+    setState(() {
+      currentVerseIndex = 0;
+    });
+
+    // THEN notify parent about the active verse that will be active (verse 0)
+    if (widget.onActiveVerseChanged != null && verseKeys.isNotEmpty) {
+      widget.onActiveVerseChanged!(verseKeys[0]);
+    }
+
+    // Finally, start speaking
     _speakCurrentVerse();
   }
 
@@ -554,14 +581,7 @@ class _ListenAudioRukuFirstAudioPlayerState
 
       if (textToSpeak.trim().isEmpty) {
         print("WARNING: Empty verse text, skipping...");
-        if (currentVerseIndex < verseTexts.length - 1) {
-          currentVerseIndex++;
-          _speakCurrentVerse();
-        } else {
-          setState(() {
-            isProcessing = false;
-          });
-        }
+        _speakNextVerse(); // Use our new method
         return;
       }
 
@@ -626,6 +646,12 @@ class _ListenAudioRukuFirstAudioPlayerState
     var result = await flutterTts.stop();
     print("Stop result: $result");
     _stopProgressTimer();
+
+    // IMPORTANT: First notify parent about resetting to the first verse
+    if (widget.onActiveVerseChanged != null && verseKeys.isNotEmpty) {
+      widget.onActiveVerseChanged!(verseKeys[0]);
+    }
+
     setState(() {
       ttsState = TtsState.stopped;
       isSpeaking = false;
@@ -645,19 +671,30 @@ class _ListenAudioRukuFirstAudioPlayerState
     // Stop current playback
     flutterTts.stop();
 
-    setState(() {
-      // Move to next verse
-      if (currentVerseIndex < verseTexts.length - 1) {
-        currentVerseIndex++;
+    // Calculate the next verse index
+    int nextVerseIndex = currentVerseIndex + 1;
+    if (nextVerseIndex < verseTexts.length) {
+      // IMPORTANT: First notify parent about the new active verse before updating state
+      if (widget.onActiveVerseChanged != null && nextVerseIndex < verseKeys.length) {
+        widget.onActiveVerseChanged!(verseKeys[nextVerseIndex]);
+      }
+
+      // Then update our internal state
+      setState(() {
+        currentVerseIndex = nextVerseIndex;
         // Update position based on current verse
         _updatePositionToCurrentVerse();
-      }
-      isProcessing = false;
-    });
+        isProcessing = false;
+      });
 
-    // If was playing, continue playing from new verse
-    if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
-      _speakCurrentVerse();
+      // If was playing, continue playing from new verse
+      if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
+        _speakCurrentVerse();
+      }
+    } else {
+      setState(() {
+        isProcessing = false;
+      });
     }
   }
 
@@ -671,19 +708,30 @@ class _ListenAudioRukuFirstAudioPlayerState
     // Stop current playback
     flutterTts.stop();
 
-    setState(() {
-      // Move to previous verse
-      if (currentVerseIndex > 0) {
-        currentVerseIndex--;
+    // Calculate the previous verse index
+    int prevVerseIndex = currentVerseIndex - 1;
+    if (prevVerseIndex >= 0) {
+      // IMPORTANT: First notify parent about the new active verse before updating state
+      if (widget.onActiveVerseChanged != null && prevVerseIndex < verseKeys.length) {
+        widget.onActiveVerseChanged!(verseKeys[prevVerseIndex]);
+      }
+
+      // Then update our internal state
+      setState(() {
+        currentVerseIndex = prevVerseIndex;
         // Update position based on current verse
         _updatePositionToCurrentVerse();
-      }
-      isProcessing = false;
-    });
+        isProcessing = false;
+      });
 
-    // If was playing, continue playing from new verse
-    if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
-      _speakCurrentVerse();
+      // If was playing, continue playing from new verse
+      if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
+        _speakCurrentVerse();
+      }
+    } else {
+      setState(() {
+        isProcessing = false;
+      });
     }
   }
 
@@ -728,6 +776,11 @@ class _ListenAudioRukuFirstAudioPlayerState
         targetVerseIndex = verseTexts.length - 1;
       }
 
+      // IMPORTANT: First notify parent about the new active verse before updating state
+      if (widget.onActiveVerseChanged != null && targetVerseIndex < verseKeys.length) {
+        widget.onActiveVerseChanged!(verseKeys[targetVerseIndex]);
+      }
+
       setState(() {
         currentVerseIndex = targetVerseIndex;
         _updatePositionToCurrentVerse();
@@ -749,9 +802,9 @@ class _ListenAudioRukuFirstAudioPlayerState
   @override
   Widget build(BuildContext context) {
     double sliderValue =
-        totalDuration > 0
-            ? (currentPosition / totalDuration).clamp(0.0, 1.0)
-            : 0.0;
+    totalDuration > 0
+        ? (currentPosition / totalDuration).clamp(0.0, 1.0)
+        : 0.0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -771,7 +824,6 @@ class _ListenAudioRukuFirstAudioPlayerState
             ),
           ),
         ),
-
         // Language support indicator
         if (!hasLanguageSupport)
           Padding(
@@ -799,8 +851,6 @@ class _ListenAudioRukuFirstAudioPlayerState
             ),
           ),
 
-        // Current verse indicator
-
         // Slider + Time Row
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -819,7 +869,7 @@ class _ListenAudioRukuFirstAudioPlayerState
                     _jumpToPosition(newPosition);
                   },
                   activeColor: AppColors.PrimaryColor,
-                  inactiveColor: const Color(0xFFD9D58E),
+                  inactiveColor: AppColors.AudioPlayerInActiveColor,
                 ),
               ),
               Padding(
@@ -864,15 +914,23 @@ class _ListenAudioRukuFirstAudioPlayerState
             ),
           ],
         ),
+
+        // Troubleshooting button
+        if (showTroubleshooting)
+          TextButton(
+            onPressed: troubleshootTTS,
+            child: Text("Troubleshoot TTS Engine"),
+          ),
       ],
     );
   }
 
+
   Widget _iconControlButton(
-    Widget icon,
-    Function() onPressed, {
-    String? tooltip,
-  }) {
+      Widget icon,
+      Function() onPressed, {
+        String? tooltip,
+      }) {
     return Tooltip(
       message: tooltip ?? "",
       child: IconButton(
@@ -896,19 +954,19 @@ class _ListenAudioRukuFirstAudioPlayerState
           children: [
             isProcessing
                 ? SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
-                  ),
-                )
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
+              ),
+            )
                 : Image.asset(
-                  isPlaying ? AppAssets.pausebutton : AppAssets.playbutton,
-                  width: 20,
-                  height: 20,
-                  fit: BoxFit.contain,
-                ),
+              isPlaying ? AppAssets.pausebutton : AppAssets.playbutton,
+              width: 20,
+              height: 20,
+              fit: BoxFit.contain,
+            ),
           ],
         ),
         onPressed: isProcessing ? null : onPressed,
