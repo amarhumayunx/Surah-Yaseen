@@ -1,4 +1,6 @@
+import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../Colors/colors.dart';
@@ -52,7 +54,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
     // Reset the no recent bookmarks flag
     _noRecentBookmarks = false;
 
-    if (_selectedFilter == AppStrings.bookmarkScreenBodystrings.recents) {
+    if (_selectedFilter == 'recents'.tr) {
       // Get current date and time
       final DateTime now = DateTime.now();
       final DateTime last24Hours = now.subtract(const Duration(hours: 24));
@@ -132,8 +134,8 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
       SnackBar(
         content: Text(
           indexesToDelete.length == 1
-              ? 'Bookmark deleted'
-              : '${indexesToDelete.length} bookmarks deleted',
+              ? 'bookmark_deleted'.tr
+              : '${indexesToDelete.length} bookmarks_deleted'.tr,
         ),
         backgroundColor: AppColors.PrimaryColor,
         behavior: SnackBarBehavior.floating,
@@ -160,7 +162,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
               const Icon(Icons.delete_outline, size: 40, color: Color(0xFF4CAF87)),
               const SizedBox(height: 15),
               Text(
-                'Confirm Delete?',
+                'delete_dialog_title'.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
@@ -185,8 +187,8 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text(
-                        'YES',
+                      child: Text(
+                        'yes'.tr,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -206,8 +208,8 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text(
-                        'NO',
+                      child: Text(
+                        'no'.tr,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -290,7 +292,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
                           GestureDetector(
                             onTap: _selectAllBookmarks,
                             child: Text(
-                              "Select All",
+                              'select_all'.tr,
                               style: TextStyle(
                                 color: AppColors.PrimaryColor,
                                 fontFamily: GoogleFonts.poppins().fontFamily,
@@ -379,23 +381,23 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
           const SizedBox(height: 20),
           Text(
             _searchQuery.isNotEmpty
-                ? 'No matching bookmarks found'
-                : 'No bookmarks yet',
+                ? 'no_matching_bookmarks_found'.tr
+                : 'no_bookmarks_yet'.tr,
             style: TextStyle(
               fontSize: 18,
               color: AppColors.PrimaryColor,
-              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             _searchQuery.isNotEmpty
-                ? 'Try a different search term'
-                : 'Long press on any verse to bookmark it',
+                ? 'try_a_different_search_term'.tr
+                : 'long_press_on_any_verse_to_bookmark_it'.tr,
             style: TextStyle(
               fontSize: 14,
               color: AppColors.PrimaryColor,
-              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
             ),
           ),
         ],
@@ -408,10 +410,10 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
       padding: const EdgeInsets.all(15),
       margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6FAF7),
+        color: AppColors.textWhite,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: const Color(0xFFCCE7D5),
+          color: AppColors.BarColor,
           width: 1.5,
         ),
       ),
@@ -419,20 +421,21 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Verse Details',
+            'verse_details'.tr,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: AppColors.PrimaryColor,
+              fontFamily: GoogleFonts.merriweather().fontFamily
             ),
           ),
           Divider(color: AppColors.BarColor),
           const SizedBox(height: 8),
           Text(
             bookmark.arabicText,
-            style: TextStyle(
-              fontFamily: GoogleFonts.merriweather().fontFamily,
-              fontSize: 20,
+            style: ArabicTextStyle(
+              arabicFont: ArabicFont.lateef,
+              fontSize: 24,
               color: AppColors.PrimaryColor,
               height: 1.5,
             ),
@@ -443,7 +446,8 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
           Text(
             bookmark.englishText ?? 'No translation available',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
               color: AppColors.BarColor,
               height: 1.3,
             ),
@@ -454,10 +458,11 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
               Icon(Icons.bookmark, color: AppColors.PrimaryColor, size: 16),
               const SizedBox(width: 5),
               Text(
-                'Added on: ${bookmark.date}',
+                '${'added_on'.tr} ${bookmark.date}',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey[600],
+                  fontFamily: GoogleFonts.merriweather().fontFamily,
+                  color: AppColors.PrimaryColor,
                 ),
               ),
             ],

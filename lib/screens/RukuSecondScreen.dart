@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/widgets/RukuSecondScreen/QuoteSectionSecondRuku.dart';
 import 'package:surah_yaseen/widgets/RukuSecondScreen/RukuSecondScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 
 import '../constants/app_assets.dart';
-import '../constants/app_strings.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/RukuSecondScreen/ButtonsUndertextSecond.dart';
 import '../widgets/RukuSecondScreen/RukuSecondCard.dart';
@@ -56,8 +56,8 @@ class _RukuSecondScreenState extends State<RukuSecondScreen> {
 
                   RukuSecondCard(
                     imagePath: AppAssets.topcornerdecor,
-                    title: AppStrings.rukuStrings.rukutwo,
-                    verseRange: AppStrings.rukuStrings.versetitlethirteentothirtytwo,
+                    title: 'ruku_two'.tr,
+                    verseRange: 'verse_title_thirteen_to_thirtytwo'.tr,
                     imageTop: -8,
                     imageLeft: 3,
                     imageWidth: 55,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:surah_yaseen/screens/RukuScreen.dart';
-import '../../constants/app_strings.dart';
 import '../../screens/AboutScreen.dart';
 import '../../screens/BookmarkScreen.dart';
 import 'option_card.dart';
@@ -28,50 +27,50 @@ class OptionGrid extends StatelessWidget {
           alignment: WrapAlignment.center,
           children: [
             OptionCard(
-              title: AppStrings.homeScreenStrings.startReading,
-              subtitle: AppStrings.homeScreenStrings.ruku1,
-              verses: AppStrings.homeScreenStrings.verses1To12,
+              title: 'start_reading'.tr,
+              subtitle: 'ruku1'.tr,
+              verses: 'verse_title_one_to_twelve'.tr,
               onTap: () => Get.to(() => RukuScreen()),
               height: screenHeight * 0.18,
               bottomDecorWidth: 28,
-              bottomDecorHeight: 44,
-              bottomDecorRight: 45,
+              bottomDecorHeight: 52,
+              bottomDecorRight: 46,
               bottomDecorBottom: 12,
             ),
             OptionCard(
-              title: AppStrings.homeScreenStrings.bookmarks,
-              subtitle: AppStrings.homeScreenStrings.ruku1,
-              verses: AppStrings.homeScreenStrings.emptyString,
+              title: 'bookmarks'.tr,
+              subtitle: 'ruku1'.tr,
+              verses: ''.tr,
               onTap: () => Get.to(() => BookmarkScreen()),
               height: screenHeight * 0.15,
               bottomDecorWidth: 28,
-              bottomDecorHeight: 44,
-              bottomDecorRight: 45,
-              bottomDecorBottom: 8,
+              bottomDecorHeight: 40,
+              bottomDecorRight: 46,
+              bottomDecorBottom: 12,
             ),
             OptionCard(
-              title: AppStrings.homeScreenStrings.about,
-              subtitle: AppStrings.homeScreenStrings.introductionTo,
-              verses: AppStrings.homeScreenStrings.surah,
+              title: 'about'.tr,
+              subtitle: 'introduction_to'.tr,
+              verses: 'surah'.tr,
               onTap: () => Get.to(() => AboutScreen()),
               height: screenHeight * 0.17,
               bottomDecorWidth: 28,
-              bottomDecorHeight: 38,
+              bottomDecorHeight: 40,
               bottomDecorRight: 46,
-              bottomDecorBottom: 10,
+              bottomDecorBottom: 14,
             ),
             Transform.translate(
               offset: Offset(0, -screenHeight * 0.03), // Responsive upward offset
               child: OptionCard(
-                title: AppStrings.homeScreenStrings.listenAudio,
-                subtitle: AppStrings.homeScreenStrings.ruku1,
-                verses: AppStrings.homeScreenStrings.verses1To12,
+                title: 'listen_audio'.tr,
+                subtitle: 'ruku1'.tr,
+                verses: 'verse_title_one_to_twelve'.tr,
                 onTap: () => Get.to(() => RukuScreen()),
                 height: screenHeight * 0.20,
-                bottomDecorWidth: 30,
-                bottomDecorHeight: 44,
-                bottomDecorRight: 45,
-                bottomDecorBottom: 20,
+                bottomDecorWidth: 28,
+                bottomDecorHeight: 52,
+                bottomDecorRight: 46,
+                bottomDecorBottom: 21,
               ),
             ),
           ],

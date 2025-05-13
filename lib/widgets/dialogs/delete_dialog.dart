@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
-import '../../constants/app_strings.dart';
 
 class DeleteDialog extends StatelessWidget {
   const DeleteDialog({super.key});
@@ -20,7 +20,7 @@ class DeleteDialog extends StatelessWidget {
             children: [
               const Icon(Icons.delete_outline, size: 40, color: Color(0xFF4CAF87)),
               const SizedBox(height: 15),
-              Text(AppStrings.deleteDialog.title,
+              Text('delete_dialog_title'.tr,
                   style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -40,7 +40,7 @@ class DeleteDialog extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: Text(AppStrings.deleteDialog.yes,
+                      child: Text('yes'.tr,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
@@ -57,7 +57,7 @@ class DeleteDialog extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: Text(AppStrings.deleteDialog.no,
+                      child: Text('no'.tr,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ),

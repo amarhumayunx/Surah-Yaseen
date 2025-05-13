@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../Colors/colors.dart';
-import '../../constants/app_strings.dart';
 
 class QuoteSectionRukuFourth extends StatelessWidget {
   const QuoteSectionRukuFourth({super.key});
@@ -16,10 +16,10 @@ class QuoteSectionRukuFourth extends StatelessWidget {
         left: 4,
         bottom: 4,),
     child: Text(
-      AppStrings.rukuFourthScreenStrings.textUnderCard,
+      'text_under_card_ruku4'.tr,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         color: AppColors.PrimaryColor,
         fontFamily: GoogleFonts.merriweather().fontFamily,
       ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,15 +58,24 @@ class RukuFirstCard extends StatelessWidget {
         children: [
           Positioned(
             top: imageTop,
-            left: imageLeft,
+            left: Directionality.of(context) == TextDirection.ltr ? imageLeft : null,
+            right: Directionality.of(context) == TextDirection.rtl ? imageLeft : null,
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20)),
-              child: Image.asset(
+              borderRadius: Directionality.of(context) == TextDirection.ltr
+                  ? const BorderRadius.only(topLeft: Radius.circular(20))
+                  : const BorderRadius.only(topRight: Radius.circular(20)),
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(
+                  Directionality.of(context) == TextDirection.rtl ? pi : 0,
+                ),
+                child: Image.asset(
                   imagePath,
                   width: imageWidth,
                   height: imageHeight,
-                  fit: BoxFit.contain),
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
           ),
           Column(
@@ -73,19 +84,19 @@ class RukuFirstCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkgreenColor,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.merriweather().fontFamily,
                 ),
                 textAlign: TextAlign.center,
               ),
               Text(
                 verseRange,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   color: AppColors.fontColor,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.merriweather().fontFamily,
                 ),
                 textAlign: TextAlign.center,
               ),

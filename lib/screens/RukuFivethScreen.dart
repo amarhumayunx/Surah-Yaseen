@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
-import '../constants/app_strings.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/RukuFivethScreen/ButtonsUnderTextFive.dart';
 import '../widgets/RukuFivethScreen/QuoteSectionFiveRuku.dart';
@@ -52,8 +52,8 @@ class _RukuFirstScreenState extends State<RukuFiveScreen> {
                   // Wrap the RukuCard with a container to set custom size for this screen
                   RukuFiveCard(
                     imagePath: AppAssets.topcornerdecor,
-                    title: AppStrings.rukuStrings.rukufiveth,
-                    verseRange: AppStrings.rukuStrings.versetitlesixtheighttoeightythree,
+                    title: 'ruku_five'.tr,
+                    verseRange: 'verse_title_sixtyeight_to_eightythree'.tr,
                     imageTop: -8,
                     imageLeft: 3,
                     imageWidth: 55,

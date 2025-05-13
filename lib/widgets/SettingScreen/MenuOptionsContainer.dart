@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart'; // Import GetX
+import 'package:share_plus/share_plus.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../screens/HelpScreen.dart';
 import '../../screens/LanguageScreen.dart';
 import '../../screens/NotificationScreen.dart';
 import '../../screens/PrivacyPolicyScreen.dart';
-import '../../screens/RateUsScreen.dart';
-import '../../screens/ShareScreen.dart';
+
 class MenuOptionsContainer extends StatefulWidget {
   const MenuOptionsContainer({super.key});
 
@@ -28,11 +29,11 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(color: AppColors.BarColor, width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey,
+              color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 5,
               offset: Offset(0, 3),
@@ -40,15 +41,17 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: Column(
             children: [
-              _buildMenuItem(Icons.notifications_none, 'Notifications', NotificationScreen()),
-              _buildMenuItem(Icons.language, 'Language', LanguageScreen()),
-              _buildMenuItem(Icons.privacy_tip_outlined, 'Privacy Policy', PrivacyPolicyScreen()),
-              _buildMenuItem(Icons.star_border, 'Rate Us', RateUsScreen()),
-              _buildMenuItem(Icons.share_outlined, 'Share', ShareScreen()),
-              _buildMenuItem(Icons.help_outline, 'Help', HelpScreen()),
+              _buildMenuItem(Icons.notifications_none, 'notifications'.tr, NotificationScreen(), null),
+              _buildMenuItem(Icons.language, 'language'.tr, LanguageScreen(), null),
+              _buildMenuItem(Icons.privacy_tip_outlined, 'privacy_policy'.tr, PrivacyPolicyScreen(), null),
+              // Handle the Rate Us button directly here
+              _buildMenuItem(Icons.star_border, 'rate_us'.tr, null, onRateUs),
+              // Handle the Share button directly here
+              _buildMenuItem(Icons.share_outlined, 'share'.tr, null, onShare),
+              _buildMenuItem(Icons.help_outline, 'help'.tr, HelpScreen(), null),
             ],
           ),
         ),
@@ -56,18 +59,23 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, Widget screen) {
+  // Modify _buildMenuItem to accept an action for Rate Us or Share directly
+  Widget _buildMenuItem(IconData icon, String title, Widget? screen, void Function()? onAction) {
     return GestureDetector(
       onTap: () {
-        // Use GetX for navigation
-        Get.to(() => screen); // Get.to() replaces Navigator.push()
+        if (onAction != null) {
+          onAction(); // Trigger the action directly if it's provided (Rate Us or Share)
+        } else if (screen != null) {
+          // Navigate to the screen if no action is provided
+          Get.to(() => screen); // Get.to() replaces Navigator.push()
+        }
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 5.0),
         child: Row(
           children: [
             Icon(icon, color: AppColors.PrimaryColor),
-            SizedBox(width: 12),
+            SizedBox(width: 10),
             Text(
               title,
               style: TextStyle(
@@ -80,5 +88,39 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
         ),
       ),
     );
+  }
+
+  // Function for Rate Us
+  void onRateUs() async {
+    const String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.example.yourapp';  // Replace with your app's Play Store URL
+
+    if (await canLaunch(playStoreUrl)) {
+      await launch(playStoreUrl);
+    } else {
+      // Handle error if the URL can't be launched
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Could not open the Play Store.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  // Function for Share
+  void onShare() {
+    const String appLink = 'https://play.google.com/store/apps/details?id=com.example.yourapp'; // Replace with your app's Play Store URL
+    Share.share('Check out this amazing app: $appLink');
   }
 }

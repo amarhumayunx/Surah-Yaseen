@@ -1,11 +1,12 @@
 // help_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../Colors/colors.dart';
-import '../widgets/AboutScreen/top_bar_about.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/SurahTitle/surat_title.dart';
+import '../widgets/TopBar/topbartest.dart';
 import '../widgets/Topbackground/top_background.dart';
 
 
@@ -44,7 +45,7 @@ class _HelpScreenState extends State<HelpScreen> {
           SafeArea(
             child: Column(
               children: [
-                TopBarAbout(),
+                TopBarSet(),
                 SizedBox(height: 10,),
                 SizedBox(height: 5,),
                 DividerBar(),
@@ -57,28 +58,27 @@ class _HelpScreenState extends State<HelpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Help & Support",
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,
-                          color: AppColors.whiteColor),
+                          'help_support'.tr,
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.whiteColor),
                         ),
                         SizedBox(height: 20),
                         Text(
-                          "If you need any assistance, please contact us at support@example.com.",
-                          style: TextStyle(fontSize: 16,color: AppColors.whiteColor),
+                          'assistance_text'.tr,
+                          style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
                         ),
                         SizedBox(height: 20),
                         Text(
-                          "FAQ:",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: AppColors.whiteColor),
+                          'faq'.tr,
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.whiteColor),
                         ),
                         SizedBox(height: 10),
                         Text(
-                          "1. How to use the app?\n- Simply open the app and follow the instructions.",
-                          style: TextStyle(fontSize: 16,
-                          color: AppColors.whiteColor),
+                          'faq_1'.tr,
+                          style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
                         ),
                         // Add more FAQs if needed
                       ],
+
                     ),
                   ),
                 )

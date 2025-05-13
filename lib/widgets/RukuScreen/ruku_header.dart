@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 
 import '../../constants/app_assets.dart';
-import '../../constants/app_strings.dart';
 
 class RukuHeader extends StatelessWidget {
   const RukuHeader({super.key});
@@ -47,12 +47,12 @@ class RukuHeader extends StatelessWidget {
                 ),
               ),
               Text(
-                AppStrings.rukuStrings.rukubuttontitle,
+                'ruku_button_title'.tr,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: AppColors.HeadingColor,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.merriweather().fontFamily,
                 ),
               ),
 
@@ -86,16 +86,16 @@ class RukuHeader extends StatelessWidget {
 
         Container(
           padding: EdgeInsets.symmetric(
-              horizontal: 10,
+              horizontal: 35,
               vertical: 10),
           child: Text(
-            AppStrings.rukuStrings.textunderrukubutton,
+            'text_under_ruku_button'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16,
-              fontStyle: FontStyle.italic,
-              color: const Color(0xFF4CAF87),
+              fontSize: 14,
+              color: AppColors.PrimaryColor,
               fontFamily: GoogleFonts.merriweather().fontFamily,
+              height: 1.5
             ),
           ),
         ),

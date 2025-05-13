@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:surah_yaseen/widgets/AboutScreen/top_bar_about.dart';
+import 'package:get/get.dart';
 
 import '../Colors/colors.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/SurahTitle/surat_title.dart';
+import '../widgets/TopBar/topbartest.dart';
 import '../widgets/Topbackground/top_background.dart';
-
+import '../widgets/buttons/buttons.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -16,7 +17,6 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -27,8 +27,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
       statusBarBrightness: Brightness.dark,
     ));
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +39,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
           SafeArea(
             child: Column(
               children: [
-                TopBarAbout(),
-                SizedBox(height: 10,),
-                SizedBox(height: 5,),
+                TopBarSet(),
+                const SizedBox(height: 10),
                 DividerBar(),
                 SurahTitle(),
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
@@ -54,39 +51,108 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Select Language",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,
-                          color: AppColors.whiteColor),
-                        ),
-                        SizedBox(height: 20),
-                        ListTile(
-                          title: Text("English",
-                          style: TextStyle(color: AppColors.whiteColor),
+                          'select_language'.tr,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.whiteColor,
                           ),
-                          onTap: () {
-                            // Add language change logic here
-                            Navigator.pop(context);
+                        ),
+                        const SizedBox(height: 20),
+                        RukuStyleButton(
+                          title: 'English',
+                          onPressed: () {
+                            Get.updateLocale(const Locale('en', 'US'));
+                            Get.snackbar(
+                              'Surah Yaseen',
+                              '',
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: Colors.black12,
+                              colorText: Colors.white,
+                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              borderRadius: 40,
+                              snackStyle: SnackStyle.FLOATING,
+                              overlayColor: Colors.black.withOpacity(0.2),
+                              messageText: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/illustrations/surahicon.png',
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 2),
+                                          const Text(
+                                            'App language has been set to English',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           },
                         ),
-                        ListTile(
-                          title: Text("Urdu",
-                            style: TextStyle(color: AppColors.whiteColor),
-                          ),
-                          onTap: () {
-                            // Add language change logic here
-                            Navigator.pop(context);
+                        RukuStyleButton(
+                          title: 'اردو',
+                          onPressed: () {
+                            Get.updateLocale(const Locale('ur', 'PK'));
+                            Get.snackbar(
+                              'سورۃ یٰسین',
+                              '',
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: Colors.black12,
+                              colorText: Colors.white,
+                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              borderRadius: 40,
+                              snackStyle: SnackStyle.FLOATING,
+                              overlayColor: Colors.black.withOpacity(0.2),
+                              messageText: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/illustrations/surahicon.png',
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 2),
+                                          const Text(
+                                            'ایپ کی زبان اردو پر سیٹ کر دی گئی ہے',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           },
                         ),
-                        ListTile(
-                          title: Text("Arabic",
-                            style: TextStyle(color: AppColors.whiteColor),
-                          ),
-                          onTap: () {
-                            // Add language change logic here
-                            Navigator.pop(context);
-                          },
-                        ),
-                        // Add more languages if needed
                       ],
                     ),
                   ),
@@ -99,54 +165,3 @@ class _LanguageScreenState extends State<LanguageScreen> {
     );
   }
 }
-
-
-
-
-
-/*class LanguageScreen extends StatelessWidget {
-  const LanguageScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Language")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Select Language",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              title: Text("English"),
-              onTap: () {
-                // Add language change logic here
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text("Urdu"),
-              onTap: () {
-                // Add language change logic here
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text("Arabic"),
-              onTap: () {
-                // Add language change logic here
-                Navigator.pop(context);
-              },
-            ),
-            // Add more languages if needed
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/

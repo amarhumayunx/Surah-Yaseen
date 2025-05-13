@@ -3,13 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/AboutScreen/TitleCardAbout.dart';
 import 'package:surah_yaseen/widgets/AboutScreen/infocardabout.dart';
-import 'package:surah_yaseen/widgets/AboutScreen/top_bar_about.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
 import '../controllers/navigation_controller.dart';
 import '../widgets/AboutScreen/quote_section.dart';
+import '../widgets/TopBar/topbartest.dart';
 import '../widgets/Topbackground/top_background.dart';
 
 class AboutScreen extends StatefulWidget {
@@ -45,7 +45,7 @@ class _AboutScreenState extends State<AboutScreen> {
             child: Column(
               children: [
                 SizedBox(height: 10,),
-                TopBarAbout(),
+                TopBarSet(),
                 SizedBox(height: 5,),
                 DividerBar(),
                 SurahTitle(),

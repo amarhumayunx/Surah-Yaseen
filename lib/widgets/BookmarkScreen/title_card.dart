@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/constants/app_assets.dart';
-import '../../constants/app_strings.dart';
 
 class TitleCardBookmark extends StatelessWidget {
   TitleCardBookmark({super.key});
@@ -12,7 +12,7 @@ class TitleCardBookmark extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 30),
       child: Stack(
-        clipBehavior: Clip.none, // 👈 Important to allow images to overflow
+        clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
           // Main white card with shadow
@@ -47,33 +47,33 @@ class TitleCardBookmark extends StatelessWidget {
           ),
           // Title Text
           Text(
-            AppStrings.bookmarkScreenBodystrings.title,
+            'bookmarks'.tr,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: AppColors.HeadingColor,
-              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
             ),
           ),
 
-          // ✅ Top Left Corner Image
+
           Positioned(
-            top: 1, // 👈 Move slightly outside the card
+            top: 1,
             left: 10,
             child: Image.asset(
-              AppAssets.topcornerdecor, // ✅ Replace with your asset path
+              AppAssets.topcornerdecor,
               width: 40,
               height: 40,
               fit: BoxFit.contain,
             ),
           ),
 
-          // ✅ Bottom Right Corner Image
+
           Positioned(
-            bottom: 1, // 👈 Move slightly outside the card
+            bottom: 1,
             right: 10,
             child: Image.asset(
-              AppAssets.bottomrightdecor, // ✅ Replace with your asset path
+              AppAssets.bottomrightdecor,
               width: 40,
               height: 40,
               fit: BoxFit.contain,

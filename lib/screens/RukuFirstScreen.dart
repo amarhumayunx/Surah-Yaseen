@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/RukuFirstScreen/ButtonsUnderTextFirst.dart';
 import 'package:surah_yaseen/widgets/RukuFirstScreen/QuoteSectionFirstRuku.dart';
 import 'package:surah_yaseen/widgets/RukuFirstScreen/RukuFirstCard.dart';
@@ -7,7 +8,6 @@ import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
-import '../constants/app_strings.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/RukuFirstScreen/RukuFirstScreenTopBar.dart';
 
@@ -52,8 +52,8 @@ class _RukuFirstScreenState extends State<RukuFirstScreen> {
                   // Wrap the RukuCard with a container to set custom size for this screen
                   RukuFirstCard(
                       imagePath: AppAssets.topcornerdecor,
-                      title: AppStrings.rukuStrings.rukutitleone,
-                      verseRange: AppStrings.rukuStrings.versetitleonetotwelve,
+                      title: 'ruku_title_one'.tr,
+                      verseRange: 'verse_title_one_to_twelve'.tr,
                       imageTop: -8,
                       imageLeft: 3,
                       imageWidth: 55,

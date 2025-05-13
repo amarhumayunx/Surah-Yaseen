@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
@@ -30,95 +32,116 @@ class OptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 8, // Shadow all around
-      shadowColor: Colors.black54,
-      borderRadius: BorderRadius.circular(20),
-      child: Stack(
-        children: [
-          Container(
-            width: 150,
-            height: height,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppColors.BarColor,
-                width: 1.5,
+    return InkWell(
+      onTap: onTap, // Make whole card tappable
+      borderRadius: BorderRadius.circular(20), // Ripple effect matches card
+      child: Material(
+        elevation: 8,
+        shadowColor: Colors.black54,
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Container(
+              width: 150,
+              height: height,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.BarColor,
+                  width: 1.5,
+                ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.HeadingColor,
-                      fontFamily: GoogleFonts.merriweather().fontFamily,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    subtitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.PrimaryColor,
-                      fontFamily: GoogleFonts.merriweather().fontFamily,
-                    ),
-                  ),
-                  if (verses.isNotEmpty)
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Text(
-                      verses,
+                      title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.HeadingColor,
+                        fontFamily: GoogleFonts.merriweather().fontFamily,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      subtitle,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
                         color: AppColors.PrimaryColor,
                         fontFamily: GoogleFonts.merriweather().fontFamily,
                       ),
                     ),
-                  const SizedBox(height: 15),
-                  Container(
-                    width: 70,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: AppColors.PrimaryColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    child: InkWell(
-                      onTap: onTap,
+                    if (verses.isNotEmpty)
+                      Text(
+                        verses,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.PrimaryColor,
+                          fontFamily: GoogleFonts.merriweather().fontFamily,
+                        ),
+                      ),
+                    const SizedBox(height: 15),
+                    Container(
+                      width: 70,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: AppColors.PrimaryColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.all(5),
                       child: const Icon(
                         Icons.arrow_forward,
                         color: Colors.white,
                         size: 20,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            top: -4,
-            left: 5,
-            child: Image.asset(AppAssets.topcornerdecor, width: 45, height: 45),
-          ),
-          Positioned(
-            bottom: bottomDecorBottom,
-            right: bottomDecorRight,
-            child: Image.asset(
-              AppAssets.bottomcornerdecor,
-              width: bottomDecorWidth,
-              height: bottomDecorHeight,
+            // Top decoration
+            Positioned(
+              top: -4,
+              left: Directionality.of(context) == TextDirection.ltr ? 5 : null,
+              right: Directionality.of(context) == TextDirection.rtl ? 5 : null,
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Directionality.of(context) == TextDirection.rtl
+                    ? Matrix4.rotationY(math.pi)
+                    : Matrix4.identity(),
+                child: Image.asset(
+                  AppAssets.topcornerdecor,
+                  width: 45,
+                  height: 45,
+                ),
+              ),
             ),
-          ),
-        ],
+            // Bottom decoration
+            Positioned(
+              bottom: bottomDecorBottom,
+              right: Directionality.of(context) == TextDirection.ltr ? bottomDecorRight : null,
+              left: Directionality.of(context) == TextDirection.rtl ? bottomDecorRight : null,
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Directionality.of(context) == TextDirection.rtl
+                    ? Matrix4.rotationY(math.pi)
+                    : Matrix4.identity(),
+                child: Image.asset(
+                  AppAssets.bottomcornerdecor,
+                  width: bottomDecorWidth,
+                  height: bottomDecorHeight,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

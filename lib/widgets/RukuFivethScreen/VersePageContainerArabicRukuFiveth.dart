@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:surah_yaseen/widgets/dialogs/BookmarkConfirmDialog.dart';
@@ -8,6 +11,7 @@ import '../../constants/app_assets.dart';
 import '../../constants/app_strings.dart';
 import '../BookmarkScreen/BookmarkProvider.dart';
 import '../FontSize/FontSizeProvider.dart';
+import '../NotificationScreen/notification_screen_history.dart';
 
 class ArabicVerseContainerRukuFiveth extends StatefulWidget {
   final int rukuNumber;
@@ -64,8 +68,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFiveth> {
   Future<void> _showBookmarkConfirmationDialog(
       BuildContext context,
       int verseIndex,
-      String arabicText)
-  async {
+      String arabicText) async {
     final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: false);
 
     // Determine the icon type based on whether the user is listening to audio
@@ -80,10 +83,17 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFiveth> {
       iconType: iconType, // Pass the icon type
     );
 
+    // Save notification with just verse number and ruku number
+    await NotificationHistoryManager.saveNotification(
+      title: 'Verse $verseIndex', // Just the verse number
+      verseIndex: verseIndex,
+      rukuNumber: widget.rukuNumber,
+    );
+
     showDialog(
       context: context,
       builder: (_) => BookmarkConfirmationDialog(
-          message: wasAdded ? 'Verse Bookmarked' : 'Verse Already Bookmarked'
+          message: wasAdded ? 'verse_bookmarked'.tr : 'verse_already_bookmarked'.tr
       ),
     ).then((_) {
       // Reset the highlight after the dialog is dismissed
@@ -215,7 +225,8 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFiveth> {
                 // Bookmark icon that appears when verse is selected or bookmarked
                 if (isSelected || isBookmarked || isActiveVerse)
                   Positioned(
-                    left: 8,
+                    left: Directionality.of(context) == TextDirection.ltr ? 2 : null,
+                    right: Directionality.of(context) == TextDirection.rtl ? 2 : null,
                     top: 8,
                     child: Container(
                       padding: EdgeInsets.all(4),
@@ -276,7 +287,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFiveth> {
                   ),
                 ),
                 child: Text(
-                  'Rukū ${widget.rukuNumber}',
+                  '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
                   style: TextStyle(
                     color: AppColors.PrimaryColor,
                     fontSize: 24,
@@ -326,7 +337,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFiveth> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
-                        'Page ${widget.currentPage} of ${widget.totalPages}',
+                        '${'page'.tr} ${widget.currentPage} ${'of'.tr} ${widget.totalPages}',
                         style: TextStyle(
                           color: AppColors.PrimaryColor,
                           fontSize: 14,
@@ -352,23 +363,37 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFiveth> {
 
           // Add Image Asset to top-left corner (before the Ruku Title)
           Positioned(
-            left: 5,  // Adjust the left position
-            top: -9,   // Adjust the top position
-            child: Image.asset(
-              AppAssets.topcornerdecor, // Replace with your image asset path
-              width: 70,
-              height: 70,
+            left: Directionality.of(context) == TextDirection.ltr ? 5 : null,
+            right: Directionality.of(context) == TextDirection.rtl ? 5 : null,
+            top: -9,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(
+                Directionality.of(context) == TextDirection.rtl ? pi : 0,
+              ),
+              child: Image.asset(
+                AppAssets.topcornerdecor,
+                width: 70,
+                height: 70,
+              ),
             ),
           ),
 
           // Add Image Asset to bottom-right corner
           Positioned(
-            right: 5,  // Adjust the right position
-            bottom: -8, // Adjust the bottom position
-            child: Image.asset(
-              AppAssets.bottomrightdecor, // Replace with your image asset path
-              width: 70,
-              height: 70,
+            right: Directionality.of(context) == TextDirection.ltr ? 5 : null,
+            left: Directionality.of(context) == TextDirection.rtl ? 5 : null,
+            bottom: -8,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(
+                Directionality.of(context) == TextDirection.rtl ? pi : 0,
+              ),
+              child: Image.asset(
+                AppAssets.bottomrightdecor,
+                width: 70,
+                height: 70,
+              ),
             ),
           ),
         ],

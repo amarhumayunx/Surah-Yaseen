@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surah_yaseen/screens/OnBoardingScreen.dart';
-import 'package:surah_yaseen/constants/app_assets.dart';
 import '../Colors/colors.dart';
 import '../constants/app_strings.dart';
+import '../constants/app_assets.dart';
+import '../menu/navigation_menu.dart';
 
 class SurahYaseenSplashScreen extends StatefulWidget {
   const SurahYaseenSplashScreen({super.key});
@@ -17,9 +19,21 @@ class _SurahYaseenSplashScreenState extends State<SurahYaseenSplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    navigateToNext();
+  }
+
+  Future<void> navigateToNext() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (isFirstTime) {
+      await prefs.setBool('isFirstTime', false);
       Get.off(() => Onboardingscreen());
-    });
+    } else {
+      Get.off(() => const NavigationMenu()); // Replace with your actual home screen
+    }
   }
 
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
-import '../../constants/app_strings.dart';
 
 class ExitDialog extends StatelessWidget {
   const ExitDialog({super.key});
@@ -20,7 +20,7 @@ class ExitDialog extends StatelessWidget {
             children: [
               const Icon(Icons.exit_to_app, size: 40, color: Color(0xFF4CAF87)),
               const SizedBox(height: 15),
-              Text(AppStrings.exitDialog.title,
+              Text('exit_dialog_title'.tr,
                   style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -39,7 +39,7 @@ class ExitDialog extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20)),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: Text(AppStrings.exitDialog.yes,
+                      child: Text('yes'.tr,
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ),
@@ -54,7 +54,7 @@ class ExitDialog extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20)),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: Text(AppStrings.exitDialog.no,
+                      child: Text('no'.tr,
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ),

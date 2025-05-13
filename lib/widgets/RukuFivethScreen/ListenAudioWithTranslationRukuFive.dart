@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/ListenAudioWithTranslastionScreenTopbar.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 
-import '../../constants/app_strings.dart';
 import 'ListenAudioWithTranslationRukuFiveAudioPlayer.dart';
 import 'VersePageContainerWithTranslationRukuFive.dart';
 
@@ -122,7 +122,7 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
                         ),
                         SizedBox(height: 10),
                         ListenAudioWithTranslationRukuFiveAudioPlayer(
-                          title: AppStrings.listenAudioWithTranslationScreenString.Ruku5title,
+                          title: 'ruku_title_audio_trans5'.tr,
                           verses: yaseen_verses,
                           startVerse: 68,
                           endVerse: 83,

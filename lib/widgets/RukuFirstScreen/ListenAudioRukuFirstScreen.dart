@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/RukuFirstScreen/ListenAudioRukuFirstAudioPlayer.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
-import '../../constants/app_strings.dart';
 import 'VersePageContainerArabicRukuFirst.dart';
 
 class ListenAudioRukuFirstScreen extends StatefulWidget {
@@ -120,7 +120,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
 
                   // Pass a callback to the audio player to update active verse
                   ListenAudioRukuFirstAudioPlayer(
-                    title: AppStrings.listenAudioScreenString.Rukutitle,
+                    title: 'ruku_title_audio1'.tr,
                     verses: yaseen_verses,
                     startVerse: 0,
                     endVerse: 12,

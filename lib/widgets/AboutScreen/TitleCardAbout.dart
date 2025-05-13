@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 
 import '../../constants/app_assets.dart';
-import '../../constants/app_strings.dart';
 
 class TitleCardAbout extends StatelessWidget {
   const TitleCardAbout({super.key});
@@ -54,34 +54,32 @@ class TitleCardAbout extends StatelessWidget {
           ),
           // Title text
           Text(
-            AppStrings.aboutScreenStrings.AboutScreenTitle,
+            'about_screen_title'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: cardHeight * 0.4, // responsive font size
               fontWeight: FontWeight.bold,
               color: AppColors.HeadingColor,
-              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
             ),
           ),
 
-          // ✅ Top Left Corner Image
           Positioned(
-            top: 1, // 👈 Move slightly outside the card
+            top: 1,
             left: 10,
             child: Image.asset(
-              AppAssets.topcornerdecor, // ✅ Replace with your asset path
+              AppAssets.topcornerdecor,
               width: 40,
               height: 40,
               fit: BoxFit.contain,
             ),
           ),
 
-          // ✅ Bottom Right Corner Image
           Positioned(
-            bottom: 1, // 👈 Move slightly outside the card
+            bottom: 1,
             right: 10,
             child: Image.asset(
-              AppAssets.bottomrightdecor, // ✅ Replace with your asset path
+              AppAssets.bottomrightdecor,
               width: 40,
               height: 40,
               fit: BoxFit.contain,

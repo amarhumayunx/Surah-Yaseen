@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/RukuSecondScreen/ListenAudioRukuSecondAudioPlayer.dart';
@@ -7,7 +8,6 @@ import 'package:surah_yaseen/widgets/RukuSecondScreen/VersePageContainerArabicRu
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
-import '../../constants/app_strings.dart';
 
 class ListenAudioRukuSecondScreen extends StatefulWidget {
   const ListenAudioRukuSecondScreen({super.key});
@@ -126,7 +126,7 @@ class _ListenAudioRukuSecondScreenState extends State<ListenAudioRukuSecondScree
                   ),
                   const SizedBox(height: 10), // Use const for static sizes
                   ListenAudioRukuSecondAudioPlayer(
-                    title: AppStrings.listenAudioScreenString.Rukutitle2,
+                    title: 'ruku_title_audio2'.tr,
                     verses: yaseen_verses,
                     startVerse: 13,
                     endVerse: 32,

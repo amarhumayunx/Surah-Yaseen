@@ -36,17 +36,17 @@ class Onboardingscreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 55),
               child: SmoothPageIndicator(
                 controller: onboardingController.pageController,
                 count: onboardingData.length,
                 effect: ExpandingDotsEffect(
-                  spacing: 8,
+                  spacing: 5,
                   radius: 10,
-                  dotWidth: 13,
-                  dotHeight: 8,
-                  dotColor: AppColors.lightColor,
-                  activeDotColor: AppColors.HeadingColor,
+                  dotWidth: 12,
+                  dotHeight: 8.5,
+                  dotColor: AppColors.OnbaordingScreenDotColor,
+                  activeDotColor: AppColors.darkgreenColor,
                 ),
               ),
             ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/RukuThirdScreen/ButtonsUnderTextThird.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
-import '../constants/app_strings.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/RukuThirdScreen/QuoteSectionRukuThird.dart';
 import '../widgets/RukuThirdScreen/RukuThirdScreenTopBar.dart';
@@ -52,8 +52,8 @@ class _RukuFirstScreenState extends State<RukuThirdScreen> {
                   // Wrap the RukuCard with a container to set custom size for this screen
                   RukuThirdCard(
                     imagePath: AppAssets.topcornerdecor,
-                    title: AppStrings.rukuStrings.rukuthree,
-                    verseRange: AppStrings.rukuStrings.versetitlethirtythreetofifty,
+                    title: 'ruku_three'.tr,
+                    verseRange: 'verse_title_thirtythree_to_fifty'.tr,
                     imageTop: -8,
                     imageLeft: 3,
                     imageWidth: 55,

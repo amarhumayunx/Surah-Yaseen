@@ -44,7 +44,8 @@ class OnboardingBottomButtons extends StatelessWidget {
                 ),
               ),
               child: Text(
-                isLastPage ? AppStrings.onboardingStrings.getStartedbuttonString : AppStrings.onboardingStrings.nextbuttonString,
+                isLastPage ? AppStrings.onboardingStrings.getStartedbuttonString
+                           : AppStrings.onboardingStrings.nextbuttonString,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: GoogleFonts.merriweather().fontFamily,
@@ -61,9 +62,9 @@ class OnboardingBottomButtons extends StatelessWidget {
             TextButton(
               onPressed: () => Get.to(() => NavigationMenu()),
               child: Text(
-                AppStrings.onboardingStrings.skipbuttonString,
+                'skip'.tr,
                 style: TextStyle(
-                  color: AppColors.HeadingColor,
+                  color: AppColors.darkgreenColor,
                   fontFamily: GoogleFonts.merriweather().fontFamily,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -71,14 +72,14 @@ class OnboardingBottomButtons extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 50,
+              height: 60,
               width: 60,
               child: ElevatedButton(
                 onPressed: onboardingController.nextPage,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.HeadingColor,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                   padding: const EdgeInsets.all(12),
                 ),

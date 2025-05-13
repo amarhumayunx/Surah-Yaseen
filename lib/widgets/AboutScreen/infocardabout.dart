@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../Colors/colors.dart';
@@ -15,40 +16,40 @@ class InfoBoxCard extends StatelessWidget {
         children: [
           // Chapter Details Card
           _buildInfoCard(
-            title: AppStrings.aboutScreenStrings.chapterDetails,
+            title: 'chapter_details'.tr,
             children: [
-              _buildDetailRow(AppStrings.aboutScreenStrings.SurahNumberText, AppStrings.aboutScreenStrings.SurahNumber),
-              _buildDetailRow(AppStrings.aboutScreenStrings.TotalVersesText, AppStrings.aboutScreenStrings.TotalVerses),
-              _buildDetailRow(AppStrings.aboutScreenStrings.RukuText, AppStrings.aboutScreenStrings.Ruku),
-              _buildDetailRow(AppStrings.aboutScreenStrings.PlaceOfRevelationText,AppStrings.aboutScreenStrings.PlaceOfRevelation),
-              _buildDetailRow(AppStrings.aboutScreenStrings.MainThemesText, AppStrings.aboutScreenStrings.MainThemes),
-              _buildDetailRow(AppStrings.aboutScreenStrings.text,AppStrings.aboutScreenStrings.themeText),
+              _buildDetailRow('surah_number_text'.tr,'surah_number'.tr),
+              _buildDetailRow('total_verses_text'.tr, 'total_verses'.tr),
+              _buildDetailRow('ruku_text'.tr, 'ruku'.tr),
+              _buildDetailRow('place_of_revelation_text'.tr,'place_of_revelation'.tr),
+              _buildDetailRow('main_themes_text'.tr, 'main_themes'.tr),
+              _buildDetailRow(AppStrings.aboutScreenStrings.text,'theme_text'.tr),
             ],
           ),
 
           // Significance & Benefits Card
           _buildInfoCard(
-            title: AppStrings.aboutScreenStrings.significanceAndBenefits,
+            title: 'significance_and_benefits'.tr,
             children: [
-              _buildCenteredText(AppStrings.aboutScreenStrings.SandBline1),
-              _buildCenteredText(AppStrings.aboutScreenStrings.SandBline2),
-              _buildCenteredText(AppStrings.aboutScreenStrings.SandBline3),
-              _buildCenteredText(AppStrings.aboutScreenStrings.SandBline4),
-              _buildCenteredText(AppStrings.aboutScreenStrings.SandBline5),
+              _buildCenteredText('sandb_line1'.tr),
+              _buildCenteredText('sandb_line2'.tr),
+              _buildCenteredText('sandb_line3'.tr),
+              _buildCenteredText('sandb_line4'.tr),
+              _buildCenteredText('sandb_line5'.tr),
             ],
           ),
 
           // Purpose of App Card
           _buildInfoCard(
-            title: AppStrings.aboutScreenStrings.purposeOfApp,
+            title: 'purpose_of_app'.tr,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 0),
                 child: Text(
-                  AppStrings.aboutScreenStrings.PurposeOfAppText,
+                  'purpose_of_app_text'.tr,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 13,
                     fontFamily: GoogleFonts.merriweather().fontFamily,
                     color: AppColors.PrimaryColor,
                   ),
@@ -58,7 +59,7 @@ class InfoBoxCard extends StatelessWidget {
           ),
 
           // Add some padding at the bottom for better scrolling
-          SizedBox(height: 20),
+          SizedBox(height: 15),
         ],
       ),
     );
@@ -80,8 +81,9 @@ class InfoBoxCard extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
               color: AppColors.darkgreenColor,
             ),
             textAlign: TextAlign.center,
@@ -103,7 +105,7 @@ class InfoBoxCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 13,
               fontFamily: GoogleFonts.merriweather().fontFamily,
               color: AppColors.PrimaryColor,
             ),
@@ -113,7 +115,7 @@ class InfoBoxCard extends StatelessWidget {
             child: Text(
               value,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 13,
                 fontFamily: GoogleFonts.merriweather().fontFamily,
                 color: AppColors.PrimaryColor,
               ),
@@ -132,7 +134,7 @@ class InfoBoxCard extends StatelessWidget {
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 13,
           fontFamily: GoogleFonts.merriweather().fontFamily,
           color: AppColors.PrimaryColor,
         ),

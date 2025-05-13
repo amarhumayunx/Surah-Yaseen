@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/constants/app_assets.dart';
-import '../../constants/app_strings.dart';
 
 // RukuFirstScreen Top Bar
 class TopBarRukuFirst extends StatelessWidget {
@@ -30,7 +30,7 @@ class TopBarRukuFirst extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AppStrings.appnamestrings.appname,
+                    'app_name'.tr,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -38,7 +38,7 @@ class TopBarRukuFirst extends StatelessWidget {
                     ),
                   ), // Added vertical spacing between text elements
                   Text(
-                    AppStrings.appnamestrings.suratname,
+                    'surat_name'.tr,
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColors.SecondaryColor,

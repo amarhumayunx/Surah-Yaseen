@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 
-import '../../constants/app_strings.dart';
 
 class FilterRow extends StatelessWidget {
   final String selectedFilter;
@@ -21,12 +21,12 @@ class FilterRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(5, 10, 10, 5),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
       child: Row(
         children: [
-          _buildFilterButton(AppStrings.bookmarkScreenBodystrings.all),
-          const SizedBox(width: 7),
-          _buildFilterButton(AppStrings.bookmarkScreenBodystrings.recents),
+          _buildFilterButton('all'.tr),
+          const SizedBox(width: 2),
+          _buildFilterButton('recents'.tr),
           const Spacer(),
           GestureDetector(
             onTap: () => _showSearchDialog(context),
@@ -55,7 +55,7 @@ class FilterRow extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onFilterSelected(filter),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
           decoration: BoxDecoration(
             color: selectedFilter == filter ? AppColors.PrimaryColor : Colors.transparent,
             borderRadius: BorderRadius.circular(30),
@@ -67,7 +67,7 @@ class FilterRow extends StatelessWidget {
               color: selectedFilter == filter ? Colors.white : AppColors.PrimaryColor,
               fontWeight: FontWeight.w500,
               fontSize: 16,
-              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
             ),
           ),
         ),
@@ -81,25 +81,28 @@ class FilterRow extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: Colors.white, // Set your desired color here
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         title: Text(
-          'Search Bookmarks',
+          'search_bookmarks'.tr,
           style: TextStyle(
             color: AppColors.PrimaryColor,
-            fontFamily: GoogleFonts.poppins().fontFamily,
+            fontFamily: GoogleFonts.merriweather().fontFamily,
             fontWeight: FontWeight.bold,
           ),
         ),
         content: TextField(
           controller: searchController,
           decoration: InputDecoration(
-            hintText: 'Enter verse text or title...',
+            hintText: 'verse_search_hint'.tr,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: AppColors.BarColor),
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: AppColors.BarColor, width: 2),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(18),
               borderSide: BorderSide(color: AppColors.PrimaryColor, width: 2),
             ),
           ),
@@ -108,8 +111,8 @@ class FilterRow extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
+              'cancel'.tr,
+              style: TextStyle(color: AppColors.PrimaryColor),
             ),
           ),
           ElevatedButton(
@@ -123,12 +126,13 @@ class FilterRow extends StatelessWidget {
               onSearch(searchController.text);
               Navigator.pop(context);
             },
-            child: const Text('Search', style: TextStyle(color: Colors.white)),
+            child: Text('search'.tr, style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
   }
+
 
   void _showDeleteOptionsMenu(BuildContext context) {
     showModalBottomSheet(
@@ -144,9 +148,9 @@ class FilterRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Bookmark Options',
+                'bookmark_options'.tr,
                 style: TextStyle(
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.merriweather().fontFamily,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: AppColors.PrimaryColor,
@@ -156,9 +160,9 @@ class FilterRow extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.delete_outline, color: AppColors.PrimaryColor),
                 title: Text(
-                  'Delete Bookmarks',
+                  'delete_bookmarks'.tr,
                   style: TextStyle(
-                    fontFamily: GoogleFonts.poppins().fontFamily,
+                    fontFamily: GoogleFonts.merriweather().fontFamily,
                     fontSize: 16,
                   ),
                 ),

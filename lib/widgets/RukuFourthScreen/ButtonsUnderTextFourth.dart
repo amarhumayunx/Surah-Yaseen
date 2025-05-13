@@ -14,7 +14,7 @@ class ButtonsUnderTextFourthRuku extends StatelessWidget {
       children: [
         // Read Button
         _buildButton(
-          'Read',
+          'read'.tr,
               () => Get.to(() => const RukuFourthReadScreen()),
         ),
 
@@ -22,7 +22,7 @@ class ButtonsUnderTextFourthRuku extends StatelessWidget {
 
         // Listen Audio Button
         _buildButton(
-          'Listen Audio',
+          'listen_audio'.tr,
               () => Get.to(() => const ListenAudioRukuFourthScreen()),
         ),
 
@@ -30,7 +30,7 @@ class ButtonsUnderTextFourthRuku extends StatelessWidget {
 
         // Listen Audio with translation Button
         _buildButton(
-          'Listen Audio with translation',
+          'listen_audio_with_translation'.tr,
               () => Get.to(() => const ListenAudioWithTranslationRukuFourth()),
         ),
       ],
@@ -39,7 +39,7 @@ class ButtonsUnderTextFourthRuku extends StatelessWidget {
 
   Widget _buildButton(String text, VoidCallback onPressed) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 30, right: 30),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -58,12 +58,12 @@ class ButtonsUnderTextFourthRuku extends StatelessWidget {
               borderRadius: BorderRadius.circular(20), // Rounded corners
             ),
             elevation: 0, // No shadow
-            padding: const EdgeInsets.symmetric(vertical: 15), // Vertical padding
+            padding: const EdgeInsets.symmetric(vertical: 18), // Vertical padding
           ),
           child: Text(
             text,
-            style: const TextStyle(
-              fontSize: 16, // Font size
+            style: TextStyle(
+              fontSize: 12, // Font size
               fontWeight: FontWeight.w600, // Font weight
             ),
           ),

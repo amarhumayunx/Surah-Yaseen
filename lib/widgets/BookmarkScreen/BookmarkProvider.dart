@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:surah_yaseen/bookmark.dart';
 
+import '../../services/notification_service.dart';
+
 class BookmarkProvider with ChangeNotifier {
   late Box<Bookmark> _bookmarkBox;
   bool _isBoxLoaded = false;
@@ -106,6 +108,9 @@ class BookmarkProvider with ChangeNotifier {
       print("Bookmark added: ${bookmark.title} with icon type: ${bookmark.iconType}");
       print("Total bookmarks: ${_bookmarkBox.values.length}");
       notifyListeners();
+
+      await NotificationService.showBookmarkNotification(bookmark.title);
+
       return true; // Return true to indicate bookmark was added successfully
     } catch (e) {
       print("Error adding bookmark: $e");

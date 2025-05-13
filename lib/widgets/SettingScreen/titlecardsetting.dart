@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 
 import '../../constants/app_assets.dart';
-import '../../constants/app_strings.dart';
 
 class TitleCardSetting extends StatelessWidget {
   const TitleCardSetting({super.key});
@@ -31,7 +31,7 @@ class TitleCardSetting extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black,
+                  color: Colors.black.withOpacity(0.1),
                   spreadRadius: 1,
                   blurRadius: 10,
                   offset: const Offset(0, 4),
@@ -54,13 +54,13 @@ class TitleCardSetting extends StatelessWidget {
           ),
           // Text layer
           Text(
-            AppStrings.settingScreenStrings.SettingScreenTitle,
+            'setting_screen_title'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: cardHeight * 0.4, // responsive font size
               fontWeight: FontWeight.bold,
               color: AppColors.HeadingColor,
-              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
             ),
           ),
 

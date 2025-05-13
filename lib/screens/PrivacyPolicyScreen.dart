@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../Colors/colors.dart';
-import '../widgets/AboutScreen/top_bar_about.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/SurahTitle/surat_title.dart';
+import '../widgets/TopBar/topbartest.dart';
 import '../widgets/Topbackground/top_background.dart';
 
 
@@ -40,7 +41,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
           SafeArea(
             child: Column(
               children: [
-                TopBarAbout(),
+                TopBarSet(),
                 SizedBox(height: 10,),
                 SizedBox(height: 5,),
                 DividerBar(),
@@ -52,7 +53,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Privacy Policy",
+                          'privacy_policy'.tr,
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,
                           color: AppColors.whiteColor,),
                         ),
@@ -60,7 +61,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                         Padding(
                           padding: const EdgeInsets.all(18.0),
                           child: Text(
-                            "This is a sample privacy policy. Your privacy is important to us. We collect your data to improve our services and experience. By using this app, you agree to the terms of our privacy policy.",
+                            'privacy_line'.tr,
                             style: TextStyle(fontSize: 16,color: AppColors.whiteColor),
                           ),
                         ),

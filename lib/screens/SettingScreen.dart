@@ -46,13 +46,13 @@ class _SettingScreenState extends State<SettingScreen> {
                 DividerBar(),
                 SurahTitle(),
                 TitleCardSetting(),
-                SizedBox(height: 5),
+                SizedBox(height: 15),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         FontSizeContainer(),
-                        SizedBox(height: 16),
+                        SizedBox(height: 15),
                         MenuOptionsContainer(),
                       ],
                     ),

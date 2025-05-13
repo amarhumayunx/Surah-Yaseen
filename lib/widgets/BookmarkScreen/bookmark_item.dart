@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Colors/colors.dart';
@@ -70,11 +73,11 @@ class BookmarkItem extends StatelessWidget {
                     // Arabic Text
                     Text(
                       arabicText,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: const Color(0xFF43A592),
+                      style: ArabicTextStyle(
+                        arabicFont: ArabicFont.lateef,
+                        fontSize: 24,
+                        color: AppColors.BookmarktextColor,
+                        height: 1.5,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -83,17 +86,17 @@ class BookmarkItem extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        color: AppColors.PrimaryColor,
+                        fontFamily: GoogleFonts.merriweather().fontFamily,
                       ),
                     ),
                     // Date Text
                     Text(
                       date,
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        fontSize: 14,
+                        color: AppColors.PrimaryColor,
+                        fontFamily: GoogleFonts.merriweather().fontFamily,
                       ),
                     ),
                   ],
@@ -115,13 +118,20 @@ class BookmarkItem extends StatelessWidget {
                   child: Stack(
                     children: [
                       Positioned(
-                        right: 7,
+                        right: Directionality.of(context) == TextDirection.ltr ? 7 : null,
+                        left: Directionality.of(context) == TextDirection.rtl ? 7 : null,
                         bottom: 4,
-                        child: Image.asset(
-                          AppAssets.bottomcornerdecor,
-                          width: 28,
-                          height: 20,
-                          fit: BoxFit.contain,
+                        child: Transform(
+                          alignment: Alignment.center,
+                          transform: Directionality.of(context) == TextDirection.rtl
+                              ? Matrix4.rotationY(math.pi) // Flip horizontally for RTL
+                              : Matrix4.identity(),
+                          child: Image.asset(
+                            AppAssets.bottomcornerdecor,
+                            width: 28,
+                            height: 20,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                       const Center(
@@ -139,20 +149,34 @@ class BookmarkItem extends StatelessWidget {
         ),
         // Bottom right decoration
         Positioned(
-          right: 8,
+          right: Directionality.of(context) == TextDirection.ltr ? 8 : null,
+          left: Directionality.of(context) == TextDirection.rtl ? 8 : null,
           bottom: 8,
           child: ClipRRect(
-            borderRadius: const BorderRadius.only(
+            borderRadius: Directionality.of(context) == TextDirection.ltr
+                ? const BorderRadius.only(
               bottomRight: Radius.circular(20),
               bottomLeft: Radius.circular(0),
               topRight: Radius.circular(0),
               topLeft: Radius.circular(25),
+            )
+                : const BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(0),
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(25),
             ),
-            child: Image.asset(
-              AppAssets.bottomrightdecor,
-              width: 40,
-              height: 22,
-              fit: BoxFit.cover,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Directionality.of(context) == TextDirection.rtl
+                  ? Matrix4.rotationY(math.pi) // Flip horizontally for RTL
+                  : Matrix4.identity(),
+              child: Image.asset(
+                AppAssets.bottomrightdecor,
+                width: 40,
+                height: 22,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

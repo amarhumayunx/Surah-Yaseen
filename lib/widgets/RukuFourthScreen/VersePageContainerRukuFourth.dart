@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:surah_yaseen/widgets/dialogs/BookmarkConfirmDialog.dart';
@@ -8,6 +11,7 @@ import '../../constants/app_assets.dart';
 import '../../constants/app_strings.dart';
 import '../BookmarkScreen/BookmarkProvider.dart';
 import '../FontSize/FontSizeProvider.dart';
+import '../NotificationScreen/notification_screen_history.dart';
 
 class VersePageContainerRukuFourth extends StatefulWidget {
   final int rukuNumber;
@@ -99,7 +103,8 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                 // Close button positioned outside the container
                 Positioned(
                   top: 20,
-                  left: 30,  // Changed from 'right: 20' to 'left: 30'
+                  left: Directionality.of(context) == TextDirection.ltr ? 30 : null,
+                  right: Directionality.of(context) == TextDirection.rtl ? 30 : null,
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(dialogContext).pop();
@@ -108,7 +113,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.transparent,  // Transparent background
+                        color: Colors.transparent,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -149,7 +154,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                             ),
                           ),
                           child: Text(
-                            'Rukū ${widget.rukuNumber}',
+                            '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
                             style: TextStyle(
                               color: AppColors.PrimaryColor,
                               fontSize: 28,
@@ -215,7 +220,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: Text(
-                                  'Page $_currentDialogPage of ${widget.totalPageDialogBox}',
+                                  '${'page'.tr} ${widget.currentPage} ${'of'.tr} ${widget.totalPages}',
                                   style: TextStyle(
                                     color: AppColors.PrimaryColor,
                                     fontSize: 16,
@@ -250,23 +255,37 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
 
                 // Add Image Asset to top-left corner (in full-screen dialog)
                 Positioned(
-                  left: 35, // Adjust the left position
-                  top: 60,  // Adjust the top position
-                  child: Image.asset(
-                    AppAssets.topcornerdecor, // Replace with your image asset path
-                    width: 70,
-                    height: 70,
+                  left: Directionality.of(context) == TextDirection.ltr ? 35 : null,
+                  right: Directionality.of(context) == TextDirection.rtl ? 35 : null,
+                  top: 60,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(
+                      Directionality.of(context) == TextDirection.rtl ? pi : 0,
+                    ),
+                    child: Image.asset(
+                      AppAssets.topcornerdecor,
+                      width: 70,
+                      height: 70,
+                    ),
                   ),
                 ),
 
                 // Add Image Asset to bottom-right corner (in full-screen dialog)
                 Positioned(
-                  right: 35,  // Adjust the right position
-                  bottom: 60, // Adjust the bottom position
-                  child: Image.asset(
-                    AppAssets.bottomrightdecor, // Replace with your image asset path
-                    width: 70,
-                    height: 70,
+                  right: Directionality.of(context) == TextDirection.ltr ? 35 : null,
+                  left: Directionality.of(context) == TextDirection.rtl ? 35 : null,
+                  bottom: 60,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(
+                      Directionality.of(context) == TextDirection.rtl ? pi : 0,
+                    ),
+                    child: Image.asset(
+                      AppAssets.bottomrightdecor,
+                      width: 70,
+                      height: 70,
+                    ),
                   ),
                 ),
               ],
@@ -277,7 +296,12 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
     );
   }
 
-  Future<void> _showBookmarkConfirmationDialog(BuildContext context, int verseIndex, String arabicText, String englishText) async {
+  Future<void> _showBookmarkConfirmationDialog(
+      BuildContext context,
+      int verseIndex,
+      String arabicText,
+      String englishText)
+  async {
     final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: false);
 
     // Add the verse to bookmarks
@@ -288,10 +312,18 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
       rukuNumber: widget.rukuNumber,
     );
 
+    // Save notification to history
+    await NotificationHistoryManager.saveNotification(
+      title: 'Verse $verseIndex',
+      verseIndex: verseIndex,
+      rukuNumber: widget.rukuNumber,
+    );
+
+    // Show the appropriate confirmation dialog
     showDialog(
       context: context,
       builder: (_) => BookmarkConfirmationDialog(
-          message: wasAdded ? 'Verse Bookmarked' : 'Verse Already Bookmarked'
+          message: wasAdded ? 'verse_bookmarked'.tr : 'verse_already_bookmarked'.tr
       ),
     ).then((_) {
       // Reset the highlight after the dialog is dismissed
@@ -427,14 +459,15 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                 // Bookmark icon that appears when verse is selected or permanently bookmarked
                 if (isSelected || isBookmarked)
                   Positioned(
-                    left: 8,
+                    left: Directionality.of(context) == TextDirection.ltr ? 2 : null,
+                    right: Directionality.of(context) == TextDirection.rtl ? 2 : null,
                     top: 8,
                     child: Container(
                       padding: EdgeInsets.all(4),
                       child: Icon(
                         Icons.bookmark,
                         color: AppColors.PrimaryColor,
-                        size: isBookmarked ? 22 : 20, // Slightly larger for bookmarked verses
+                        size: isBookmarked ? 24 : 20, // Slightly larger for bookmarked verses in fullscreen
                       ),
                     ),
                   ),
@@ -510,7 +543,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                     showDialog(
                       context: context,
                       builder: (_) => BookmarkConfirmationDialog(
-                          message: wasAdded ? 'Verse Bookmarked' : 'Verse Already Bookmarked'
+                          message: wasAdded ? 'verse_bookmarked'.tr : 'verse_already_bookmarked'.tr
                       ),
                     ).then((_) {
                       // Reset the highlight after the dialog is dismissed
@@ -581,7 +614,8 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                       // Bookmark icon that appears when verse is selected or permanently bookmarked
                       if (isSelected || isBookmarked)
                         Positioned(
-                          left: 8,
+                          left: Directionality.of(context) == TextDirection.ltr ? 8 : null,
+                          right: Directionality.of(context) == TextDirection.rtl ? 2 : null,
                           top: 8,
                           child: Container(
                             padding: EdgeInsets.all(4),
@@ -632,7 +666,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                   ),
                 ),
                 child: Text(
-                  widget.isFullScreen ? 'Full Screen' : 'Rukū ${widget.rukuNumber}',
+                  widget.isFullScreen ? 'Full Screen' : '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
                   style: TextStyle(
                     color: AppColors.PrimaryColor,
                     fontSize: widget.isFullScreen ? 28 : 24,
@@ -703,7 +737,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
-                        'Page ${widget.currentPage} of ${widget.totalPages}',
+                        '${'page'.tr} ${widget.currentPage} ${'of'.tr} ${widget.totalPages}',
                         style: TextStyle(
                           color: AppColors.PrimaryColor,
                           fontSize: widget.isFullScreen ? 16 : 14,
@@ -729,23 +763,37 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
 
           // Add Image Asset to top-left corner (before the Ruku Title)
           Positioned(
-            left: 5,  // Adjust the left position
-            top: -8,   // Adjust the top position
-            child: Image.asset(
-              AppAssets.topcornerdecor, // Replace with your image asset path
-              width: 70,
-              height: 70,
+            left: Directionality.of(context) == TextDirection.ltr ? 5 : null,
+            right: Directionality.of(context) == TextDirection.rtl ? 5 : null,
+            top: -9,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(
+                Directionality.of(context) == TextDirection.rtl ? pi : 0,
+              ),
+              child: Image.asset(
+                AppAssets.topcornerdecor,
+                width: 70,
+                height: 70,
+              ),
             ),
           ),
 
           // Add Image Asset to bottom-right corner
           Positioned(
-            right: 5,  // Adjust the right position
-            bottom: -8, // Adjust the bottom position
-            child: Image.asset(
-              AppAssets.bottomrightdecor, // Replace with your image asset path
-              width: 70,
-              height: 70,
+            right: Directionality.of(context) == TextDirection.ltr ? 5 : null,
+            left: Directionality.of(context) == TextDirection.rtl ? 5 : null,
+            bottom: -8,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(
+                Directionality.of(context) == TextDirection.rtl ? pi : 0,
+              ),
+              child: Image.asset(
+                AppAssets.bottomrightdecor,
+                width: 70,
+                height: 70,
+              ),
             ),
           ),
         ],

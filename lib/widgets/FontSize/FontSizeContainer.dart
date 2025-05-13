@@ -1,4 +1,6 @@
+import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../Colors/colors.dart';
@@ -19,7 +21,7 @@ class FontSizeContainer extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(18),
                 border: Border.all(
                     color: AppColors.BarColor, width: 1.5),
               ),
@@ -38,21 +40,22 @@ class FontSizeContainer extends StatelessWidget {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          'Font Size',
+                          'font_size'.tr,
                           style: TextStyle(
                             color: AppColors.PrimaryColor,
                             fontSize: 16,
+                            fontFamily: GoogleFonts.merriweather().fontFamily,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 8),
                     Container(
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
@@ -67,32 +70,34 @@ class FontSizeContainer extends StatelessWidget {
                           Text(
                             'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18 + (_fontSizeValue * 8),
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
+                            style: ArabicTextStyle(
+                              arabicFont: ArabicFont.lateef,
+                              fontSize: 24 + (_fontSizeValue * 8),
                               color: AppColors.PrimaryColor,
+                              height: 1.5
                             ),
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Start with the holy name of Allah, the Most Merciful, the Most Merciful.',
+                            'bismillah'.tr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 14 + (_fontSizeValue * 4),
+                                fontSize: 13 + (_fontSizeValue * 8),
                                 color: AppColors.BarColor,
-                                fontFamily: GoogleFonts.merriweather().fontFamily
+                                fontFamily: GoogleFonts.merriweather().fontFamily,
+                                height: 1.3
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 12),
                     Row(
                       children: [
                         Text(
                             'A',
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
                                 color: AppColors.PrimaryColor)),
                         Expanded(
                           child: SliderTheme(
@@ -114,7 +119,8 @@ class FontSizeContainer extends StatelessWidget {
                         Text(
                             'A',
                             style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 21,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
                                 color: AppColors.PrimaryColor)),
                       ],
                     ),

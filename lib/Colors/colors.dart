@@ -26,4 +26,6 @@ class AppColors {
   /// White color for text on dark backgrounds
   static const Color textWhite = Colors.white;
   static const Color AudioPlayerInActiveColor = Color(0xFFCFC378);
+  static const Color BookmarktextColor = Color(0xFF227653);
+  static const Color OnbaordingScreenDotColor = Color(0xFF90BAA9);
 }

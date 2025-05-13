@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'dart:async';
 import 'dart:math';
@@ -970,6 +971,7 @@ class _ListenAudioWithTranslationRukuFirstAudioPlayerState
                 widget.title ?? AppStrings.listenAudioWithTranslationScreenString.Ruku1title,
                 style: TextStyle(
                   fontSize: 20,
+                  fontFamily: GoogleFonts.merriweather().fontFamily,
                   fontWeight: FontWeight.bold,
                   color: AppColors.PrimaryColor,
                 ),

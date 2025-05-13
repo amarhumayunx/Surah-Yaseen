@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
-import '../../constants/app_strings.dart';
 import '../../screens/AboutScreen.dart';
 
 class TopBarSetting extends StatelessWidget {
@@ -32,7 +31,7 @@ class TopBarSetting extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  AppStrings.appnamestrings.appname,
+                  'app_name'.tr,
                   style: TextStyle(
                     fontSize: fontSizeTitle,
                     fontWeight: FontWeight.bold,
@@ -41,7 +40,7 @@ class TopBarSetting extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  AppStrings.appnamestrings.suratname,
+                  'surat_name'.tr,
                   style: TextStyle(
                     fontSize: fontSizeSubtitle,
                     color: AppColors.SecondaryColor,
