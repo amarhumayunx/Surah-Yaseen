@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../Colors/colors.dart';
@@ -53,10 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Dynamic values based on screen dimensions
-    final double paddingHorizontal = screenWidth * 0.01; // ~25 on a 360px screen
-    final double imageHeight = screenHeight * 0.13; // ~100px for the Quran image
-    final double imageWidth = screenWidth * 0.9; // ~80% of screen width
-    final double spacing = screenHeight * 0.02; // Dynamic spacing
+    final double paddingHorizontal = screenWidth * 0.01;
+    final double imageHeight = screenHeight * 0.15; // Slightly reduced to save space
+    final double spacing = screenHeight * 0.01;
 
     return WillPopScope(
       onWillPop: () => _onWillPop(context),
@@ -69,20 +69,31 @@ class _HomeScreenState extends State<HomeScreen> {
             SafeArea(
               child: Column(
                 children: [
+                  // Fixed top section
                   const TopBar(),
                   SizedBox(height: spacing),
                   const DividerBar(),
                   const SurahTitle(),
-                  SizedBox(height: 30),
-                  Image.asset(
-                    AppAssets.quran,
-                    height: imageHeight,
-                    width: imageWidth, // Set width dynamically
-                    fit: BoxFit.contain, // Ensure the image maintains its aspect ratio
+
+                  // Content area with adjusted spacing
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SvgPicture.asset(
+                            AppAssets.quran,
+                            height: imageHeight,
+                            fit: BoxFit.contain,
+                          ),
+                          QuoteSection(),
+                          OptionGrid(),
+                          // No large SizedBox at the bottom
+                        ],
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 10),
-                  QuoteSection(),
-                  OptionGrid(),
                 ],
               ),
             ),

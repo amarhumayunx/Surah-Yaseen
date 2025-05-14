@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Colors/colors.dart';
 import '../../constants/app_assets.dart';
@@ -106,43 +107,13 @@ class BookmarkItem extends StatelessWidget {
               if (!isInDeleteMode)
                 Container(
                   width: 80,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.PrimaryColor,
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: AppColors.BarColor,
-                      width: 1,
-                    ),
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        right: Directionality.of(context) == TextDirection.ltr ? 7 : null,
-                        left: Directionality.of(context) == TextDirection.rtl ? 7 : null,
-                        bottom: 4,
-                        child: Transform(
-                          alignment: Alignment.center,
-                          transform: Directionality.of(context) == TextDirection.rtl
-                              ? Matrix4.rotationY(math.pi) // Flip horizontally for RTL
-                              : Matrix4.identity(),
-                          child: Image.asset(
-                            AppAssets.bottomcornerdecor,
-                            width: 28,
-                            height: 20,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      const Center(
-                        child: Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                    ],
-                  ),
+                  height: 50,
+                  child: SvgPicture.asset(
+                    AppAssets.bookmarkitembutton,
+                    width: 80,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  )
                 ),
             ],
           ),

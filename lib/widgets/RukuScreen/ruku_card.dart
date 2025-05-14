@@ -8,25 +8,15 @@ import 'package:surah_yaseen/Colors/colors.dart';
 import '../../constants/app_assets.dart';
 
 class RukuCard extends StatelessWidget {
-  final String imagePath;
   final String title;
   final String verseRange;
-
-  // Optional image positioning (kept same)
-  final double imageTop;
-  final double imageLeft;
-  final double imageWidth;
-  final double imageHeight;
+  final String backgroundSvgPath;
 
   const RukuCard({
     super.key,
-    required this.imagePath,
     required this.title,
     required this.verseRange,
-    this.imageTop = -4,
-    this.imageLeft = 5,
-    this.imageWidth = 45,
-    this.imageHeight = 45,
+    required this.backgroundSvgPath,
   });
 
   @override
@@ -43,76 +33,64 @@ class RukuCard extends StatelessWidget {
       width: cardWidth,
       height: cardHeight,
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.BarColor,
-          width: 1.5,
-        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.transparent,
-            spreadRadius: 1,
-            blurRadius: 0,
-            offset: const Offset(0, 2),
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 1.5),
+            spreadRadius: 0.1,
           ),
         ],
       ),
       child: Stack(
         children: [
-          Positioned(
-            top: imageTop,
-            left: Directionality.of(context) == TextDirection.ltr ? imageLeft : null,
-            right: Directionality.of(context) == TextDirection.rtl ? imageLeft : null,
-            child: ClipRRect(
-              borderRadius: Directionality.of(context) == TextDirection.ltr
-                  ? const BorderRadius.only(topLeft: Radius.circular(20))
-                  : const BorderRadius.only(topRight: Radius.circular(20)),
-              child: Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.rotationY(
-                  Directionality.of(context) == TextDirection.rtl ? pi : 0,
-                ),
-                child: Image.asset(
-                  imagePath,
-                  width: imageWidth,
-                  height: imageHeight,
-                  fit: BoxFit.contain,
-                ),
-              ),
+          // SVG Background
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: SvgPicture.asset(
+              backgroundSvgPath,
+              width: cardWidth,
+              height: cardHeight,
+              fit: BoxFit.fill,
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkgreenColor,
-                  fontFamily: GoogleFonts.merriweather().fontFamily,
+
+          // Content
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkgreenColor,
+                    fontFamily: GoogleFonts.merriweather().fontFamily,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                verseRange,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.fontColor,
-                  fontFamily: GoogleFonts.merriweather().fontFamily,
+                Text(
+                  verseRange,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.fontColor,
+                    fontFamily: GoogleFonts.merriweather().fontFamily,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: SvgPicture.asset(
-                  AppAssets.quranpakrukuscreen_svg,
-                  height: 70,
-                  width: 70,
+                const SizedBox(height: 10),
+                Center(
+                  child: SvgPicture.asset(
+                    AppAssets.quranpakrukuscreen_svg,
+                    height: 70,
+                    width: 70,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

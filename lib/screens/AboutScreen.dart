@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/AboutScreen/TitleCardAbout.dart';
 import 'package:surah_yaseen/widgets/AboutScreen/infocardabout.dart';
@@ -22,6 +23,8 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   final NavigationController _navigationController = Get.find<NavigationController>();
 
+
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +38,11 @@ class _AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final double imageHeight = screenHeight * 0.17;
+    final double imageWidth = screenWidth;
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.lightColorSec,
@@ -55,9 +63,11 @@ class _AboutScreenState extends State<AboutScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: Image(
-                          image: AssetImage(AppAssets.quran),
-                          height: 150,
+                        child: SvgPicture.asset(
+                          AppAssets.quran,
+                          height: imageHeight,
+                          width: imageWidth,
+                          fit: BoxFit.contain,
                         ),
                       ),
                       SizedBox(height: 10),

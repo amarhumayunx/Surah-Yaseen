@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
@@ -41,7 +42,7 @@ class _ListenAudioWithTranslationRukuFirstAudioPlayerState
   // TTS Parameters - optimized for Quranic recitation
   double volume = 1.0;
   double pitch = 1.0;
-  double rate = 0.5;
+  double rate = 0.4;
   String? arabicLanguage;
   String? englishLanguage;
   double currentPosition = 0.0;
@@ -1024,6 +1025,7 @@ class _ListenAudioWithTranslationRukuFirstAudioPlayerState
                       _jumpToPosition(newPosition);
                     },
                     activeColor: AppColors.PrimaryColor,
+                    divisions: 50000,
                     inactiveColor: AppColors.AudioPlayerInActiveColor,
                   ),
                 ),
@@ -1052,7 +1054,7 @@ class _ListenAudioWithTranslationRukuFirstAudioPlayerState
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _iconControlButton(
-                Image.asset(AppAssets.backwardarrow, width: 30, height: 30),
+                SvgPicture.asset(AppAssets.backwardarrow, width: 30, height: 30),
                 _skipBackward,
                 tooltip: "Previous verse",
               ),
@@ -1063,7 +1065,7 @@ class _ListenAudioWithTranslationRukuFirstAudioPlayerState
               ),
               const SizedBox(width: 25),
               _iconControlButton(
-                Image.asset(AppAssets.forwardarrow, width: 30, height: 30),
+                SvgPicture.asset(AppAssets.forwardarrow, width: 30, height: 30),
                 _skipForward,
                 tooltip: "Next verse",
               ),
@@ -1108,8 +1110,8 @@ class _ListenAudioWithTranslationRukuFirstAudioPlayerState
                 strokeWidth: 2,
               ),
             )
-                : Image.asset(
-              isPlaying ? AppAssets.pausebutton : AppAssets.playbutton,
+                : SvgPicture.asset(
+              isPlaying ? AppAssets.pause_button : AppAssets.play_button,
               width: 20,
               height: 20,
               fit: BoxFit.contain,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
@@ -41,7 +42,7 @@ class _ListenAudioRukuFourthAudioPlayerState
   // TTS Parameters - optimized for Quranic recitation
   double volume = 1.0;
   double pitch = 1.0;
-  double rate = 0.5;
+  double rate = 0.4;
   String? language;
   double currentPosition = 0.0;
   double totalDuration = 0.0;
@@ -856,7 +857,8 @@ class _ListenAudioRukuFourthAudioPlayerState
                     _jumpToPosition(newPosition);
                   },
                   activeColor: AppColors.PrimaryColor,
-                  inactiveColor: const Color(0xFFD9D58E),
+                  divisions: 50000,
+                  inactiveColor: AppColors.AudioPlayerInActiveColor,
                 ),
               ),
               Padding(
@@ -884,7 +886,7 @@ class _ListenAudioRukuFourthAudioPlayerState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _iconControlButton(
-              Image.asset(AppAssets.backwardarrow, width: 30, height: 30),
+              SvgPicture.asset(AppAssets.backwardarrow, width: 30, height: 30),
               _skipBackward,
               tooltip: "Previous verse",
             ),
@@ -895,7 +897,7 @@ class _ListenAudioRukuFourthAudioPlayerState
             ),
             const SizedBox(width: 25),
             _iconControlButton(
-              Image.asset(AppAssets.forwardarrow, width: 30, height: 30),
+              SvgPicture.asset(AppAssets.forwardarrow, width: 30, height: 30),
               _skipForward,
               tooltip: "Next verse",
             ),
@@ -948,8 +950,8 @@ class _ListenAudioRukuFourthAudioPlayerState
                 strokeWidth: 2,
               ),
             )
-                : Image.asset(
-              isPlaying ? AppAssets.pausebutton : AppAssets.playbutton,
+                : SvgPicture.asset(
+              isPlaying ? AppAssets.pause_button : AppAssets.play_button,
               width: 20,
               height: 20,
               fit: BoxFit.contain,

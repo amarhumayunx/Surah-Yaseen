@@ -14,16 +14,16 @@ class OptionGrid extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Calculate dynamic offsets and scaling based on screen size
-    final double topOffset = screenHeight * 0.02; // ~3% from top
-    final double scaleFactor = screenWidth > 550 ? 1.1 : 1.0;
+    final double topOffset = screenHeight * 0.01; // ~3% from top
+    final double scaleFactor = screenWidth > 550 ? 1.01 : 1.0;
 
     return Transform.translate(
       offset: Offset(0, topOffset),
       child: Transform.scale(
         scale: scaleFactor,
         child: Wrap(
-          spacing: screenWidth * 0.03, // ~3% horizontal spacing
-          runSpacing: screenHeight * 0.012, // ~1.5% vertical spacing
+          spacing: screenWidth * 0.01, // ~3% horizontal spacing
+          runSpacing: screenHeight * 0.01, // ~1.5% vertical spacing
           alignment: WrapAlignment.center,
           children: [
             OptionCard(
@@ -31,46 +31,30 @@ class OptionGrid extends StatelessWidget {
               subtitle: 'ruku1'.tr,
               verses: 'verse_title_one_to_twelve'.tr,
               onTap: () => Get.to(() => RukuScreen()),
-              height: screenHeight * 0.18,
-              bottomDecorWidth: 28,
-              bottomDecorHeight: 52,
-              bottomDecorRight: 46,
-              bottomDecorBottom: 12,
+              size: screenHeight * 0.19,
             ),
             OptionCard(
               title: 'bookmarks'.tr,
               subtitle: 'ruku1'.tr,
               verses: ''.tr,
-              onTap: () => Get.to(() => BookmarkScreen()),
-              height: screenHeight * 0.15,
-              bottomDecorWidth: 28,
-              bottomDecorHeight: 40,
-              bottomDecorRight: 46,
-              bottomDecorBottom: 12,
+              onTap: () => Get.to(() => BookmarkScreen(verseIndex: 0, rukuNumber: 0,)),
+              size: screenHeight * 0.17,
             ),
             OptionCard(
               title: 'about'.tr,
               subtitle: 'introduction_to'.tr,
               verses: 'surah'.tr,
               onTap: () => Get.to(() => AboutScreen()),
-              height: screenHeight * 0.17,
-              bottomDecorWidth: 28,
-              bottomDecorHeight: 40,
-              bottomDecorRight: 46,
-              bottomDecorBottom: 14,
+              size: screenHeight * 0.17,
             ),
             Transform.translate(
-              offset: Offset(0, -screenHeight * 0.03), // Responsive upward offset
+              offset: Offset(0, -screenHeight * 0.02), // Responsive upward offset
               child: OptionCard(
                 title: 'listen_audio'.tr,
                 subtitle: 'ruku1'.tr,
                 verses: 'verse_title_one_to_twelve'.tr,
                 onTap: () => Get.to(() => RukuScreen()),
-                height: screenHeight * 0.20,
-                bottomDecorWidth: 28,
-                bottomDecorHeight: 52,
-                bottomDecorRight: 46,
-                bottomDecorBottom: 21,
+                size: screenHeight * 0.19,
               ),
             ),
           ],

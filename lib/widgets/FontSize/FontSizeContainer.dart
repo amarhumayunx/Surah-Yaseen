@@ -1,5 +1,6 @@
 import 'package:arabic_font/arabic_font.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -32,11 +33,8 @@ class FontSizeContainer extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Image.asset(
-                          AppAssets.fontsizeicon,
-                          width: 24,
-                          height: 24,
-                          color: AppColors.PrimaryColor,
+                        SvgPicture.asset(
+                          AppAssets.fontsize,
                         ),
                         SizedBox(width: 8),
                         Text(

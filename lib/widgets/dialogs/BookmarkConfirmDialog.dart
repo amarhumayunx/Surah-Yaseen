@@ -16,7 +16,7 @@ class BookmarkConfirmationDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      backgroundColor: AppColors.lightColorSec,
+      backgroundColor: AppColors.lightColorapp,
       child: Container(
         padding: const EdgeInsets.all(20),
         width: 250,

@@ -19,11 +19,11 @@ class RukuGrid extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              double screenWidth = constraints.maxWidth;
+              double screenWidth = constraints.minWidth;
               int crossAxisCount = screenWidth > 600 ? 3 : 2;
-              double mainAxisSpacing = screenWidth > 600 ? 30 : 25;
-              double crossAxisSpacing = screenWidth > 600 ? 25 : 20;
-              double childAspectRatio = screenWidth > 600 ? 1.2 : 1.0;
+              double mainAxisSpacing = screenWidth > 600 ? 5 : 5;
+              double crossAxisSpacing = screenWidth > 600 ? 5 : 5;
+              double childAspectRatio = screenWidth > 600 ? 1.0 : 1.0;
 
               return GridView.count(
                 crossAxisCount: crossAxisCount,
@@ -36,61 +36,41 @@ class RukuGrid extends StatelessWidget {
                   GestureDetector(
                     onTap: () => Get.to(() => RukuFirstScreen()),
                     child: RukuCard(
-                      imagePath: AppAssets.topcornerdecor,
+                      backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_title_one'.tr,
                       verseRange: 'verse_title_one_to_twelve'.tr,
-                      imageTop: -8,
-                      imageLeft: 3,
-                      imageWidth: 55,
-                      imageHeight: 55,
                     ),
                   ),
                   GestureDetector(
                     onTap: () => Get.to(() => RukuSecondScreen()),
                     child: RukuCard(
-                      imagePath: AppAssets.topcornerdecor,
+                      backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_two'.tr,
                       verseRange: 'verse_title_thirteen_to_thirtytwo'.tr,
-                      imageTop: -8,
-                      imageLeft: 3,
-                      imageWidth: 55,
-                      imageHeight: 55,
                     ),
                   ),
                   GestureDetector(
                     onTap: () => Get.to(() => RukuThirdScreen()),
                     child: RukuCard(
-                      imagePath: AppAssets.topcornerdecor,
+                      backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_three'.tr,
                       verseRange: 'verse_title_thirtythree_to_fifty'.tr,
-                      imageTop: -8,
-                      imageLeft: 3,
-                      imageWidth: 55,
-                      imageHeight: 55,
                     ),
                   ),
                   GestureDetector(
                     onTap: () => Get.to(() => RukuFourthScreen()),
                     child: RukuCard(
-                      imagePath: AppAssets.topcornerdecor,
+                      backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_four'.tr,
                       verseRange: 'verse_title_fiftyone_to_sixtyseven'.tr,
-                      imageTop: -8,
-                      imageLeft: 3,
-                      imageWidth: 55,
-                      imageHeight: 55,
                     ),
                   ),
                   GestureDetector(
                     onTap: () => Get.to(() => RukuFiveScreen()),
                     child: RukuCard(
-                      imagePath: AppAssets.topcornerdecor,
+                      backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_five'.tr,
                       verseRange: 'verse_title_sixtyeight_to_eightythree'.tr,
-                      imageTop: -8,
-                      imageLeft: 3,
-                      imageWidth: 55,
-                      imageHeight: 55,
                     ),
                   ),
                 ],

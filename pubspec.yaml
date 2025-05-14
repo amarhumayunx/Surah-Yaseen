@@ -56,7 +56,7 @@ dependencies:
   video_player: ^2.9.5
   arabic_font: ^0.0.9
   get_storage: ^2.1.1
-  flutter_local_notifications: ^19.1.0
+  flutter_local_notifications: ^19.2.0
   permission_handler: ^12.0.0+1
   url_launcher: ^6.3.1
   share_plus: ^11.0.0
@@ -68,6 +68,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
+  remove_alpha_icon: true
   image_path: "assets/images/illustrations/surahicon.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -92,11 +93,6 @@ flutter:
   assets:
     - assets/images/icons/
     - assets/images/illustrations/
-    - assets/audio/surahyaseenrukuone1to12.mp3
-    - assets/audio/surahyaseenrukutwo13to32.mp3
-    - assets/audio/surahyaseenrukuthree33to50.mp3
-    - assets/audio/surahyaseenrukufour51to67.mp3
-    - assets/audio/surahyaseenrukufive68to83.mp3
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

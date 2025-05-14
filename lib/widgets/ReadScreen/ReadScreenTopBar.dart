@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/constants/app_assets.dart';
@@ -6,6 +7,7 @@ import 'package:surah_yaseen/constants/app_assets.dart';
 // TopBarReadScreen Top Bar
 class TopBarReadScreen extends StatelessWidget {
   const TopBarReadScreen({super.key});
+  final BoxFit iconFit = BoxFit.contain;
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +16,9 @@ class TopBarReadScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 10.0),
           child: IconButton(
-            icon: Image.asset(
-              AppAssets.back_arrow_key,
-              height: 30,
-              width: 30,
-              color: AppColors.SecondaryColor,
+            icon: SvgPicture.asset(
+              AppAssets.backarrow,
+              fit: iconFit,
             ),
             onPressed: () {
               Navigator.pop(context);

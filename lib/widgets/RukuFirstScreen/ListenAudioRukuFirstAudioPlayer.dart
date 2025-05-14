@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
@@ -41,7 +42,7 @@ class _ListenAudioRukuFirstAudioPlayerState
   // TTS Parameters - optimized for Quranic recitation
   double volume = 1.0;
   double pitch = 1.0;
-  double rate = 0.5;
+  double rate = 0.4;
   String? language;
   double currentPosition = 0.0;
   double totalDuration = 0.0;
@@ -305,7 +306,11 @@ class _ListenAudioRukuFirstAudioPlayerState
     verseEstimatedDurations = [];
 
     // Base duration for short verses (in seconds)
-    const double baseDuration = 3.0;
+    const double baseDuration = 1.0;
+
+    // Adjust this factor to match your TTS engine's speed setting
+    // For rate = 0.5, a multiplier between 0.15-0.2 tends to work well
+    const double charTimeFactor = 0.10;
 
     // Estimate time based on content length
     double totalEstimatedDuration = 0.0;
@@ -314,10 +319,8 @@ class _ListenAudioRukuFirstAudioPlayerState
       // Calculate estimated time based on character count
       int charCount = verse.trim().length;
 
-      // Base formula:
-      // - 3 seconds minimum for very short verses
-      // - ~0.25 seconds per character for longer verses (adjusted for recitation)
-      double estimatedDuration = max(baseDuration, charCount * 0.25);
+      // More accurate formula that accounts for your TTS rate setting of 0.5
+      double estimatedDuration = max(baseDuration, charCount * charTimeFactor);
 
       // Add this verse's duration to our list
       verseEstimatedDurations.add(estimatedDuration);
@@ -328,6 +331,7 @@ class _ListenAudioRukuFirstAudioPlayerState
     totalDuration = max(10.0, totalEstimatedDuration);
     print("Total estimated duration: $totalDuration seconds");
   }
+
 
   void _startProgressTimer() {
     _stopProgressTimer();
@@ -347,7 +351,7 @@ class _ListenAudioRukuFirstAudioPlayerState
         ? verseEstimatedDurations[currentVerseIndex]
         : 3.0;
 
-    // Create smoother progress updates (60 updates per second)
+    // Create smoother progress updates (60fps)
     progressTimer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
       if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
         setState(() {
@@ -366,10 +370,9 @@ class _ListenAudioRukuFirstAudioPlayerState
               1.0,
             );
 
-            // Update current position smoothly
-            double newPosition =
-                currentPosition +
-                    (elapsedSeconds * (currentVerseDuration / 3.0));
+            // Update current position based on real-time elapsed duration
+            // This is the key change - use a direct 1:1 time ratio
+            double newPosition = currentPosition + elapsedSeconds;
 
             // Ensure we don't overshoot the current verse's duration
             if (newPosition <=
@@ -377,8 +380,9 @@ class _ListenAudioRukuFirstAudioPlayerState
               currentPosition = newPosition;
               lastPosition = currentPosition;
             } else {
-              // If we've reached the end of the current verse, we'll let the completion handler
-              // handle the transition to the next verse
+              // Cap at the end of the current verse
+              currentPosition = currentVerseStartPosition + currentVerseDuration;
+              lastPosition = currentPosition;
               _stopProgressTimer();
             }
           }
@@ -755,43 +759,44 @@ class _ListenAudioRukuFirstAudioPlayerState
       isProcessing = true;
     });
 
-    _stop().then((_) {
-      // Calculate which verse this position corresponds to
-      double accumulatedDuration = 0.0;
-      int targetVerseIndex = 0;
+    // Stop current playback
+    flutterTts.stop();
 
-      for (int i = 0; i < verseEstimatedDurations.length; i++) {
-        double nextAccumulatedDuration =
-            accumulatedDuration + verseEstimatedDurations[i];
-        if (position >= accumulatedDuration &&
-            position < nextAccumulatedDuration) {
-          targetVerseIndex = i;
-          break;
-        }
-        accumulatedDuration = nextAccumulatedDuration;
-        targetVerseIndex = i + 1;
+    // Calculate which verse this position corresponds to
+    double accumulatedDuration = 0.0;
+    int targetVerseIndex = 0;
+
+    for (int i = 0; i < verseEstimatedDurations.length; i++) {
+      double nextAccumulatedDuration = accumulatedDuration + verseEstimatedDurations[i];
+      if (position >= accumulatedDuration && position < nextAccumulatedDuration) {
+        targetVerseIndex = i;
+        break;
       }
+      accumulatedDuration = nextAccumulatedDuration;
+      targetVerseIndex = i + 1;
+    }
 
-      // Ensure the index is valid
-      if (targetVerseIndex >= verseTexts.length) {
-        targetVerseIndex = verseTexts.length - 1;
-      }
+    // Ensure the index is valid
+    if (targetVerseIndex >= verseTexts.length) {
+      targetVerseIndex = verseTexts.length - 1;
+    }
 
-      // IMPORTANT: First notify parent about the new active verse before updating state
-      if (widget.onActiveVerseChanged != null && targetVerseIndex < verseKeys.length) {
-        widget.onActiveVerseChanged!(verseKeys[targetVerseIndex]);
-      }
+    // IMPORTANT: First notify parent about the new active verse before updating state
+    if (widget.onActiveVerseChanged != null && targetVerseIndex < verseKeys.length) {
+      widget.onActiveVerseChanged!(verseKeys[targetVerseIndex]);
+    }
 
-      setState(() {
-        currentVerseIndex = targetVerseIndex;
-        _updatePositionToCurrentVerse();
-        isProcessing = false;
-      });
-
-      if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
-        _speakCurrentVerse();
-      }
+    setState(() {
+      currentVerseIndex = targetVerseIndex;
+      currentPosition = position;
+      _updatePositionToCurrentVerse();
+      isProcessing = false;
     });
+
+    // If the user was playing audio before, start playing from the new position
+    if (ttsState == TtsState.playing || ttsState == TtsState.continued) {
+      _speakCurrentVerse();
+    }
   }
 
   String _formatDuration(double seconds) {
@@ -871,6 +876,7 @@ class _ListenAudioRukuFirstAudioPlayerState
                     _jumpToPosition(newPosition);
                   },
                   activeColor: AppColors.PrimaryColor,
+                  divisions: 50000,
                   inactiveColor: AppColors.AudioPlayerInActiveColor,
                 ),
               ),
@@ -899,7 +905,7 @@ class _ListenAudioRukuFirstAudioPlayerState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _iconControlButton(
-              Image.asset(AppAssets.backwardarrow, width: 30, height: 30),
+              SvgPicture.asset(AppAssets.backwardarrow, width: 30, height: 30),
               _skipBackward,
               tooltip: "Previous verse",
             ),
@@ -910,7 +916,7 @@ class _ListenAudioRukuFirstAudioPlayerState
             ),
             const SizedBox(width: 25),
             _iconControlButton(
-              Image.asset(AppAssets.forwardarrow, width: 30, height: 30),
+              SvgPicture.asset(AppAssets.forwardarrow, width: 30, height: 30),
               _skipForward,
               tooltip: "Next verse",
             ),
@@ -963,8 +969,8 @@ class _ListenAudioRukuFirstAudioPlayerState
                 strokeWidth: 2,
               ),
             )
-                : Image.asset(
-              isPlaying ? AppAssets.pausebutton : AppAssets.playbutton,
+                : SvgPicture.asset(
+              isPlaying ? AppAssets.pause_button : AppAssets.play_button,
               width: 20,
               height: 20,
               fit: BoxFit.contain,

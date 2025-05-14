@@ -163,7 +163,9 @@ class FilterRow extends StatelessWidget {
                   'delete_bookmarks'.tr,
                   style: TextStyle(
                     fontFamily: GoogleFonts.merriweather().fontFamily,
-                    fontSize: 16,
+                    color: AppColors.PrimaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
                 ),
                 onTap: () {

@@ -11,6 +11,8 @@ class AppColors {
   static Color blackColor = Colors.black;
   static Color whiteColor = Color(0xFF86C1A9);
   static Color darkgreenColor = Color(0xFF227653);
+  static Color lightColorapp = Color(0xFFE9F7F1);
+  static Color colorone = Color(0xFF4CAF87);
 
   static const Color primaryGreen = Color(0xFF4A6D51);
 

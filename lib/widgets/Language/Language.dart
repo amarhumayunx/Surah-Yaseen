@@ -22,6 +22,7 @@ class Languages extends Translations {
     'page':'Page',
     'of':'of',
     'notification_history_already_cleared':'Notifications history already cleared',
+    'notification_history_cleared':'Notifications history cleared',
     'bookmark_options':'Bookmark Options',
     'delete_bookmarks':'Delete Bookmarks',
     'select_all':'Select All',
@@ -206,6 +207,7 @@ class Languages extends Translations {
     'test_verse': 'Test Verse',
     'notification_title': 'Verse Bookmarked',
     'notification_body': '%s has been saved.',
+    "notification_dialog_title": "Are you sure you want to clear notification history?",
     'verse_already_bookmarked': 'Verse Already Bookmarked',
     'surah_description': 'Surah Ya-Sin is the 36th chapter of the Quran. It is often referred to as \'The Heart of the Quran\' and consists of 83 verses. The chapter begins with the Arabic letters \'Ya\' and \'Sin\', which are among the mysterious letters of the Quran.',
     'virtues_of_yasin': 'It is recommended to recite Surah Ya-Sin during difficult times, for the deceased, and is often read on Friday nights.',
@@ -213,6 +215,8 @@ class Languages extends Translations {
     'ur_PK': {
     // Exit Dialog Strings
     'exit_dialog_title': 'ایپ سے باہر نکلیں',
+    "notification_dialog_title": "کیا آپ واقعی اطلاعات کی تاریخ مٹانا چاہتے ہیں؟",
+    'notification_history_cleared': 'اطلاعات کی تاریخ صاف کر دی گئی',
     'yes': 'ہاں',
     'no': 'نہیں',
     'ruku_line_bookmark': 'رکوع',

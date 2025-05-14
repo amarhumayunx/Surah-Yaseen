@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 
 class DeleteDialog extends StatelessWidget {
@@ -10,7 +11,7 @@ class DeleteDialog extends StatelessWidget {
       context: context,
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        backgroundColor: AppColors.lightColorSec,
+        backgroundColor: AppColors.lightColorapp,
         child: Container(
           padding: const EdgeInsets.all(20),
           width: 280,
@@ -18,13 +19,14 @@ class DeleteDialog extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.delete_outline, size: 40, color: Color(0xFF4CAF87)),
+              Icon(Icons.delete_outline, size: 40, color: AppColors.colorone),
               const SizedBox(height: 15),
               Text('delete_dialog_title'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 20,
+                      fontFamily: GoogleFonts.merriweather().fontFamily,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF4CAF87))),
+                      color: AppColors.PrimaryColor)),
               const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +35,7 @@ class DeleteDialog extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => Navigator.of(context).pop(true),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF87),
+                        backgroundColor: AppColors.darkgreenColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -41,7 +43,8 @@ class DeleteDialog extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                       child: Text('yes'.tr,
-                          style: const TextStyle(
+                          style: TextStyle(
+                              fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ),
@@ -50,15 +53,16 @@ class DeleteDialog extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(false),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF4CAF87),
-                        side: const BorderSide(color: Color(0xFF4CAF87)),
+                        foregroundColor: AppColors.colorone,
+                        side: BorderSide(color: AppColors.colorone),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                       child: Text('no'.tr,
-                          style: const TextStyle(
+                          style: TextStyle(
+                              fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ),

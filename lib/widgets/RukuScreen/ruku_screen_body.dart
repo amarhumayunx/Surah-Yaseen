@@ -21,7 +21,6 @@ class RukuScreenBody extends StatelessWidget {
           const DividerBar(),
           const SurahTitle(),
           const RukuHeader(),
-          SizedBox(height: 10),
 
           // Scrollable area starts here
           Expanded(

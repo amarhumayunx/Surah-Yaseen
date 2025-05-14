@@ -70,26 +70,6 @@ class NotificationHistoryManager {
     }
   }
 
-// Navigate to a specific bookmarked verse
-  /*static void navigateToBookmarkedVerse(int verseIndex, int rukuNumber, String arabicText) {
-    // Use GetX to navigate to the verse screen
-    Get.to(() => VerseScreen(
-      verseIndex: verseIndex,
-      rukuNumber: rukuNumber,
-      arabicText: arabicText,
-    ));
-  }*/
-
-  // Method to decode and navigate from a saved notification
-  /*static void navigateFromNotification(Map<String, dynamic> notification) {
-    // You'll need to modify this method to fetch the Arabic text
-    // This might involve querying your bookmarks or verses database
-    navigateToBookmarkedVerse(
-        notification['verseIndex'] ?? -1,
-        notification['rukuNumber'] ?? -1,
-        notification['arabicText'] ?? 'Unable to load verse text'
-    );
-  }*/
 
   // Clear all notification history
   static Future<void> clearHistory() async {

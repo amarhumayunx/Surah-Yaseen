@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../Colors/colors.dart';
 import 'package:surah_yaseen/widgets/OnBoardingScreen/onboarding_data.dart';
-import '../controllers/onboarding_controller.dart';
 import 'package:surah_yaseen/widgets/OnBoardingScreen/onboarding_page.dart';
 import 'package:surah_yaseen/widgets/OnBoardingScreen/onboarding_bottom_buttons.dart';
 
-class Onboardingscreen extends StatelessWidget {
-  Onboardingscreen({super.key});
+import '../Colors/colors.dart';
+import '../controllers/onboarding_controller.dart';
 
-  final onboardingController = Get.put(OnboardingController());
+class Onboardingscreen extends StatelessWidget {
+  const Onboardingscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final onboardingController = Get.put(OnboardingController());
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: AppColors.SecondaryColor,
       body: SafeArea(
         child: Column(
           children: [
+            // PageView in an Expanded widget to take available space
             Expanded(
+              flex: 7, // Give more space to the content
               child: PageView.builder(
                 controller: onboardingController.pageController,
                 onPageChanged: (index) =>
@@ -35,8 +39,10 @@ class Onboardingscreen extends StatelessWidget {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 55),
+
+            // Page indicator with flexible sizing
+            Flexible(
+              flex: 1,
               child: SmoothPageIndicator(
                 controller: onboardingController.pageController,
                 count: onboardingData.length,
@@ -50,7 +56,15 @@ class Onboardingscreen extends StatelessWidget {
                 ),
               ),
             ),
-            OnboardingBottomButtons(totalPages: onboardingData.length),
+
+            // Bottom buttons with constrained height
+            SizedBox(
+              height: screenHeight * 0.1, // 10% of screen height
+              child: OnboardingBottomButtons(totalPages: onboardingData.length),
+            ),
+
+            // Small bottom padding to ensure no overflow
+            SizedBox(height: 8),
           ],
         ),
       ),

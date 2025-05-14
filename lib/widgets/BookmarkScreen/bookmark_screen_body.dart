@@ -330,6 +330,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
                                 child: Stack(
                                   children: [
                                     // Main Bookmark Card
+                                    SizedBox(height: 20),
                                     BookmarkItem(
                                       arabicText: bookmark.arabicText,
                                       title: bookmark.title,
@@ -338,21 +339,16 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
                                       isSelected: isSelected,
                                       isInDeleteMode: _deleteMode,
                                     ),
-
-                                    // Delete mode circular checkmark indicator
-
                                   ],
                                 ),
                               ),
-
                               // Expanded details (only when selected and not in delete mode)
                               if (_selectedBookmarkIndex == index && !_deleteMode)
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10, bottom: 15),
+                                  padding: const EdgeInsets.only(top: 10, bottom: 5),
                                   child: _buildBookmarkDetails(bookmark),
                                 ),
-
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 15),
                             ],
                           );
                         }).toList(),
@@ -408,10 +404,10 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
   Widget _buildBookmarkDetails(Bookmark bookmark) {
     return Container(
       padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: AppColors.textWhite,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: AppColors.BarColor,
           width: 1.5,
@@ -430,7 +426,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
             ),
           ),
           Divider(color: AppColors.BarColor),
-          const SizedBox(height: 8),
+          const SizedBox(height: 0),
           Text(
             bookmark.arabicText,
             style: ArabicTextStyle(
@@ -442,7 +438,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           Text(
             bookmark.englishText ?? 'No translation available',
             style: TextStyle(
@@ -452,11 +448,11 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
               height: 1.3,
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           Row(
             children: [
               Icon(Icons.bookmark, color: AppColors.PrimaryColor, size: 16),
-              const SizedBox(width: 5),
+              const SizedBox(width: 2),
               Text(
                 '${'added_on'.tr} ${bookmark.date}',
                 style: TextStyle(

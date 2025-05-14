@@ -11,7 +11,7 @@ class NavigationController extends GetxController{
   final screens = [
     HomeScreen(),
     RukuScreen(),
-    BookmarkScreen(),
+    BookmarkScreen(verseIndex: 0, rukuNumber: 0,),
     SettingScreen()
   ];
 

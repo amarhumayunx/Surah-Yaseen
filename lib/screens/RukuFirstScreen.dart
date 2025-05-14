@@ -43,6 +43,7 @@ class _RukuFirstScreenState extends State<RukuFirstScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20,),
               child: Column(
                 children: [
+                  SizedBox(height: 10),
                   const TopBarRukuFirst(),
                   const SizedBox(height: 20),
                   const DividerBar(),

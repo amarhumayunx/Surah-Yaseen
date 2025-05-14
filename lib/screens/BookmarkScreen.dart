@@ -7,7 +7,16 @@ import '../widgets/Topbackground/top_background.dart';
 
 
 class BookmarkScreen extends StatefulWidget {
-  const BookmarkScreen({super.key});
+  final int verseIndex;
+  final int rukuNumber;
+
+  // Define the constructor with the required named parameters
+  const BookmarkScreen({
+    super.key,
+    required this.verseIndex,
+    required this.rukuNumber
+  });
+
 
   @override
   State<BookmarkScreen> createState() => _BookmarkScreenState();

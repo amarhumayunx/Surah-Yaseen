@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
@@ -19,6 +20,7 @@ class TopBarSet extends StatelessWidget {
 
     // Adjusting padding based on screen size
     final double horizontalPadding = screenWidth * 0.05;
+    final BoxFit iconFit = BoxFit.contain;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -30,18 +32,14 @@ class TopBarSet extends StatelessWidget {
                 ? Transform(
               alignment: Alignment.center,
               transform: Matrix4.rotationY(3.1416), // Flip horizontally (180°)
-              child: Image.asset(
-                AppAssets.back_arrow_key,
-                height: 25,
-                width: 25,
-                color: AppColors.SecondaryColor,
+              child: SvgPicture.asset(
+                AppAssets.backarrow,
+                fit: iconFit,
               ),
             )
-                : Image.asset(
-              AppAssets.back_arrow_key,
-              height: 25,
-              width: 25,
-              color: AppColors.SecondaryColor,
+                : SvgPicture.asset(
+              AppAssets.backarrow,
+              fit: iconFit,
             ),
             onPressed: () {
               Navigator.pop(context);
