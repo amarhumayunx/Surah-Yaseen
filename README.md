@@ -1,4 +1,4 @@
-# 📖 Yaseen Companion – Surah Yaseen Interactive App  
+# 📖 Surah Yaseen Companion – Surah Yaseen Interactive App  
 **Slogan**: **Read. Listen. Reflect. Remember.** 🕌🎧  
 
 ---
