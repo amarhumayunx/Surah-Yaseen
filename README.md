@@ -206,10 +206,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Developer
 
-**Your Name**
+**Muhammad Humayun Amar**
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- GitHub: [@amarhumayunx](https://github.com/amarhumayunx)
+- Email: amarhumayun@outlook.com
 
 ---
 
