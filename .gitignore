@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Releases folder - track README but ignore large binary files
+/releases/*.apk
+/releases/*.aab
+/releases/*.ipa
+/releases/*.app
+!/releases/README.md
