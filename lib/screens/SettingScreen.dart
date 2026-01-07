@@ -8,6 +8,8 @@ import '../Colors/colors.dart';
 import '../widgets/FontSize/FontSizeContainer.dart';
 import '../widgets/SettingScreen/top_bar_setting.dart';
 import '../widgets/Topbackground/top_background.dart';
+import '../widgets/Ads/reusable_banner_ad.dart';
+import '../constants/ad_unit_ids.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -54,6 +56,13 @@ class _SettingScreenState extends State<SettingScreen> {
                         FontSizeContainer(),
                         SizedBox(height: 15),
                         MenuOptionsContainer(),
+                        SizedBox(height: 20),
+                        // Banner Ad - using screen type (recommended approach)
+                        ReusableBannerAd(
+                          screenType: AdScreenType.settings,
+                          minHeight: 50,
+                        ),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),

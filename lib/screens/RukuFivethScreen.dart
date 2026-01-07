@@ -6,10 +6,14 @@ import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
-import '../widgets/RukuFivethScreen/ButtonsUnderTextFive.dart';
-import '../widgets/RukuFivethScreen/QuoteSectionFiveRuku.dart';
-import '../widgets/RukuFivethScreen/RukuFiveCard.dart';
-import '../widgets/RukuFivethScreen/RukuFiveScreenTopBar.dart';
+import 'package:surah_yaseen/widgets/RukuScreen/RukuButtonsUnderText.dart';
+import 'package:surah_yaseen/widgets/RukuScreen/RukuCard.dart' show RukuDetailCard;
+import 'package:surah_yaseen/widgets/RukuScreen/RukuQuoteSection.dart';
+import 'package:surah_yaseen/widgets/RukuScreen/RukuScreenTopBar.dart';
+import 'package:surah_yaseen/widgets/RukuFivethScreen/ListenAudioRukuFiveScreen.dart';
+import 'package:surah_yaseen/widgets/RukuFivethScreen/ListenAudioWithTranslationRukuFive.dart';
+import 'package:surah_yaseen/widgets/RukuFivethScreen/RukuFiveReadScreen.dart';
+import 'package:surah_yaseen/widgets/RukuFivethScreen/ruku_fifth_banner_ad_widget.dart';
 
 class RukuFiveScreen extends StatefulWidget {
   const RukuFiveScreen({super.key});
@@ -43,14 +47,14 @@ class _RukuFirstScreenState extends State<RukuFiveScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
               child: Column(
                 children: [
-                  const TopBarRukuFive(),
+                  const RukuScreenTopBar(),
                   const SizedBox(height: 20),
                   const DividerBar(),
                   const SizedBox(height: 10),
                   const SurahTitle(),
                   const SizedBox(height: 80),
                   // Wrap the RukuCard with a container to set custom size for this screen
-                  RukuFiveCard(
+                  RukuDetailCard(
                     imagePath: AppAssets.topcornerdecor,
                     title: 'ruku_five'.tr,
                     verseRange: 'verse_title_sixtyeight_to_eightythree'.tr,
@@ -60,13 +64,19 @@ class _RukuFirstScreenState extends State<RukuFiveScreen> {
                     imageHeight: 55,
                   ),
                   const SizedBox(height: 10),
-                  QuoteSectionRukuFive(),
+                  RukuQuoteSection(translationKey: 'text_under_card_ruku5'),
                   SizedBox(height: 10),
-                  ButtonsUnderTextRukuFive(),
+                  RukuButtonsUnderText(
+                    readScreen: const RukuFiveReadScreen(),
+                    listenAudioScreen: const ListenAudioRukuFiveScreen(),
+                    listenAudioWithTranslationScreen: const ListenAudioWithTranslationRukuFive(),
+                  ),
                 ],
               ),
             ),
           ),
+          // Banner ad anchored at the bottom
+          const RukuFifthBannerAdWidget(),
         ],
       ),
     );

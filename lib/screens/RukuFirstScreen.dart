@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:surah_yaseen/widgets/RukuFirstScreen/ButtonsUnderTextFirst.dart';
-import 'package:surah_yaseen/widgets/RukuFirstScreen/QuoteSectionFirstRuku.dart';
-import 'package:surah_yaseen/widgets/RukuFirstScreen/RukuFirstCard.dart';
+import 'package:surah_yaseen/widgets/RukuScreen/RukuButtonsUnderText.dart';
+import 'package:surah_yaseen/widgets/RukuScreen/RukuCard.dart' show RukuDetailCard;
+import 'package:surah_yaseen/widgets/RukuScreen/RukuQuoteSection.dart';
+import 'package:surah_yaseen/widgets/RukuScreen/RukuScreenTopBar.dart';
+import 'package:surah_yaseen/widgets/RukuFirstScreen/ListenAudioRukuFirstScreen.dart';
+import 'package:surah_yaseen/widgets/RukuFirstScreen/ListenAudioWithTranslationRukuFirst.dart';
+import 'package:surah_yaseen/widgets/RukuFirstScreen/RukuFirstReadScreen.dart';
+import 'package:surah_yaseen/widgets/RukuFirstScreen/ruku_first_banner_ad_widget.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
-import '../widgets/RukuFirstScreen/RukuFirstScreenTopBar.dart';
 
 class RukuFirstScreen extends StatefulWidget {
   const RukuFirstScreen({super.key});
@@ -44,14 +48,14 @@ class _RukuFirstScreenState extends State<RukuFirstScreen> {
               child: Column(
                 children: [
                   SizedBox(height: 10),
-                  const TopBarRukuFirst(),
+                  const RukuScreenTopBar(),
                   const SizedBox(height: 20),
                   const DividerBar(),
                   const SizedBox(height: 10),
                   const SurahTitle(),
                   const SizedBox(height: 90),
                   // Wrap the RukuCard with a container to set custom size for this screen
-                  RukuFirstCard(
+                  RukuDetailCard(
                       imagePath: AppAssets.topcornerdecor,
                       title: 'ruku_title_one'.tr,
                       verseRange: 'verse_title_one_to_twelve'.tr,
@@ -61,13 +65,19 @@ class _RukuFirstScreenState extends State<RukuFirstScreen> {
                       imageHeight: 55,
                   ),
                   const SizedBox(height: 10),
-                  QuoteSectionRukuFirst(),
+                  RukuQuoteSection(translationKey: 'text_under_card_ruku1'),
                   SizedBox(height: 10),
-                  ButtonsUnderText(),
+                  RukuButtonsUnderText(
+                    readScreen: const RukuFirstReadScreen(),
+                    listenAudioScreen: const ListenAudioRukuFirstScreen(),
+                    listenAudioWithTranslationScreen: const ListenAudioWithTranslationRukuFirst(),
+                  ),
                 ],
               ),
             ),
           ),
+          // Banner ad anchored at the bottom
+          const RukuFirstBannerAdWidget(),
         ],
       ),
     );

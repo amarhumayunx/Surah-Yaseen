@@ -11,12 +11,10 @@ class TopBarSet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     // Dynamic font sizes and icon sizes
     final double fontSizeTitle = screenWidth * 0.06; // ~24 on a 400px screen
     final double fontSizeSubtitle = screenWidth * 0.04; // ~16 on a 400px screen
-    final double iconSize = screenWidth * 0.09; // ~40 for a standard screen width
 
     // Adjusting padding based on screen size
     final double horizontalPadding = screenWidth * 0.05;

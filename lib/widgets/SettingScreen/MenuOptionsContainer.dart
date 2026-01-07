@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../screens/HelpScreen.dart';
 import '../../screens/LanguageScreen.dart';
 import '../../screens/NotificationScreen.dart';
-import '../../screens/PrivacyPolicyScreen.dart';
 
 class MenuOptionsContainer extends StatefulWidget {
   const MenuOptionsContainer({super.key});
@@ -44,9 +43,24 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
           padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: Column(
             children: [
-              _buildMenuItem(Icons.notifications_none, 'notifications'.tr, NotificationScreen(), null),
-              _buildMenuItem(Icons.language, 'language'.tr, LanguageScreen(), null),
-              _buildMenuItem(Icons.privacy_tip_outlined, 'privacy_policy'.tr, PrivacyPolicyScreen(), null),
+              _buildMenuItem(
+                Icons.notifications_none,
+                'notifications'.tr,
+                NotificationScreen(),
+                null,
+              ),
+              _buildMenuItem(
+                Icons.language,
+                'language'.tr,
+                LanguageScreen(),
+                null,
+              ),
+              _buildMenuItem(
+                Icons.privacy_tip_outlined,
+                'privacy_policy'.tr,
+                null,
+                onPrivacyPolicy,
+              ),
               // Handle the Rate Us button directly here
               _buildMenuItem(Icons.star_border, 'rate_us'.tr, null, onRateUs),
               // Handle the Share button directly here
@@ -60,14 +74,24 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
   }
 
   // Modify _buildMenuItem to accept an action for Rate Us or Share directly
-  Widget _buildMenuItem(IconData icon, String title, Widget? screen, void Function()? onAction) {
+  Widget _buildMenuItem(
+    IconData icon,
+    String title,
+    Widget? screen,
+    void Function()? onAction,
+  ) {
     return GestureDetector(
       onTap: () {
         if (onAction != null) {
           onAction(); // Trigger the action directly if it's provided (Rate Us or Share)
         } else if (screen != null) {
-          // Navigate to the screen if no action is provided
-          Get.to(() => screen); // Get.to() replaces Navigator.push()
+          // Navigate to the screen if no action is provided with custom animation
+          Get.to(
+            () => screen,
+            transition: Transition.rightToLeft,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
         }
       },
       child: Padding(
@@ -90,9 +114,66 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
     );
   }
 
+  // Function for Privacy Policy - opens in in-app browser
+  void onPrivacyPolicy() async {
+    const String privacyPolicyUrl = 'https://v0-surah-yaseenx.vercel.app/';
+
+    try {
+      final Uri url = Uri.parse(privacyPolicyUrl);
+
+      // Try to launch with in-app browser first
+      if (await canLaunchUrl(url)) {
+        try {
+          await launchUrl(
+            url,
+            mode: LaunchMode.inAppWebView,
+            webViewConfiguration: const WebViewConfiguration(
+              enableJavaScript: true,
+              enableDomStorage: true,
+            ),
+          );
+        } catch (e) {
+          // Fallback to external browser if in-app browser fails
+          if (mounted) {
+            await launchUrl(url, mode: LaunchMode.platformDefault);
+          }
+        }
+      } else {
+        // If canLaunchUrl returns false, try direct launch
+        if (mounted) {
+          await launchUrl(url, mode: LaunchMode.platformDefault);
+        }
+      }
+    } catch (e) {
+      // Handle any errors
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text(
+                'Could not open the Privacy Policy. Please check your internet connection.',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
+
   // Function for Rate Us
   void onRateUs() async {
-    const String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.example.yourapp';  // Replace with your app's Play Store URL
+    const String playStoreUrl =
+        'https://play.google.com/store/apps/details?id=com.example.yourapp'; // Replace with your app's Play Store URL
 
     if (await canLaunch(playStoreUrl)) {
       await launch(playStoreUrl);
@@ -120,7 +201,8 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
 
   // Function for Share
   void onShare() {
-    const String appLink = 'https://play.google.com/store/apps/details?id=com.example.yourapp'; // Replace with your app's Play Store URL
+    const String appLink =
+        'https://play.google.com/store/apps/details?id=com.example.yourapp'; // Replace with your app's Play Store URL
     Share.share('Check out this amazing app: $appLink');
   }
 }

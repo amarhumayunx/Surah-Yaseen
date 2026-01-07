@@ -34,7 +34,14 @@ class RukuGrid extends StatelessWidget {
                 childAspectRatio: childAspectRatio,
                 children: [
                   GestureDetector(
-                    onTap: () => Get.to(() => RukuFirstScreen()),
+                    onTap:
+                        () => Get.to(
+                          () => RukuFirstScreen(),
+                          transition: Transition.rightToLeft,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        ),
+                    behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_title_one'.tr,
@@ -42,7 +49,14 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(() => RukuSecondScreen()),
+                    onTap:
+                        () => Get.to(
+                          () => RukuSecondScreen(),
+                          transition: Transition.rightToLeft,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        ),
+                    behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_two'.tr,
@@ -50,7 +64,14 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(() => RukuThirdScreen()),
+                    onTap:
+                        () => Get.to(
+                          () => RukuThirdScreen(),
+                          transition: Transition.rightToLeft,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        ),
+                    behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_three'.tr,
@@ -58,7 +79,14 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(() => RukuFourthScreen()),
+                    onTap:
+                        () => Get.to(
+                          () => RukuFourthScreen(),
+                          transition: Transition.rightToLeft,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        ),
+                    behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_four'.tr,
@@ -66,7 +94,14 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(() => RukuFiveScreen()),
+                    onTap:
+                        () => Get.to(
+                          () => RukuFiveScreen(),
+                          transition: Transition.rightToLeft,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        ),
+                    behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
                       title: 'ruku_five'.tr,

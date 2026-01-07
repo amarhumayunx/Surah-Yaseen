@@ -27,7 +27,6 @@ class _BookmarkScreenBodySecondState extends State<BookmarkScreenBodySecond> {
   String _searchQuery = '';
   bool _deleteMode = false;
   final Set<int> _selectedForDeletion = {};
-  bool _noRecentBookmarks = false;
 
   // Method to handle bookmark icon tap
   void _onBookmarkTapped(int index) {
@@ -51,8 +50,6 @@ class _BookmarkScreenBodySecondState extends State<BookmarkScreenBodySecond> {
   }
 
   void _filterBookmarks(List<Bookmark> bookmarks) {
-    // Reset the no recent bookmarks flag
-    _noRecentBookmarks = false;
 
     if (_selectedFilter == 'recents'.tr) {
       // Get current date and time
@@ -86,11 +83,6 @@ class _BookmarkScreenBodySecondState extends State<BookmarkScreenBodySecond> {
         if (aParts[1] != bParts[1]) return bParts[1] - aParts[1]; // Month
         return bParts[0] - aParts[0]; // Day
       });
-
-      // Set flag if no recent bookmarks
-      if (bookmarks.isEmpty) {
-        _noRecentBookmarks = true;
-      }
     }
 
     // Apply search filter if any
@@ -99,7 +91,7 @@ class _BookmarkScreenBodySecondState extends State<BookmarkScreenBodySecond> {
       bookmarks.retainWhere((bookmark) =>
       bookmark.title.toLowerCase().contains(query) ||
           bookmark.arabicText.toLowerCase().contains(query) ||
-          (bookmark.englishText.toLowerCase().contains(query) ?? false)
+          bookmark.englishText.toLowerCase().contains(query)
       );
     }
   }
@@ -444,7 +436,7 @@ class _BookmarkScreenBodySecondState extends State<BookmarkScreenBodySecond> {
           ),
           const SizedBox(height: 10),
           Text(
-            bookmark.englishText ?? 'No translation available',
+            bookmark.englishText,
             style: TextStyle(
               fontSize: 14,
               fontFamily: GoogleFonts.merriweather().fontFamily,

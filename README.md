@@ -1,180 +1,246 @@
-# 📖 Surah Yaseen Companion – Surah Yaseen Interactive App  
-**Slogan**: **Read. Listen. Reflect. Remember.** 🕌🎧  
+# 📖 Surah Yaseen Companion
+
+<div align="center">
+
+**✨ Read. Listen. Reflect. Remember. ✨**
+
+*A spiritually enriching Flutter app to engage with Surah Yaseen - the heart of the Qur'an* 🕌
+
+[![Flutter](https://img.shields.io/badge/Flutter-3.7+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-lightgrey)](https://www.apple.com/ios/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+</div>
 
 ---
 
-## 📑 Table of Contents  
-1. [Introduction](#1-introduction)  
-2. [Purpose and Goals](#2-purpose-and-goals)  
-3. [App Description](#3-app-description)  
-4. [Functional Requirements](#4-functional-requirements)  
-5. [Spiritual Considerations](#5-spiritual-considerations)  
-6. [Optional Features for Future Updates](#6-optional-features-for-future-updates)  
-7. [Non-Functional Requirements](#7-non-functional-requirements)  
-8. [System Architecture and Design](#8-system-architecture-and-design)  
-9. [UI/UX Design](#9-uiux-design)  
-10. [Development Plan](#10-development-plan)  
-11. [Testing and Debugging](#11-testing-and-debugging)  
-12. [Deployment and Maintenance](#12-deployment-and-maintenance)  
-13. [Conclusion](#13-conclusion)  
+## 📱 About
+
+**Surah Yaseen Companion** is a beautiful, modern mobile application built with Flutter that helps you connect with Surah Yaseen through structured reading, audio playback, translations, and spiritual insights. Experience the heart of the Qur'an with ease and elegance.
+
+### 🎯 Key Highlights
+
+- 📖 **Ruku-wise Reading** - Navigate through 5 structured Rukus
+- 🎧 **Audio Playback** - Listen to beautiful recitations with synchronized highlighting
+- 🔖 **Smart Bookmarking** - Save your favorite verses and Rukus
+- 🌍 **Multi-language** - Support for English and Urdu
+- 🎨 **Beautiful UI** - Modern, clean design with Arabic typography
+- ⚙️ **Customizable** - Adjustable font sizes and settings
+- 🔔 **Notifications** - Daily reminders for spiritual practice
+- 📱 **Cross-platform** - Works seamlessly on Android and iOS
 
 ---
 
-## 1. Introduction  
-Welcome to **Yaseen Companion**, a spiritually enriching app designed to provide a meaningful and interactive way to engage with **Surah Yaseen**—the heart of the Qur’an. Whether you wish to **read**, **listen**, **reflect**, or **bookmark**, this app offers a seamless and organized experience.
+## ✨ Features
+
+### 📚 Reading Experience
+- ✨ **Ruku-by-Ruku Navigation** - Easy navigation through all 5 Rukus
+- 📝 **Translations** - Clear translations for better understanding
+- 🔤 **Arabic Typography** - Beautiful Lateef font for authentic reading
+- 📏 **Adjustable Font Size** - Customize reading experience
+- 🌙 **Smooth Scrolling** - Fluid navigation through verses
+
+### 🎵 Audio Features
+- 🎧 **High-Quality Recitation** - Crystal clear audio playback
+- 🎯 **Verse Highlighting** - Synchronized highlighting during playback
+- ⏯️ **Playback Controls** - Play, pause, and navigate audio
+- 🔄 **Auto-scroll** - Automatically scrolls with recitation
+
+### 🔖 Bookmarking
+- 📌 **Save Verses** - Bookmark any verse or Ruku
+- 📋 **Organized Bookmarks** - Manage all saved content easily
+- 🔍 **Quick Access** - Jump to bookmarked verses instantly
+- 🗑️ **Manage Bookmarks** - Delete or organize saved items
+
+### ⚙️ Settings & Customization
+- 🌐 **Language Selection** - Switch between English and Urdu
+- 📱 **Font Size Control** - Adjust text size for comfortable reading
+- 🔔 **Notification Settings** - Customize daily reminders
+- 💾 **Offline Access** - Read and listen without internet
+
+### 🎨 User Experience
+- 🚀 **Onboarding** - Beautiful introduction to app features
+- 🏠 **Intuitive Navigation** - Easy-to-use bottom navigation
+- 🎯 **Splash Screen** - Elegant app launch experience
+- 📊 **Help & About** - Comprehensive app information
 
 ---
 
-## 2. Purpose and Goals  
+## 🛠️ Tech Stack
 
-### 🎯 Purpose  
-To offer users an easy and modern way to access **Surah Yaseen**—complete with ruku-wise reading, audio, translations, and significance—all in one mobile application.
-
-### 🌟 Goals  
-- **Spiritual Engagement**: Promote daily reading and listening of Surah Yaseen.  
-- **User Accessibility**: Easy navigation with ruku-by-ruku division and bookmarking.  
-- **Knowledge and Learning**: Understand meanings, significance, and benefits.
-
----
-
-## 3. App Description  
-
-**Yaseen Companion** is a mobile application that helps users connect with Surah Yaseen through structured reading, audio playback, and tafsir insights.
-
-### 🔑 Key Features  
-- 📖 Ruku-by-ruku reading  
-- 🎧 Audio playback for each ruku  
-- 🔖 Bookmarking of verses and rukus  
-- 📚 Highlighted meanings and benefits  
-- ✨ Virtues and spiritual significance
+- **Framework**: [Flutter](https://flutter.dev) 3.7+
+- **State Management**: GetX, Provider
+- **Local Storage**: Hive, SharedPreferences, GetStorage
+- **Audio**: Just Audio, Flutter TTS, Audio Session
+- **UI Components**: Material Design, Custom Widgets
+- **Notifications**: Flutter Local Notifications
+- **Navigation**: GetX Navigation
+- **Localization**: GetX Translations
 
 ---
 
-## 4. Functional Requirements  
+## 📦 Installation
 
-### 4.1 Ruku-Wise Reading  
-- Divides Surah Yaseen into logical rukus  
-- Easy navigation between rukus  
+### Prerequisites
 
-### 4.2 Audio Integration  
-- High-quality recitation  
-- Auto-scroll feature during playback  
+- Flutter SDK (3.7.2 or higher)
+- Dart SDK
+- Android Studio / Xcode (for platform-specific development)
+- An IDE (VS Code / Android Studio)
 
-### 4.3 Bookmarking  
-- Save favorite rukus or verses  
-- Manage saved content  
+### Clone the Repository
 
-### 4.4 Tafsir Highlights  
-- Brief summaries of meanings  
-- Key spiritual lessons and benefits  
+```bash
+git clone https://github.com/yourusername/Surah-Yaseen.git
+cd Surah-Yaseen
+```
 
-### 4.5 Search & Filter  
-- Keyword-based search of verses and rukus  
+### Install Dependencies
 
----
+```bash
+flutter pub get
+```
 
-## 5. Spiritual Considerations  
-- Quranic content handled with respect  
-- Audio from certified Qaris  
-- Option to enable/disable translations  
-- Includes Bismillah and end-of-recitation duas  
+### Generate Code (if needed)
 
----
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
 
-## 6. Optional Features for Future Updates  
-- 🌙 Dark Mode for night reading  
-- ⏰ Daily Reminder notifications  
-- 🧠 Memorization progress tracker  
-- 📖 Expanded tafsir with scholar references  
-- 📈 User stats (streaks, read count)
+### Run the App
 
----
+```bash
+# For Android
+flutter run
 
-## 7. Non-Functional Requirements  
-- 📱 Cross-platform (Android, iOS)  
-- ⚡ Fast performance, smooth scrolling  
-- 🌐 Offline access to downloaded content  
-- 😊 User-friendly, modern design  
-- ♿ Accessibility-compliant interface
+# For iOS
+flutter run -d ios
+
+# For Web
+flutter run -d chrome
+```
 
 ---
 
-## 8. System Architecture and Design  
+## 📱 Screenshots
 
-### 🏗️ Architecture  
-- **Frontend**: Android (Java/Kotlin)  
-- **Backend**: Firebase for saved data and bookmarks  
-- **Audio**: Integrated with local and streamed Quran recitation  
-- **Storage**: Encrypted bookmarks and preferences
-
-### 🔄 Data Flow  
-- User → UI → Local/Firebase Storage  
-- Audio → Player → UI Highlight Sync  
-- Bookmarks → Saved → Re-accessed via Dashboard
+> *Coming soon - Add your app screenshots here!*
 
 ---
 
-## 9. UI/UX Design  
+## 🏗️ Project Structure
 
-### 🎨 Tools Used  
-- Figma for prototyping  
-- Adobe XD for visual assets  
-
-### 🖼️ Key Screens  
-- Home (Ruku List + Quick Access)  
-- Reader (Arabic + Translation + Tafsir + Audio)  
-- Bookmarks Page  
-- Benefits/Significance Section  
-
----
-
-## 10. Development Plan  
-
-### 🚀 Milestones  
-1. Layout and UI Design  
-2. Ruku-by-Ruku Structure  
-3. Audio Integration  
-4. Bookmark Feature  
-5. Meaning & Benefits Module  
-6. Firebase Sync for Saved Data  
-7. Testing & Optimization  
-
----
-
-## 11. Testing and Debugging  
-
-### 🧪 Testing Phases  
-- Unit tests (navigation, bookmarking, audio control)  
-- UI testing on different Android screen sizes  
-- Manual testing for verse accuracy and formatting  
-
-### 🛠️ Tools  
-- Android Emulator  
-- Firebase Test Lab  
-- Logcat Debugging  
-- Espresso for UI automation
+```
+lib/
+├── bookmark.dart              # Bookmark model
+├── main.dart                  # App entry point
+├── Colors/                    # Color constants
+├── constants/                 # App strings and assets
+├── controllers/               # State controllers
+├── menu/                      # Navigation components
+├── screens/                   # App screens
+│   ├── HomeScreen.dart
+│   ├── RukuScreen.dart
+│   ├── BookmarkScreen.dart
+│   ├── SettingScreen.dart
+│   └── ...
+├── services/                  # App services
+│   └── notification_service.dart
+└── widgets/                   # Reusable widgets
+    ├── HomeScreen/
+    ├── BookmarkScreen/
+    └── ...
+```
 
 ---
 
-## 12. Deployment and Maintenance  
+## 🎯 Key Screens
 
-### 📦 Deployment  
-- Released to Google Play Store  
-- Planned iOS release with Flutter cross-platform version  
-- Signed and optimized builds
-
-### 🔄 Maintenance  
-- User feedback collection  
-- Bug fixes and feature enhancements  
-- Security and content updates
+- 🏠 **Home Screen** - Main dashboard with quick access to all features
+- 📖 **Ruku Screens** - Individual screens for each of the 5 Rukus
+- 🎧 **Audio Player** - Audio playback with translation
+- 🔖 **Bookmarks** - Saved verses and Rukus
+- ⚙️ **Settings** - App preferences and customization
+- 📚 **Library** - Browse all Rukus
+- ℹ️ **About & Help** - App information and guidance
 
 ---
 
-## 13. Conclusion  
+## 🔧 Configuration
 
-**Yaseen Companion** empowers users to spiritually engage with Surah Yaseen through a clean, accessible, and insightful interface. With features like audio, bookmarking, and ruku-wise navigation, the app makes it easier than ever to read and understand one of the most revered Surahs of the Qur’an. 🌙📖
+### Fonts
+
+The app uses **Lateef** font family for Arabic text, located in `assets/fonts/`.
+
+### Assets
+
+- **Icons**: `assets/images/icons/`
+- **Illustrations**: `assets/images/illustrations/`
+- **Fonts**: `assets/fonts/`
 
 ---
 
-**📬 Feel free to contribute or report issues.**  
-> *May this project be a source of continuous benefit (Sadaqah Jariyah).*
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. 
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Spiritual Note
+
+> *This project is created with the intention of providing a means for people to connect with the Qur'an. May it be a source of continuous benefit (Sadaqah Jariyah) and may Allah accept our efforts. Ameen.* 🤲
+
+---
+
+## 👨‍💻 Developer
+
+**Your Name**
+
+- GitHub: [@yourusername](https://github.com/yourusername)
+- Email: your.email@example.com
+
+---
+
+## 📞 Support
+
+If you have any questions, suggestions, or feedback, please feel free to:
+- 📧 Open an issue on GitHub
+- 💬 Create a discussion thread
+- 📱 Contact the developer
+
+---
+
+## 🌟 Acknowledgments
+
+- All the scholars and reciters who made this content available
+- The Flutter community for amazing tools and packages
+- Lateef font creators for beautiful Arabic typography
+- All contributors and testers
+
+---
+
+## ⭐ Show Your Support
+
+If you find this project helpful, please give it a ⭐ on GitHub!
+
+---
+
+<div align="center">
+
+**Made with ❤️ and Flutter**
+
+*May this app be a source of guidance and blessing* 🌙✨
+
+</div>

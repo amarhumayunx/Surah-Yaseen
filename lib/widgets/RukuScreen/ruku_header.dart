@@ -14,9 +14,7 @@ class RukuHeader extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(
-              top: 25,
-              bottom: 1),
+          margin: const EdgeInsets.only(top: 25, bottom: 1),
           width: 240,
           height: 70,
           child: Stack(
@@ -25,11 +23,18 @@ class RukuHeader extends StatelessWidget {
               // SVG Background with proper sizing
               SvgPicture.asset(
                 AppAssets.titleheader,
-                fit: BoxFit.fill, // Use fill to ensure the entire area is covered
+                fit:
+                    BoxFit
+                        .fill, // Use fill to ensure the entire area is covered
               ),
               // Text remains centered with proper contrast
               Padding(
-                padding: const EdgeInsets.only(top: 1,bottom: 8,right: 5,left: 5),
+                padding: const EdgeInsets.only(
+                  top: 1,
+                  bottom: 8,
+                  right: 5,
+                  left: 5,
+                ),
                 child: Text(
                   'ruku_button_title'.tr,
                   style: TextStyle(
@@ -45,15 +50,20 @@ class RukuHeader extends StatelessWidget {
         ),
 
         Container(
-          padding: const EdgeInsets.only(top: 2,bottom: 15,right: 35,left: 35),
+          padding: const EdgeInsets.only(
+            top: 2,
+            bottom: 15,
+            right: 35,
+            left: 35,
+          ),
           child: Text(
             'text_under_ruku_button'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 14,
-                color: AppColors.PrimaryColor,
-                fontFamily: GoogleFonts.merriweather().fontFamily,
-                height: 1.5
+              fontSize: 14,
+              color: AppColors.PrimaryColor,
+              fontFamily: GoogleFonts.merriweather().fontFamily,
+              height: 1.5,
             ),
           ),
         ),

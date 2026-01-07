@@ -45,8 +45,6 @@ dependencies:
   shared_preferences: ^2.5.3
   hive_flutter: ^1.1.0
   hive: ^2.2.3
-  hive_generator: ^2.0.1
-  build_runner: ^2.4.15
   rxdart: ^0.28.0
   just_audio: ^0.10.2
   audio_session: ^0.2.1
@@ -60,23 +58,25 @@ dependencies:
   permission_handler: ^12.0.0+1
   url_launcher: ^6.3.1
   share_plus: ^11.0.0
+  google_mobile_ads: ^5.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-flutter_icons:
-  android: true
-  ios: true
-  remove_alpha_icon: true
-  image_path: "assets/images/illustrations/surahicon.png"
-
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.13
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_icon: true
+  image_path: "assets/images/illustrations/surahicon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

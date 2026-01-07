@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/AboutScreen/TitleCardAbout.dart';
 import 'package:surah_yaseen/widgets/AboutScreen/infocardabout.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
-import '../controllers/navigation_controller.dart';
 import '../widgets/AboutScreen/quote_section.dart';
 import '../widgets/TopBar/topbartest.dart';
 import '../widgets/Topbackground/top_background.dart';
+import '../widgets/Ads/reusable_banner_ad.dart';
+import '../constants/ad_unit_ids.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -21,7 +21,6 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  final NavigationController _navigationController = Get.find<NavigationController>();
 
 
 
@@ -73,6 +72,13 @@ class _AboutScreenState extends State<AboutScreen> {
                       SizedBox(height: 10),
                       QuoteSection(),
                       InfoBoxCard(), // Now this will work correctly because we removed the Expanded from InfoBoxCard
+                      SizedBox(height: 20),
+                      // Banner Ad - Info Screen
+                      ReusableBannerAd(
+                        screenType: AdScreenType.about,
+                        minHeight: 50,
+                      ),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),

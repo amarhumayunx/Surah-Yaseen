@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../Dividerbar/dividerbar.dart';
 import 'ruku_grid.dart';
 import 'ruku_header.dart';
+import 'banner_ad_widget.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/TopBar/topbar.dart';
 
@@ -25,7 +26,14 @@ class RukuScreenBody extends StatelessWidget {
           // Scrollable area starts here
           Expanded(
             child: SingleChildScrollView(
-              child: const RukuGrid(),
+              child: Column(
+                children: [
+                  const RukuGrid(),
+                  const SizedBox(height: 20),
+                  BannerAdWidget(),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ],

@@ -6,6 +6,7 @@ class Languages extends Translations {
     'en_US': {
     // Exit Dialog Strings
     'exit_dialog_title': 'Exit App',
+    'press_again_to_exit': 'Press again to exit app',
     'yes': 'YES',
     'no': 'NO',
 
@@ -215,6 +216,7 @@ class Languages extends Translations {
     'ur_PK': {
     // Exit Dialog Strings
     'exit_dialog_title': 'ایپ سے باہر نکلیں',
+    'press_again_to_exit': 'ایپ سے باہر نکالنے کے لیے دوبارہ دبائیں',
     "notification_dialog_title": "کیا آپ واقعی اطلاعات کی تاریخ مٹانا چاہتے ہیں؟",
     'notification_history_cleared': 'اطلاعات کی تاریخ صاف کر دی گئی',
     'yes': 'ہاں',

@@ -1,13 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../Colors/colors.dart';
 import '../widgets/TopBar/topbar.dart';
-import '../controllers/navigation_controller.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
-import '../widgets/dialogs/exit_dialog.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import '../widgets/HomeScreen/quote_section.dart';
 import '../widgets/HomeScreen/option_grid.dart';
@@ -21,8 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final NavigationController _navigationController = Get.find<NavigationController>();
-  final ExitDialog _exitDialog = ExitDialog();
+  BannerAd? _bannerAd;
+  bool _isBannerAdReady = false;
 
   @override
   void initState() {
@@ -34,18 +33,54 @@ class _HomeScreenState extends State<HomeScreen> {
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.dark,
     ));
+    
+    // Initialize banner ad
+    _loadBannerAd();
   }
 
-  Future<bool> _onWillPop(BuildContext context) async {
-    final shouldExit = await _exitDialog.showExitDialog(context);
-    if (shouldExit) {
-      // Exit the app safely
-      Future.delayed(const Duration(milliseconds: 100), () {
-        SystemNavigator.pop();
-      });
-      return false; // Prevent manual pop
-    }
-    return false; // Cancel back press
+  void _loadBannerAd() {
+    // Use test ad unit ID for development
+    // For Android: ca-app-pub-3940256099942544/6300978111
+    // For iOS: ca-app-pub-3940256099942544/2934735716
+    // Replace with your production ad unit ID when ready: 'ca-app-pub-3425673808153409/9699762512'
+    final String adUnitId = kDebugMode
+        ? 'ca-app-pub-3940256099942544/6300978111' // Test ad unit ID
+        : 'ca-app-pub-3425673808153409/9699762512'; // Production ad unit ID
+    
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+          print('Banner ad loaded successfully');
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          print('Error code: ${err.code}');
+          print('Error domain: ${err.domain}');
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+        onAdOpened: (_) {
+          print('Banner ad opened');
+        },
+        onAdClosed: (_) {
+          print('Banner ad closed');
+        },
+      ),
+    );
+
+    _bannerAd?.load();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,9 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final double imageHeight = screenHeight * 0.15; // Slightly reduced to save space
     final double spacing = screenHeight * 0.01;
 
-    return WillPopScope(
-      onWillPop: () => _onWillPop(context),
-      child: Scaffold(
+    return Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: AppColors.lightColorSec,
         body: Stack(
@@ -89,7 +122,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           QuoteSection(),
                           OptionGrid(),
-                          // No large SizedBox at the bottom
+                          // Banner Ad at the bottom
+                          if (_isBannerAdReady && _bannerAd != null)
+                            Container(
+                              alignment: Alignment.center,
+                              width: _bannerAd!.size.width.toDouble(),
+                              height: _bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: _bannerAd!),
+                            ),
                         ],
                       ),
                     ),
@@ -99,7 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 }

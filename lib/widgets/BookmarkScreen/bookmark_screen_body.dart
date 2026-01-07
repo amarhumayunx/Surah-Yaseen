@@ -13,6 +13,7 @@ import '../SurahTitle/surat_title.dart';
 import 'filter_row.dart';
 import 'title_card.dart';
 import 'bookmark_item.dart';
+import 'banner_ad_widget.dart';
 
 class BookmarkScreenBody extends StatefulWidget {
   const BookmarkScreenBody({super.key});
@@ -27,7 +28,11 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
   String _searchQuery = '';
   bool _deleteMode = false;
   final Set<int> _selectedForDeletion = {};
-  bool _noRecentBookmarks = false;
+  
+  // Ad unit ID for bookmarks banner ad
+  // Use test ad unit ID for development: 'ca-app-pub-3940256099942544/6300978111'
+  // Production ad unit ID: 'ca-app-pub-3425673808153409/1849192657'
+  static const String _bannerAdUnitId = 'ca-app-pub-3425673808153409/1849192657';
 
   // Method to handle bookmark icon tap
   void _onBookmarkTapped(int index) {
@@ -51,8 +56,6 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
   }
 
   void _filterBookmarks(List<Bookmark> bookmarks) {
-    // Reset the no recent bookmarks flag
-    _noRecentBookmarks = false;
 
     if (_selectedFilter == 'recents'.tr) {
       // Get current date and time
@@ -86,11 +89,6 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
         if (aParts[1] != bParts[1]) return bParts[1] - aParts[1]; // Month
         return bParts[0] - aParts[0]; // Day
       });
-
-      // Set flag if no recent bookmarks
-      if (bookmarks.isEmpty) {
-        _noRecentBookmarks = true;
-      }
     }
 
     // Apply search filter if any
@@ -99,7 +97,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
       bookmarks.retainWhere((bookmark) =>
       bookmark.title.toLowerCase().contains(query) ||
           bookmark.arabicText.toLowerCase().contains(query) ||
-          (bookmark.englishText.toLowerCase().contains(query) ?? false)
+          bookmark.englishText.toLowerCase().contains(query)
       );
     }
   }
@@ -282,6 +280,15 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
                     onShowDeleteMode: _toggleDeleteMode,
                   ),
 
+                  // Banner Ad
+                  const SizedBox(height: 16),
+                  Center(
+                    child: BannerAdWidget(
+                      adUnitId: _bannerAdUnitId,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
                   // Select All row when in delete mode
                   if (_deleteMode)
                     Padding(
@@ -440,7 +447,7 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
           ),
           const SizedBox(height: 5),
           Text(
-            bookmark.englishText ?? 'No translation available',
+            bookmark.englishText,
             style: TextStyle(
               fontSize: 14,
               fontFamily: GoogleFonts.merriweather().fontFamily,

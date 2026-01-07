@@ -53,7 +53,9 @@ class _VersePageContainerState extends State<VersePageContainer> {
   late PageController _dialogPageController;
   late int _currentDialogPage;
   int? _longPressedVerseIndex;
-  final Color _bookmarkHighlightColor = Color(0xFFF6FAF7); // Soft greenish background
+  final Color _bookmarkHighlightColor = Color(
+    0xFFF6FAF7,
+  ); // Soft greenish background
   final Color _bookmarkBorderColor = Color(0xFFCCE7D5); // Green border
 
   @override
@@ -96,23 +98,22 @@ class _VersePageContainerState extends State<VersePageContainer> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (
-          BuildContext dialogContext
-          )
-      {
+      builder: (BuildContext dialogContext) {
         return StatefulBuilder(
-          builder: (
-              BuildContext context,
-              StateSetter setDialogState
-              )
-          {
+          builder: (BuildContext context, StateSetter setDialogState) {
             return Stack(
               children: [
                 // Close button positioned outside the container
                 Positioned(
                   top: 20,
-                  left: Directionality.of(context) == TextDirection.ltr ? 30 : null,
-                  right: Directionality.of(context) == TextDirection.rtl ? 30 : null,
+                  left:
+                      Directionality.of(context) == TextDirection.ltr
+                          ? 30
+                          : null,
+                  right:
+                      Directionality.of(context) == TextDirection.rtl
+                          ? 30
+                          : null,
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(dialogContext).pop();
@@ -124,10 +125,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                         color: Colors.transparent,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
+                      child: Icon(Icons.close, color: Colors.white),
                     ),
                   ),
                 ),
@@ -163,10 +161,9 @@ class _VersePageContainerState extends State<VersePageContainer> {
                           ),
                           child: Text(
                             '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
-                            style: TextStyle(
+                            style: GoogleFonts.merriweather(
                               color: AppColors.PrimaryColor,
                               fontSize: 28,
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
@@ -189,9 +186,13 @@ class _VersePageContainerState extends State<VersePageContainer> {
                             },
                             itemCount: widget.totalPageDialogBox,
                             itemBuilder: (context, pageIndex) {
-                              int startIdx = pageIndex * widget.versesPerPageDialogBox;
+                              int startIdx =
+                                  pageIndex * widget.versesPerPageDialogBox;
                               // Pass the setState function to allow highlighting in fullscreen mode
-                              return _buildVersesPageFullscreen(startIdx, setDialogState);
+                              return _buildVersesPageFullscreen(
+                                startIdx,
+                                setDialogState,
+                              );
                             },
                           ),
                         ),
@@ -218,24 +219,28 @@ class _VersePageContainerState extends State<VersePageContainer> {
                                   color: AppColors.PrimaryColor,
                                   size: 16,
                                 ),
-                                onPressed: _currentDialogPage > 1
-                                    ? () {
-                                  _dialogPageController.previousPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
-                                    : null,
+                                onPressed:
+                                    _currentDialogPage > 1
+                                        ? () {
+                                          _dialogPageController.previousPage(
+                                            duration: const Duration(
+                                              milliseconds: 300,
+                                            ),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }
+                                        : null,
                               ),
 
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
                                 child: Text(
-                                  '${'page'.tr} ${widget.currentPage} ${'of'.tr} ${widget.totalPages}',
-                                  style: TextStyle(
+                                  '${'page'.tr} ${_currentDialogPage} ${'of'.tr} ${widget.totalPageDialogBox}',
+                                  style: GoogleFonts.merriweather(
                                     color: AppColors.PrimaryColor,
                                     fontSize: 14,
-                                    fontFamily: GoogleFonts.merriweather().fontFamily,
                                   ),
                                 ),
                               ),
@@ -246,14 +251,18 @@ class _VersePageContainerState extends State<VersePageContainer> {
                                   color: AppColors.PrimaryColor,
                                   size: 16,
                                 ),
-                                onPressed: _currentDialogPage < widget.totalPageDialogBox
-                                    ? () {
-                                  _dialogPageController.nextPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
-                                    : null,
+                                onPressed:
+                                    _currentDialogPage <
+                                            widget.totalPageDialogBox
+                                        ? () {
+                                          _dialogPageController.nextPage(
+                                            duration: const Duration(
+                                              milliseconds: 300,
+                                            ),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }
+                                        : null,
                               ),
                             ],
                           ),
@@ -264,8 +273,14 @@ class _VersePageContainerState extends State<VersePageContainer> {
                 ),
 
                 Positioned(
-                  left: Directionality.of(context) == TextDirection.ltr ? 35 : null,
-                  right: Directionality.of(context) == TextDirection.rtl ? 35 : null,
+                  left:
+                      Directionality.of(context) == TextDirection.ltr
+                          ? 35
+                          : null,
+                  right:
+                      Directionality.of(context) == TextDirection.rtl
+                          ? 35
+                          : null,
                   top: 60,
                   child: Transform(
                     alignment: Alignment.center,
@@ -282,8 +297,14 @@ class _VersePageContainerState extends State<VersePageContainer> {
 
                 // Add Image Asset to bottom-right corner (in full-screen dialog)
                 Positioned(
-                  right: Directionality.of(context) == TextDirection.ltr ? 35 : null,
-                  left: Directionality.of(context) == TextDirection.rtl ? 35 : null,
+                  right:
+                      Directionality.of(context) == TextDirection.ltr
+                          ? 35
+                          : null,
+                  left:
+                      Directionality.of(context) == TextDirection.rtl
+                          ? 35
+                          : null,
                   bottom: 60,
                   child: Transform(
                     alignment: Alignment.center,
@@ -297,7 +318,6 @@ class _VersePageContainerState extends State<VersePageContainer> {
                     ),
                   ),
                 ),
-
               ],
             );
           },
@@ -307,12 +327,15 @@ class _VersePageContainerState extends State<VersePageContainer> {
   }
 
   Future<void> _showBookmarkConfirmationDialog(
-      BuildContext context,
-      int verseIndex,
-      String arabicText,
-      String englishText)
-  async {
-    final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: false);
+    BuildContext context,
+    int verseIndex,
+    String arabicText,
+    String englishText,
+  ) async {
+    final bookmarkProvider = Provider.of<BookmarkProvider>(
+      context,
+      listen: false,
+    );
 
     // Add the verse to bookmarks
     bool wasAdded = await bookmarkProvider.addVerseBookmark(
@@ -332,9 +355,13 @@ class _VersePageContainerState extends State<VersePageContainer> {
     // Show the appropriate confirmation dialog
     showDialog(
       context: context,
-      builder: (_) => BookmarkConfirmationDialog(
-          message: wasAdded ? 'verse_bookmarked'.tr : 'verse_already_bookmarked'.tr
-      ),
+      builder:
+          (_) => BookmarkConfirmationDialog(
+            message:
+                wasAdded
+                    ? 'verse_bookmarked'.tr
+                    : 'verse_already_bookmarked'.tr,
+          ),
     ).then((_) {
       // Reset the highlight after the dialog is dismissed
       setState(() {
@@ -345,19 +372,31 @@ class _VersePageContainerState extends State<VersePageContainer> {
 
   // For regular mode
   Widget _buildVersesPage(int startIdx, bool isInDialog) {
-    final fontSizeProvider = Provider.of<FontSizeProvider>(context, listen: true);
+    final fontSizeProvider = Provider.of<FontSizeProvider>(
+      context,
+      listen: true,
+    );
     final _fontSizeValue = fontSizeProvider.fontSizeValue;
-    final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: true);
+    final bookmarkProvider = Provider.of<BookmarkProvider>(
+      context,
+      listen: true,
+    );
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
-    Map<String, String> versesEnglish = AppStrings.yasinSurahStrings.versesEnglish;
+    Map<String, String> versesEnglish =
+        AppStrings.yasinSurahStrings.versesEnglish;
 
     List<MapEntry<String, String>> arabicEntries = [];
     List<MapEntry<String, String>> englishEntries = [];
 
-    int versesToShow = isInDialog ? widget.versesPerPageDialogBox : widget.versesPerPage;
+    int versesToShow =
+        isInDialog ? widget.versesPerPageDialogBox : widget.versesPerPage;
 
-    for (int i = startIdx; i < startIdx + versesToShow && i <= widget.lastVerseIndex; i++) {
+    for (
+      int i = startIdx;
+      i < startIdx + versesToShow && i <= widget.lastVerseIndex;
+      i++
+    ) {
       String key = 'verse_$i';
       if (versesArabic.containsKey(key) && versesEnglish.containsKey(key)) {
         arabicEntries.add(MapEntry(key, versesArabic[key]!));
@@ -367,8 +406,8 @@ class _VersePageContainerState extends State<VersePageContainer> {
 
     return ListView.builder(
       padding: EdgeInsets.symmetric(
-          horizontal: widget.isFullScreen || isInDialog ? 24 : 20,
-          vertical: widget.isFullScreen || isInDialog ? 20 : 15
+        horizontal: widget.isFullScreen || isInDialog ? 24 : 20,
+        vertical: widget.isFullScreen || isInDialog ? 20 : 15,
       ),
       itemCount: arabicEntries.length,
       itemBuilder: (context, index) {
@@ -379,8 +418,8 @@ class _VersePageContainerState extends State<VersePageContainer> {
 
         // Check if this verse is already bookmarked
         final isBookmarked = bookmarkProvider.isVerseBookmarked(
-            actualVerseIndex,
-            widget.rukuNumber
+          actualVerseIndex,
+          widget.rukuNumber,
         );
 
         return GestureDetector(
@@ -401,16 +440,17 @@ class _VersePageContainerState extends State<VersePageContainer> {
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 5),
             padding: EdgeInsets.all((isSelected || isBookmarked) ? 12 : 0),
-            decoration: (isSelected || isBookmarked)
-                ? BoxDecoration(
-              color: _bookmarkHighlightColor,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                color: _bookmarkBorderColor,
-                width: 1.5,
-              ),
-            )
-                : null,
+            decoration:
+                (isSelected || isBookmarked)
+                    ? BoxDecoration(
+                      color: _bookmarkHighlightColor,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: _bookmarkBorderColor,
+                        width: 1.5,
+                      ),
+                    )
+                    : null,
             child: Stack(
               children: [
                 // Content Container with padding for bookmark icon
@@ -418,8 +458,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Space for bookmark icon if verse is bookmarked
-                    if (isBookmarked)
-                      SizedBox(width: 30),
+                    if (isBookmarked) SizedBox(width: 30),
 
                     // Main content with adjusted width
                     Expanded(
@@ -429,37 +468,55 @@ class _VersePageContainerState extends State<VersePageContainer> {
                           Text(
                             arabicText,
                             style: ArabicTextStyle(
-                              arabicFont: ArabicFont.lateef, // Use the family name from pubspec.yaml
-                              fontSize: isInDialog
-                                  ? (24 + (_fontSizeValue * 8)) // For dialog box
-                                  : (widget.isFullScreen
-                                  ? (24 + (_fontSizeValue * 8)) // For fullscreen
-                                  : (24 + (_fontSizeValue * 8))), // For regular view
+                              arabicFont:
+                                  ArabicFont
+                                      .lateef, // Use the family name from pubspec.yaml
+                              fontSize:
+                                  isInDialog
+                                      ? (24 +
+                                          (_fontSizeValue *
+                                              8)) // For dialog box
+                                      : (widget.isFullScreen
+                                          ? (24 +
+                                              (_fontSizeValue *
+                                                  8)) // For fullscreen
+                                          : (24 +
+                                              (_fontSizeValue *
+                                                  8))), // For regular view
                               color: AppColors.PrimaryColor,
                               height: 1,
                             ),
                             textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
                           ),
-                          SizedBox(height: widget.isFullScreen || isInDialog ? 14 : 10),
+                          SizedBox(
+                            height: widget.isFullScreen || isInDialog ? 14 : 10,
+                          ),
                           Text(
                             englishText.tr,
                             style: TextStyle(
                               fontFamily: GoogleFonts.merriweather().fontFamily,
-                              fontSize: isInDialog ?
-                              (13 + (_fontSizeValue * 8)) : // For dialog box
-                              (widget.isFullScreen ?
-                              (13 + (_fontSizeValue * 8)) : // For fullscreen
-                              (13 + (_fontSizeValue * 8))),
-                              color: widget.isFullScreen || isInDialog
-                                  ? AppColors.BarColor
-                                  : AppColors.BarColor,
+                              fontSize:
+                                  isInDialog
+                                      ? (13 + (_fontSizeValue * 8))
+                                      : // For dialog box
+                                      (widget.isFullScreen
+                                          ? (13 + (_fontSizeValue * 8))
+                                          : // For fullscreen
+                                          (13 + (_fontSizeValue * 8))),
+                              color:
+                                  widget.isFullScreen || isInDialog
+                                      ? AppColors.BarColor
+                                      : AppColors.BarColor,
                               height: 1.3,
                             ),
                             textAlign: TextAlign.left,
                           ),
                           if (index < arabicEntries.length - 1)
-                            SizedBox(height: widget.isFullScreen || isInDialog ? 20 : 12),
+                            SizedBox(
+                              height:
+                                  widget.isFullScreen || isInDialog ? 20 : 12,
+                            ),
                         ],
                       ),
                     ),
@@ -469,15 +526,24 @@ class _VersePageContainerState extends State<VersePageContainer> {
                 // Bookmark icon that appears when verse is selected or permanently bookmarked
                 if (isSelected || isBookmarked)
                   Positioned(
-                    left: Directionality.of(context) == TextDirection.ltr ? 2 : null,
-                    right: Directionality.of(context) == TextDirection.rtl ? 2 : null,
+                    left:
+                        Directionality.of(context) == TextDirection.ltr
+                            ? 2
+                            : null,
+                    right:
+                        Directionality.of(context) == TextDirection.rtl
+                            ? 2
+                            : null,
                     top: 8,
                     child: Container(
                       padding: EdgeInsets.all(4),
                       child: Icon(
                         Icons.bookmark,
                         color: AppColors.PrimaryColor,
-                        size: isBookmarked ? 24 : 20, // Slightly larger for bookmarked verses in fullscreen
+                        size:
+                            isBookmarked
+                                ? 24
+                                : 20, // Slightly larger for bookmarked verses in fullscreen
                       ),
                     ),
                   ),
@@ -491,22 +557,33 @@ class _VersePageContainerState extends State<VersePageContainer> {
 
   // For fullscreen dialog mode with bookmark functionality
   Widget _buildVersesPageFullscreen(int startIdx, StateSetter setDialogState) {
-    final fontSizeProvider = Provider.of<FontSizeProvider>(context, listen: true);
+    final fontSizeProvider = Provider.of<FontSizeProvider>(
+      context,
+      listen: true,
+    );
     final _fontSizeValue = fontSizeProvider.fontSizeValue;
-    final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: true);
+    final bookmarkProvider = Provider.of<BookmarkProvider>(
+      context,
+      listen: true,
+    );
 
     // Track highlighted verse in fullscreen mode
     int? _dialogLongPressedVerseIndex;
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
-    Map<String, String> versesEnglish = AppStrings.yasinSurahStrings.versesEnglish;
+    Map<String, String> versesEnglish =
+        AppStrings.yasinSurahStrings.versesEnglish;
 
     List<MapEntry<String, String>> arabicEntries = [];
     List<MapEntry<String, String>> englishEntries = [];
 
     int versesToShow = widget.versesPerPageDialogBox;
 
-    for (int i = startIdx; i < startIdx + versesToShow && i <= widget.lastVerseIndex; i++) {
+    for (
+      int i = startIdx;
+      i < startIdx + versesToShow && i <= widget.lastVerseIndex;
+      i++
+    ) {
       String key = 'verse_$i';
       if (versesArabic.containsKey(key) && versesEnglish.containsKey(key)) {
         arabicEntries.add(MapEntry(key, versesArabic[key]!));
@@ -515,134 +592,153 @@ class _VersePageContainerState extends State<VersePageContainer> {
     }
 
     return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            itemCount: arabicEntries.length,
-            itemBuilder: (context, index) {
-              final actualVerseIndex = startIdx + index;
-              final arabicText = arabicEntries[index].value;
-              final englishText = englishEntries[index].value;
-              final isSelected = _dialogLongPressedVerseIndex == index;
+      builder: (BuildContext context, StateSetter setState) {
+        return ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          itemCount: arabicEntries.length,
+          itemBuilder: (context, index) {
+            final actualVerseIndex = startIdx + index;
+            final arabicText = arabicEntries[index].value;
+            final englishText = englishEntries[index].value;
+            final isSelected = _dialogLongPressedVerseIndex == index;
 
-              // Check if this verse is already bookmarked
-              final isBookmarked = bookmarkProvider.isVerseBookmarked(
-                  actualVerseIndex,
-                  widget.rukuNumber
-              );
+            // Check if this verse is already bookmarked
+            final isBookmarked = bookmarkProvider.isVerseBookmarked(
+              actualVerseIndex,
+              widget.rukuNumber,
+            );
 
-              return GestureDetector(
-                onLongPress: () {
-                  // Update local state for the dialog
-                  setState(() {
-                    _dialogLongPressedVerseIndex = index;
-                  });
+            return GestureDetector(
+              onLongPress: () {
+                // Update local state for the dialog
+                setState(() {
+                  _dialogLongPressedVerseIndex = index;
+                });
 
-                  Future.delayed(Duration(milliseconds: 300), () async {
-                    final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: false);
+                Future.delayed(Duration(milliseconds: 300), () async {
+                  final bookmarkProvider = Provider.of<BookmarkProvider>(
+                    context,
+                    listen: false,
+                  );
 
-                    // Add the verse to bookmarks
-                    bool wasAdded = await bookmarkProvider.addVerseBookmark(
-                      arabicText: arabicText,
-                      englishText: englishText,
-                      verseIndex: actualVerseIndex,
-                      rukuNumber: widget.rukuNumber,
-                    );
+                  // Add the verse to bookmarks
+                  bool wasAdded = await bookmarkProvider.addVerseBookmark(
+                    arabicText: arabicText,
+                    englishText: englishText,
+                    verseIndex: actualVerseIndex,
+                    rukuNumber: widget.rukuNumber,
+                  );
 
-                    // Show the appropriate confirmation dialog
-                    showDialog(
-                      context: context,
-                      builder: (_) => BookmarkConfirmationDialog(
-                          message: wasAdded ? 'verse_bookmarked'.tr : 'verse_already_bookmarked'.tr
-                      ),
-                    ).then((_) {
-                      // Reset the highlight after the dialog is dismissed
-                      setState(() {
-                        _dialogLongPressedVerseIndex = null;
-                      });
+                  // Show the appropriate confirmation dialog
+                  showDialog(
+                    context: context,
+                    builder:
+                        (_) => BookmarkConfirmationDialog(
+                          message:
+                              wasAdded
+                                  ? 'verse_bookmarked'.tr
+                                  : 'verse_already_bookmarked'.tr,
+                        ),
+                  ).then((_) {
+                    // Reset the highlight after the dialog is dismissed
+                    setState(() {
+                      _dialogLongPressedVerseIndex = null;
                     });
                   });
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  padding: EdgeInsets.all((isSelected || isBookmarked) ? 12 : 0),
-                  decoration: (isSelected || isBookmarked)
-                      ? BoxDecoration(
-                    color: _bookmarkHighlightColor,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: _bookmarkBorderColor,
-                      width: 1.5,
-                    ),
-                  )
-                      : null,
-                  child: Stack(
-                    children: [
-                      // Content Container with padding for bookmark icon
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Space for bookmark icon if verse is bookmarked
-                          if (isBookmarked)
-                            SizedBox(width: 32), // Slightly wider in fullscreen mode
-
-                          // Main content with adjusted width
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  arabicText,
-                                  style: ArabicTextStyle(
-                                    arabicFont: ArabicFont.lateef,
-                                    fontSize: 24 + (_fontSizeValue * 8),
-                                    color: AppColors.PrimaryColor,
-                                    height: 1.5,
-                                  ),
-                                  textAlign: TextAlign.right,
-                                  textDirection: TextDirection.rtl,
-                                ),
-                                SizedBox(height: 14),
-                                Text(
-                                  englishText,
-                                  style: TextStyle(
-                                    fontFamily: GoogleFonts.merriweather().fontFamily,
-                                    fontSize: 13 + (_fontSizeValue * 8),
-                                    color: AppColors.BarColor,
-                                    height: 1.3,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                if (index < arabicEntries.length - 1)
-                                  SizedBox(height: 20),
-                              ],
-                            ),
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                padding: EdgeInsets.all((isSelected || isBookmarked) ? 12 : 0),
+                decoration:
+                    (isSelected || isBookmarked)
+                        ? BoxDecoration(
+                          color: _bookmarkHighlightColor,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: _bookmarkBorderColor,
+                            width: 1.5,
                           ),
-                        ],
-                      ),
-
-                      // Bookmark icon that appears when verse is selected or permanently bookmarked
-                      if (isSelected || isBookmarked)
-                        Positioned(
-                          left: Directionality.of(context) == TextDirection.ltr ? 8 : null,
-                          right: Directionality.of(context) == TextDirection.rtl ? 2 : null,
-                          top: 8,
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            child: Icon(
-                              Icons.bookmark,
-                              color: AppColors.PrimaryColor,
-                              size: isBookmarked ? 24 : 20, // Slightly larger for bookmarked verses in fullscreen
-                            ),
+                        )
+                        : null,
+                child: Stack(
+                  children: [
+                    // Content Container with padding for bookmark icon
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Space for bookmark icon if verse is bookmarked
+                        if (isBookmarked)
+                          SizedBox(
+                            width: 32,
+                          ), // Slightly wider in fullscreen mode
+                        // Main content with adjusted width
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                arabicText,
+                                style: ArabicTextStyle(
+                                  arabicFont: ArabicFont.lateef,
+                                  fontSize: 24 + (_fontSizeValue * 8),
+                                  color: AppColors.PrimaryColor,
+                                  height: 1.5,
+                                ),
+                                textAlign: TextAlign.right,
+                                textDirection: TextDirection.rtl,
+                              ),
+                              SizedBox(height: 14),
+                              Text(
+                                englishText,
+                                style: TextStyle(
+                                  fontFamily:
+                                      GoogleFonts.merriweather().fontFamily,
+                                  fontSize: 13 + (_fontSizeValue * 8),
+                                  color: AppColors.BarColor,
+                                  height: 1.3,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              if (index < arabicEntries.length - 1)
+                                SizedBox(height: 20),
+                            ],
                           ),
                         ),
-                    ],
-                  ),
+                      ],
+                    ),
+
+                    // Bookmark icon that appears when verse is selected or permanently bookmarked
+                    if (isSelected || isBookmarked)
+                      Positioned(
+                        left:
+                            Directionality.of(context) == TextDirection.ltr
+                                ? 8
+                                : null,
+                        right:
+                            Directionality.of(context) == TextDirection.rtl
+                                ? 2
+                                : null,
+                        top: 8,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          child: Icon(
+                            Icons.bookmark,
+                            color: AppColors.PrimaryColor,
+                            size:
+                                isBookmarked
+                                    ? 24
+                                    : 20, // Slightly larger for bookmarked verses in fullscreen
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              );
-            },
-          );
-        }
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -652,7 +748,8 @@ class _VersePageContainerState extends State<VersePageContainer> {
       width: widget.isFullScreen ? double.infinity : 350,
       height: widget.isFullScreen ? double.infinity : 480,
       decoration: BoxDecoration(
-        color: widget.isFullScreen ? Colors.white.withOpacity(0.95) : Colors.white,
+        color:
+            widget.isFullScreen ? Colors.white.withOpacity(0.95) : Colors.white,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
           color: widget.isFullScreen ? Colors.transparent : AppColors.BarColor,
@@ -667,7 +764,9 @@ class _VersePageContainerState extends State<VersePageContainer> {
               // Ruku Title
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: widget.isFullScreen ? 16 : 10),
+                padding: EdgeInsets.symmetric(
+                  vertical: widget.isFullScreen ? 16 : 10,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.only(
@@ -676,7 +775,9 @@ class _VersePageContainerState extends State<VersePageContainer> {
                   ),
                 ),
                 child: Text(
-                  widget.isFullScreen ? 'Full Screen' : '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
+                  widget.isFullScreen
+                      ? 'Full Screen'
+                      : '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
                   style: TextStyle(
                     color: AppColors.PrimaryColor,
                     fontSize: widget.isFullScreen ? 28 : 24,
@@ -702,7 +803,8 @@ class _VersePageContainerState extends State<VersePageContainer> {
                       }
                     } else if (details.primaryVelocity! < 0) {
                       // Swiped left - go to next page
-                      if (widget.onNextPage != null && widget.currentPage < widget.totalPages) {
+                      if (widget.onNextPage != null &&
+                          widget.currentPage < widget.totalPages) {
                         // Reset highlight before changing page
                         setState(() {
                           _longPressedVerseIndex = null;
@@ -722,23 +824,29 @@ class _VersePageContainerState extends State<VersePageContainer> {
                   vertical: widget.isFullScreen ? 12 : 6,
                   horizontal: widget.isFullScreen ? 16 : 0,
                 ),
-                decoration: widget.isFullScreen
-                    ? BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25),
-                  ),
-                )
-                    : null,
+                decoration:
+                    widget.isFullScreen
+                        ? BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(25),
+                            bottomRight: Radius.circular(25),
+                          ),
+                        )
+                        : null,
                 child: Row(
-                  mainAxisAlignment: widget.isFullScreen
-                      ? MainAxisAlignment.spaceBetween
-                      : MainAxisAlignment.start,
+                  mainAxisAlignment:
+                      widget.isFullScreen
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.start,
                   children: [
                     if (!widget.isFullScreen)
                       IconButton(
-                        icon: Icon(Icons.fullscreen, color: AppColors.PrimaryColor, size: 20),
+                        icon: Icon(
+                          Icons.fullscreen,
+                          color: AppColors.PrimaryColor,
+                          size: 20,
+                        ),
                         onPressed: () => _showFullScreenDialog(context),
                       ),
                     if (!widget.isFullScreen) const SizedBox(width: 45),
@@ -749,13 +857,16 @@ class _VersePageContainerState extends State<VersePageContainer> {
                         color: AppColors.PrimaryColor,
                         size: widget.isFullScreen ? 20 : 18,
                       ),
-                      onPressed: widget.currentPage > 1 ? () {
-                        // Reset highlight before changing page
-                        setState(() {
-                          _longPressedVerseIndex = null;
-                        });
-                        widget.onPrevPage!();
-                      } : null,
+                      onPressed:
+                          widget.currentPage > 1
+                              ? () {
+                                // Reset highlight before changing page
+                                setState(() {
+                                  _longPressedVerseIndex = null;
+                                });
+                                widget.onPrevPage!();
+                              }
+                              : null,
                     ),
 
                     Padding(
@@ -776,13 +887,16 @@ class _VersePageContainerState extends State<VersePageContainer> {
                         color: AppColors.PrimaryColor,
                         size: widget.isFullScreen ? 20 : 18,
                       ),
-                      onPressed: widget.currentPage < widget.totalPages ? () {
-                        // Reset highlight before changing page
-                        setState(() {
-                          _longPressedVerseIndex = null;
-                        });
-                        widget.onNextPage!();
-                      } : null,
+                      onPressed:
+                          widget.currentPage < widget.totalPages
+                              ? () {
+                                // Reset highlight before changing page
+                                setState(() {
+                                  _longPressedVerseIndex = null;
+                                });
+                                widget.onNextPage!();
+                              }
+                              : null,
                     ),
                   ],
                 ),

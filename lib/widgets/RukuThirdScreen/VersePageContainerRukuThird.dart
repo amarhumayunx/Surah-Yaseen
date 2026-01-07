@@ -55,8 +55,6 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
   int? _longPressedVerseIndex;
   final Color _bookmarkHighlightColor = Color(0xFFF6FAF7); // Soft greenish background
   final Color _bookmarkBorderColor = Color(0xFFCCE7D5); // Green border
-  final Color _activeVerseHighlightColor = Color(0xFFF6F0DE); // Soft yellowish background
-  final Color _activeVerseBorderColor = AppColors.BarColor; // Golden border
 
   @override
   void initState() {
@@ -163,10 +161,9 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                           ),
                           child: Text(
                             '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
-                            style: TextStyle(
+                            style: GoogleFonts.merriweather(
                               color: AppColors.PrimaryColor,
                               fontSize: 28,
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
@@ -228,11 +225,10 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: Text(
-                                  '${'page'.tr} ${widget.currentPage} ${'of'.tr} ${widget.totalPages}',
-                                  style: TextStyle(
+                                  '${'page'.tr} ${_currentDialogPage} ${'of'.tr} ${widget.totalPageDialogBox}',
+                                  style: GoogleFonts.merriweather(
                                     color: AppColors.PrimaryColor,
                                     fontSize: 16,
-                                    fontFamily: GoogleFonts.merriweather().fontFamily,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

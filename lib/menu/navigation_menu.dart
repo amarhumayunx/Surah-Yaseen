@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'dart:io' show Platform;
@@ -6,6 +7,7 @@ import 'dart:io' show Platform;
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
 import '../controllers/navigation_controller.dart';
+import '../widgets/snackbars/exit_snackbar.dart';
 
 /// Navigation style types based on device behavior
 enum NavigationType {
@@ -24,6 +26,7 @@ class NavigationMenu extends StatefulWidget {
 class _NavigationMenuState extends State<NavigationMenu> {
   NavigationType navigationType = NavigationType.buttonNavigation;
   double bottomPadding = 24.0;
+  DateTime? _lastBackPressTime;
 
   @override
   void initState() {
@@ -76,15 +79,53 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
     return WillPopScope(
       onWillPop: () async {
+        final navigationController = Get.find<NavigationController>();
+        
+        // If not on home screen (index 0), navigate to home screen
         if (navigationController.selected.value != 0) {
           navigationController.selected.value = 0;
-          return false;
+          return false; // Prevent default back action
         }
-        return true;
+        
+        // On home screen - handle double back press
+        final now = DateTime.now();
+        final shouldExit = _lastBackPressTime != null &&
+            now.difference(_lastBackPressTime!) < const Duration(seconds: 2);
+        
+        if (shouldExit) {
+          // Exit the app
+          SystemNavigator.pop();
+          return false;
+        } else {
+          // Show snackbar and update last back press time
+          _lastBackPressTime = now;
+          ExitSnackBar.show();
+          return false; // Prevent default back action
+        }
       },
       child: Scaffold(
-        body: Obx(() =>
-        navigationController.screens[navigationController.selected.value]),
+        body: Obx(() => AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.1, 0.0),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeInOut,
+                )),
+                child: child,
+              ),
+            );
+          },
+          child: Container(
+            key: ValueKey<int>(navigationController.selected.value),
+            child: navigationController.screens[navigationController.selected.value],
+          ),
+        )),
         extendBody: true,
         backgroundColor: AppColors.lightColorSec,
         bottomNavigationBar: Obx(() =>

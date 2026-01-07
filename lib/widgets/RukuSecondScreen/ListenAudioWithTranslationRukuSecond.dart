@@ -7,7 +7,7 @@ import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/ListenAudioWithT
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 
-import 'ListenAudioWithTranslationRukuSecondAudioPlayer.dart';
+import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/RukuAudioPlayerWithTranslation.dart';
 import 'VersePageContainerWithTranslationRukuSecond.dart';
 
 class ListenAudioWithTranslationRukuSecond extends StatefulWidget {
@@ -125,7 +125,7 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
 
                         ),
                         SizedBox(height: 10),
-                        ListenAudioWithTranslationRukuSecondAudioPlayer(
+                        RukuAudioPlayerWithTranslation(
                           title: 'ruku_title_audio_trans2'.tr,
                           verses: yaseen_verses,
                           startVerse: 13,

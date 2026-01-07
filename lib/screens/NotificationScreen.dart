@@ -13,6 +13,8 @@ import '../widgets/NotificationScreen/notification_screen_history.dart';
 import '../widgets/SurahTitle/surat_title.dart';
 import '../widgets/Topbackground/top_background.dart';
 import '../widgets/dialogs/clear_notification_history_dialog_box.dart';
+import '../widgets/Ads/reusable_banner_ad.dart';
+import '../constants/ad_unit_ids.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -57,15 +59,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
       return;
     }
 
-    // Navigate to the BookmarkScreen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BookmarkScreenSecond(
-          verseIndex: verseIndex,
-          rukuNumber: rukuNumber,
-        ),
+    // Navigate to the BookmarkScreen with animation
+    Get.to(
+      () => BookmarkScreenSecond(
+        verseIndex: verseIndex,
+        rukuNumber: rukuNumber,
       ),
+      transition: Transition.rightToLeft,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
   }
 
@@ -239,7 +241,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   Container(
                     height: MediaQuery.of(context).size.height * 0.45, // Adaptive height
                     child: _buildNotificationHistoryList(),
-                  )
+                  ),
+                  const SizedBox(height: 20),
+                  // Banner Ad for Notification Screen
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ReusableBannerAd(
+                      screenType: AdScreenType.notification,
+                      minHeight: 50,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

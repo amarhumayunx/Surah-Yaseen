@@ -8,7 +8,6 @@ class SurahTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     // Dynamic font sizes based on screen width
     final double fontSizeTitle = screenWidth * 0.08; // ~32 on a 400px screen

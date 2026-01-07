@@ -6,7 +6,7 @@ import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.d
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
-import 'ListenAudioRukuFiveAudioPlayer.dart';
+import 'package:surah_yaseen/widgets/ListenAudioScreen/RukuAudioPlayer.dart';
 import 'VersePageContainerArabicRukuFiveth.dart';
 
 class ListenAudioRukuFiveScreen extends StatefulWidget {
@@ -122,7 +122,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFiveScreen> {
                     activeVerseIndex: _activeVerseIndex
                   ),
                   SizedBox(height: 10),
-                  ListenAudioRukuFiveAudioPlayer(
+                  RukuAudioPlayer(
                     title: 'ruku_title_audio5'.tr,
                     verses: yaseen_verses,
                     startVerse: 68,

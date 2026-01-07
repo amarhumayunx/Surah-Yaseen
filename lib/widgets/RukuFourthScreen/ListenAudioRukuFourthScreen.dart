@@ -6,7 +6,7 @@ import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.d
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
-import 'ListenAudioRukuFourthAudioPlayer.dart';
+import 'package:surah_yaseen/widgets/ListenAudioScreen/RukuAudioPlayer.dart';
 import 'VersePageContainerArabicRukuFourth.dart';
 
 class ListenAudioRukuFourthScreen extends StatefulWidget {
@@ -41,12 +41,6 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFourthScreen> {
   int _currentPage = 1;
   final int _totalPages = 3; // Total number of pages for Arabic verses
   int _activeVerseIndex = -1;
-
-  void _handlePageChanged(int newPage) {
-    setState(() {
-      _currentPage = newPage;
-    });
-  }
 
   void _goToNextPage() {
     if (_currentPage < _totalPages) {
@@ -128,7 +122,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFourthScreen> {
                     activeVerseIndex: _activeVerseIndex,
                   ),
                   SizedBox(height: 10),
-                  ListenAudioRukuFourthAudioPlayer(
+                  RukuAudioPlayer(
                     title: 'ruku_title_audio4'.tr,
                     verses: yaseen_verses,
                     startVerse: 51,

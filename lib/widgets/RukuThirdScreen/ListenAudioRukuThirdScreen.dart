@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/ListenAudioScreen/ListenAudioScreenTopBar.dart';
-import 'package:surah_yaseen/widgets/RukuThirdScreen/ListenAudioRukuThirdAudioPlayer.dart';
+import 'package:surah_yaseen/widgets/ListenAudioScreen/RukuAudioPlayer.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
@@ -44,12 +44,6 @@ class _ListenAudioScreenState extends State<ListenAudioRukuThirdScreen> {
   final int _totalPages = 3; // Total number of pages for Arabic verses
 
   int _activeVerseIndex = -1; // Track the active verse index
-
-  void _handlePageChanged(int newPage) {
-    setState(() {
-      _currentPage = newPage;
-    });
-  }
 
   void _goToNextPage() {
     if (_currentPage < _totalPages) {
@@ -129,7 +123,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuThirdScreen> {
                   SizedBox(height: 10),
 
                   // Audio Player
-                  ListenAudioRukuThirdAudioPlayer(
+                  RukuAudioPlayer(
                     title: 'ruku_title_audio3'.tr,
                     verses: yaseen_verses,
                     startVerse: 33,

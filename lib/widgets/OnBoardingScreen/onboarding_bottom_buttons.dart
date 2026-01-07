@@ -32,7 +32,7 @@ class OnboardingBottomButtons extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 if (isLastPage) {
-                  Get.to(() => NavigationMenu());
+                  Get.off(() => const NavigationMenu());
                 } else {
                   onboardingController.nextPage();
                 }
@@ -60,7 +60,7 @@ class OnboardingBottomButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () => Get.to(() => NavigationMenu()),
+              onPressed: () => Get.off(() => const NavigationMenu()),
               child: Text(
                 'skip'.tr,
                 style: TextStyle(

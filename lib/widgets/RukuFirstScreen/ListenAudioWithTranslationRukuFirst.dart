@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/ListenAudioWithTranslastionScreenTopbar.dart';
-import 'package:surah_yaseen/widgets/RukuFirstScreen/ListenAudioWithTranslationRukuFirstAudioPlayer.dart';
+import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/RukuAudioPlayerWithTranslation.dart';
 import 'package:surah_yaseen/widgets/RukuFirstScreen/VersePageContainerWithTranslationRukuFirst.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
@@ -118,7 +118,7 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
 
                         ),
                         SizedBox(height: 10),
-                        ListenAudioWithTranslationRukuFirstAudioPlayer(
+                        RukuAudioPlayerWithTranslation(
                           title: 'ruku_title_audio_trans1'.tr,
                           verses: yaseen_verses,
                           startVerse: 0,  // Start from the first verse

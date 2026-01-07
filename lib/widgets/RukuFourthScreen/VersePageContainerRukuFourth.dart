@@ -155,10 +155,9 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                           ),
                           child: Text(
                             '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
-                            style: TextStyle(
+                            style: GoogleFonts.merriweather(
                               color: AppColors.PrimaryColor,
                               fontSize: 28,
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
@@ -220,11 +219,10 @@ class _VersePageContainerState extends State<VersePageContainerRukuFourth> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: Text(
-                                  '${'page'.tr} ${widget.currentPage} ${'of'.tr} ${widget.totalPages}',
-                                  style: TextStyle(
+                                  '${'page'.tr} ${_currentDialogPage} ${'of'.tr} ${widget.totalPageDialogBox}',
+                                  style: GoogleFonts.merriweather(
                                     color: AppColors.PrimaryColor,
                                     fontSize: 16,
-                                    fontFamily: GoogleFonts.merriweather().fontFamily,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
