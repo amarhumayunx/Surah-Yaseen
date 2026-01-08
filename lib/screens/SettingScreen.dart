@@ -48,7 +48,13 @@ class _SettingScreenState extends State<SettingScreen> {
                 DividerBar(),
                 SurahTitle(),
                 TitleCardSetting(),
-                SizedBox(height: 15),
+                SizedBox(height: 10),
+                // Banner Ad - using screen type (recommended approach)
+                ReusableBannerAd(
+                  screenType: AdScreenType.settings,
+                  minHeight: 50,
+                ),
+                SizedBox(height: 10),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -56,12 +62,6 @@ class _SettingScreenState extends State<SettingScreen> {
                         FontSizeContainer(),
                         SizedBox(height: 15),
                         MenuOptionsContainer(),
-                        SizedBox(height: 20),
-                        // Banner Ad - using screen type (recommended approach)
-                        ReusableBannerAd(
-                          screenType: AdScreenType.settings,
-                          minHeight: 50,
-                        ),
                         SizedBox(height: 20),
                       ],
                     ),

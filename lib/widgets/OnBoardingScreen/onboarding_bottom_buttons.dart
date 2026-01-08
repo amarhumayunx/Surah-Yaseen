@@ -24,73 +24,77 @@ class OnboardingBottomButtons extends StatelessWidget {
         height: 140,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         color: AppColors.SecondaryColor,
-        child: currentPage > 0
-            ? Center(
-          child: SizedBox(
-            width: 350,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                if (isLastPage) {
-                  Get.off(() => const NavigationMenu());
-                } else {
-                  onboardingController.nextPage();
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.HeadingColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-              child: Text(
-                isLastPage ? AppStrings.onboardingStrings.getStartedbuttonString
-                           : AppStrings.onboardingStrings.nextbuttonString,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: GoogleFonts.merriweather().fontFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        )
-            : Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(
-              onPressed: () => Get.off(() => const NavigationMenu()),
-              child: Text(
-                'skip'.tr,
-                style: TextStyle(
-                  color: AppColors.darkgreenColor,
-                  fontFamily: GoogleFonts.merriweather().fontFamily,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 60,
-              width: 60,
-              child: ElevatedButton(
-                onPressed: onboardingController.nextPage,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.HeadingColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
+        child:
+            currentPage > 0
+                ? Center(
+                  child: SizedBox(
+                    width: 350,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (isLastPage) {
+                          Get.off(() => const NavigationMenu());
+                        } else {
+                          onboardingController.nextPage();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.HeadingColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: Text(
+                        isLastPage
+                            ? AppStrings
+                                .onboardingStrings
+                                .getStartedbuttonString
+                            : AppStrings.onboardingStrings.nextbuttonString,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: GoogleFonts.merriweather().fontFamily,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                  padding: const EdgeInsets.all(12),
+                )
+                : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => Get.off(() => const NavigationMenu()),
+                      child: Text(
+                        'skip'.tr,
+                        style: TextStyle(
+                          color: AppColors.darkgreenColor,
+                          fontFamily: GoogleFonts.merriweather().fontFamily,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: ElevatedButton(
+                        onPressed: onboardingController.nextPage,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.HeadingColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward_ios_sharp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Icon(
-                  Icons.arrow_forward_ios_sharp,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
       );
     });
   }

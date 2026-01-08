@@ -9,6 +9,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:surah_yaseen/bookmark.dart';
 import 'package:surah_yaseen/screens/loading_screen.dart';
 import 'package:surah_yaseen/services/notification_service.dart';
+import 'package:surah_yaseen/services/verse_navigation_service.dart';
 import 'package:surah_yaseen/widgets/BookmarkScreen/BookmarkProvider.dart';
 import 'package:surah_yaseen/widgets/FontSize/FontSizeProvider.dart';
 import 'package:surah_yaseen/widgets/Language/Language.dart';
@@ -36,6 +37,12 @@ void main() async {
 
   // Initialize NotificationService
   await NotificationService.initialize();
+  
+  // Set up notification tap handler
+  NotificationService.onNotificationTapped = (String? payload) {
+    // Handle notification tap - navigate to the verse
+    VerseNavigationService.handleNotificationPayload(payload);
+  };
 
   // Initialize Flutter Local Notifications
   const AndroidInitializationSettings initializationSettingsAndroid =

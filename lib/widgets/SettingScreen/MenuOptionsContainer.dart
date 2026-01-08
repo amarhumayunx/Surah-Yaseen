@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../screens/HelpScreen.dart';
 import '../../screens/LanguageScreen.dart';
 import '../../screens/NotificationScreen.dart';
+import '../../screens/PrivacyPolicyWebViewScreen.dart';
 
 class MenuOptionsContainer extends StatefulWidget {
   const MenuOptionsContainer({super.key});
@@ -114,60 +115,16 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
     );
   }
 
-  // Function for Privacy Policy - opens in in-app browser
-  void onPrivacyPolicy() async {
+  // Function for Privacy Policy - opens in custom WebView with floating back button
+  void onPrivacyPolicy() {
     const String privacyPolicyUrl = 'https://v0-surah-yaseenx.vercel.app/';
-
-    try {
-      final Uri url = Uri.parse(privacyPolicyUrl);
-
-      // Try to launch with in-app browser first
-      if (await canLaunchUrl(url)) {
-        try {
-          await launchUrl(
-            url,
-            mode: LaunchMode.inAppWebView,
-            webViewConfiguration: const WebViewConfiguration(
-              enableJavaScript: true,
-              enableDomStorage: true,
-            ),
-          );
-        } catch (e) {
-          // Fallback to external browser if in-app browser fails
-          if (mounted) {
-            await launchUrl(url, mode: LaunchMode.platformDefault);
-          }
-        }
-      } else {
-        // If canLaunchUrl returns false, try direct launch
-        if (mounted) {
-          await launchUrl(url, mode: LaunchMode.platformDefault);
-        }
-      }
-    } catch (e) {
-      // Handle any errors
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text(
-                'Could not open the Privacy Policy. Please check your internet connection.',
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Close'),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    }
+    
+    Get.to(
+      () => PrivacyPolicyWebViewScreen(url: privacyPolicyUrl),
+      transition: Transition.rightToLeft,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   // Function for Rate Us

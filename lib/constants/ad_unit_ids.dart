@@ -40,14 +40,44 @@ class AdUnitIds {
   // Ruku detail screens - add actual IDs when available
   static const String rukuFirstScreenBanner =
       'ca-app-pub-3425673808153409/9273221255';
+  static const String rukuFirstReadScreenBanner =
+      'ca-app-pub-3425673808153409/3352285514';
+  static const String rukuFirstAudioScreenBanner =
+      'ca-app-pub-3425673808153409/4473795494';
+  static const String rukuFirstAudioWithTranslationScreenBanner =
+      'ca-app-pub-3425673808153409/7319450687';
   static const String rukuSecondScreenBanner =
       'ca-app-pub-3425673808153409/5142404555';
+  static const String rukuSecondReadScreenBanner =
+      'ca-app-pub-3425673808153409/4693287342';
+  static const String rukuSecondAudioScreenBanner =
+      'ca-app-pub-3425673808153409/7035028580';
+  static const String rukuSecondAudioWithTranslationScreenBanner =
+      'ca-app-pub-3425673808153409/3703639306';
   static const String rukuThirdScreenBanner =
       'ca-app-pub-3425673808153409/4686931372';
+  static const String rukuThirdReadScreenBanner =
+      'ca-app-pub-3425673808153409/3136323785';
+  static const String rukuThirdAudioScreenBanner =
+      'ca-app-pub-3425673808153409/4825149281';
+  static const String rukuThirdAudioWithTranslationScreenBanner =
+      'ca-app-pub-3425673808153409/8572822605';
   static const String rukuFourthScreenBanner =
       'ca-app-pub-3425673808153409/7365065601';
+  static const String rukuFourthReadScreenBanner =
+      'ca-app-pub-3425673808153409/8381250916';
+  static const String rukuFourthAudioScreenBanner =
+      'ca-app-pub-3425673808153409/5755087572';
+  static const String rukuFourthAudioWithTranslationScreenBanner =
+      'ca-app-pub-3425673808153409/2098574280';
   static const String rukuFifthScreenBanner =
       'ca-app-pub-3425673808153409/7856020190';
+  static const String rukuFifthReadScreenBanner =
+      'ca-app-pub-3425673808153409/5853808858';
+  static const String rukuFifthAudioScreenBanner =
+      'ca-app-pub-3425673808153409/2018683230';
+  static const String rukuFifthAudioWithTranslationScreenBanner =
+      'ca-app-pub-3425673808153409/9705601564';
 
   // Other screens - add actual IDs when available
   static const String aboutScreenBanner =
@@ -55,7 +85,7 @@ class AdUnitIds {
   static const String helpScreenBanner =
       'ca-app-pub-3425673808153409/1354707943'; // Update with actual ID
   static const String languageScreenBanner =
-      'ca-app-pub-3425673808153409/1354707943'; // Update with actual ID
+      'ca-app-pub-3425673808153409/9091697358';
   static const String notificationScreenBanner =
       'ca-app-pub-3425673808153409/1027065576';
   static const String privacyPolicyScreenBanner =

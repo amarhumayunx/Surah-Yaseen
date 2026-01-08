@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '../Dividerbar/dividerbar.dart';
 import 'ruku_grid.dart';
 import 'ruku_header.dart';
-import 'banner_ad_widget.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
-import 'package:surah_yaseen/widgets/TopBar/topbar.dart';
+import 'package:surah_yaseen/widgets/TopBar/topbartest.dart';
 
 class RukuScreenBody extends StatelessWidget {
   const RukuScreenBody({super.key});
@@ -17,7 +16,7 @@ class RukuScreenBody extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          const TopBar(),
+          const TopBarSet(),
           SizedBox(height: spacing),
           const DividerBar(),
           const SurahTitle(),
@@ -27,12 +26,7 @@ class RukuScreenBody extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: [
-                  const RukuGrid(),
-                  const SizedBox(height: 20),
-                  BannerAdWidget(),
-                  const SizedBox(height: 20),
-                ],
+                children: [const RukuGrid(), const SizedBox(height: 20)],
               ),
             ),
           ),

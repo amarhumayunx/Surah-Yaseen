@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:surah_yaseen/widgets/BookmarkScreen/bookmark_screen_second.dart';
 import 'package:surah_yaseen/widgets/TopBar/topbartest.dart';
 
 import '../Colors/colors.dart';
 import '../services/notification_service.dart';
+import '../services/verse_navigation_service.dart';
 import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/NotificationScreen/notification_screen_history.dart';
 import '../widgets/SurahTitle/surat_title.dart';
@@ -33,41 +33,38 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
 
     // Load notification history and check if notifications are enabled
     _loadNotificationHistory();
     _checkNotificationsStatus();
   }
 
-  // Add this function to your NotificationScreen class
-
-  void _navigateToBookmarkScreen(Map<String, dynamic> notification) {
+  // Navigate to the specific verse when notification is tapped
+  void _navigateToVerse(Map<String, dynamic> notification) {
     // Extract the verse index and ruku number from the notification
     final int verseIndex = notification['verseIndex'];
     final int rukuNumber = notification['rukuNumber'];
 
     // Check if the values are valid
-    if (verseIndex < 0 || rukuNumber < 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('invalid_notification_data'.tr)),
-      );
+    // verseIndex can be 0 (Bismillah) or higher, rukuNumber should be 1-5
+    if (verseIndex < 0 || rukuNumber < 1 || rukuNumber > 5) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('invalid_notification_data'.tr)));
       return;
     }
 
-    // Navigate to the BookmarkScreen with animation
-    Get.to(
-      () => BookmarkScreenSecond(
-        verseIndex: verseIndex,
-        rukuNumber: rukuNumber,
-      ),
-      transition: Transition.rightToLeft,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+    // Use the navigation service to navigate to the specific verse
+    VerseNavigationService.navigateToVerse(
+      verseIndex: verseIndex,
+      rukuNumber: rukuNumber,
     );
   }
 
@@ -113,16 +110,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
       // Show dialog box to inform user that history is already empty
       await showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text('notification_dialog_title'.tr),
-          content: Text('notification_history_already_cleared'.tr),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('ok'.tr),
-            )
-          ],
-        ),
+        builder:
+            (context) => AlertDialog(
+              title: Text('notification_dialog_title'.tr),
+              content: Text('notification_history_already_cleared'.tr),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('ok'.tr),
+                ),
+              ],
+            ),
       );
       return;
     }
@@ -135,13 +133,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
       isHistoryAlreadyCleared = true;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('notification_history_cleared'.tr)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('notification_history_cleared'.tr)));
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -152,111 +147,113 @@ class _NotificationScreenState extends State<NotificationScreen> {
         children: [
           TopBackground(),
           SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TopBarSet(),
-                  const SizedBox(height: 10),
-                  DividerBar(),
-                  SurahTitle(),
-                  const SizedBox(height: 80),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'notification_status'.tr,
+            child: Column(
+              children: [
+                TopBarSet(),
+                const SizedBox(height: 10),
+                DividerBar(),
+                SurahTitle(),
+                const SizedBox(height: 80),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'notification_status'.tr,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: GoogleFonts.merriweather().fontFamily,
+                          color: AppColors.PrimaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              isNotificationsEnabled
+                                  ? AppColors.PrimaryColor
+                                  : Colors.red,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          isNotificationsEnabled ? 'enabled'.tr : 'disabled'.tr,
                           style: TextStyle(
-                            fontSize: 16,
                             fontFamily: GoogleFonts.merriweather().fontFamily,
-                            color: AppColors.PrimaryColor,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: isNotificationsEnabled
-                                ? AppColors.PrimaryColor
-                                : Colors.red,
-                            borderRadius: BorderRadius.circular(12),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final confirm =
+                                await NotificationHistoryClearDialog()
+                                    .showNotificationHistoryClearDialog(
+                                      context,
+                                    );
+                            if (confirm) {
+                              await _clearNotificationHistory();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.PrimaryColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
                           child: Text(
-                            isNotificationsEnabled ? 'enabled'.tr : 'disabled'.tr,
+                            'clear'.tr,
                             style: TextStyle(
                               fontFamily: GoogleFonts.merriweather().fontFamily,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              final confirm = await NotificationHistoryClearDialog()
-                                  .showNotificationHistoryClearDialog(context);
-                              if (confirm) {
-                                await _clearNotificationHistory();
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.PrimaryColor,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                            child: Text('clear'.tr,style: TextStyle(
-                              fontFamily: GoogleFonts.merriweather().fontFamily,
-                            ),),
-                          ),
+                ),
+                // Banner Ad for Notification Screen
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ReusableBannerAd(
+                    screenType: AdScreenType.notification,
+                    minHeight: 50,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.history, color: AppColors.PrimaryColor),
+                      const SizedBox(width: 8),
+                      Text(
+                        'notification_history'.tr,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: AppColors.PrimaryColor,
+                          fontFamily: GoogleFonts.merriweather().fontFamily,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.history, color: AppColors.PrimaryColor),
-                        const SizedBox(width: 8),
-                        Text(
-                          'notification_history'.tr,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppColors.PrimaryColor,
-                            fontFamily: GoogleFonts.merriweather().fontFamily,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.45, // Adaptive height
-                    child: _buildNotificationHistoryList(),
-                  ),
-                  const SizedBox(height: 20),
-                  // Banner Ad for Notification Screen
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: ReusableBannerAd(
-                      screenType: AdScreenType.notification,
-                      minHeight: 50,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
+                ),
+                Expanded(child: _buildNotificationHistoryList()),
+              ],
             ),
-          )
-
+          ),
         ],
       ),
     );
@@ -283,12 +280,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
         }
 
         return ListView.builder(
-          shrinkWrap: true,
           itemCount: snapshot.data!.length,
+          padding: const EdgeInsets.only(bottom: 16),
           itemBuilder: (context, index) {
             final notification = snapshot.data![index];
             return GestureDetector(
-              onTap: () => _navigateToBookmarkScreen(notification),
+              onTap: () => _navigateToVerse(notification),
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
@@ -303,8 +300,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ],
                 ),
                 child: ListTile(
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -337,5 +336,4 @@ class _NotificationScreenState extends State<NotificationScreen> {
       },
     );
   }
-
 }

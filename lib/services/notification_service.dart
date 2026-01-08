@@ -13,6 +13,9 @@ class NotificationService {
   static const String _channelDescription =
       'Notifies when a verse is bookmarked';
 
+  // Callback function to handle notification taps
+  static Function(String? payload)? onNotificationTapped;
+
   static Future<void> initialize() async {
     // Request notification permissions first
     await _requestPermissions();
@@ -37,7 +40,10 @@ class NotificationService {
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         debugPrint('Notification clicked: ${response.payload}');
-        // Handle notification tap
+        // Handle notification tap via callback
+        if (onNotificationTapped != null) {
+          onNotificationTapped!(response.payload);
+        }
       },
     );
 
@@ -74,9 +80,13 @@ class NotificationService {
     }
   }
 
-  static Future<void> showBookmarkNotification(String verseTitle) async {
+  static Future<void> showBookmarkNotification(
+    String verseTitle, {
+    required int verseIndex,
+    required int rukuNumber,
+  }) async {
     // Debug print to verify the method is called
-    debugPrint('Showing notification for: $verseTitle');
+    debugPrint('Showing notification for: $verseTitle (Verse $verseIndex, Ruku $rukuNumber)');
 
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       _channelId,
@@ -107,16 +117,19 @@ class NotificationService {
     // Use a random ID to prevent notification overrides
     final int notificationId = DateTime.now().millisecondsSinceEpoch.remainder(100000);
 
+    // Create payload with verseIndex and rukuNumber: format "verseIndex|rukuNumber"
+    final String payload = '$verseIndex|$rukuNumber';
+
     // Ensure the notification has a valid title and body
     await _plugin.show(
       notificationId, // Unique Notification ID
       'Verse Bookmarked', // Title of the notification
       '$verseTitle has been saved.', // Body of the notification
       platformDetails,
-      payload: verseTitle, // Optional payload for when notification is tapped
+      payload: payload, // Payload with verseIndex and rukuNumber
     );
 
-    debugPrint('Notification sent with ID: $notificationId');
+    debugPrint('Notification sent with ID: $notificationId, payload: $payload');
   }
 
   // Helper method to check if notifications are enabled

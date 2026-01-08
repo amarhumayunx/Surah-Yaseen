@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 
 import '../../constants/app_assets.dart';
+import 'banner_ad_widget.dart';
 
 class RukuHeader extends StatelessWidget {
   const RukuHeader({super.key});
@@ -52,7 +53,7 @@ class RukuHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(
             top: 2,
-            bottom: 15,
+            bottom: 5,
             right: 35,
             left: 35,
           ),
@@ -67,6 +68,7 @@ class RukuHeader extends StatelessWidget {
             ),
           ),
         ),
+        const BannerAdWidget(),
       ],
     );
   }

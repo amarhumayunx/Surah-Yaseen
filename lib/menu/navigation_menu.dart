@@ -10,11 +10,7 @@ import '../controllers/navigation_controller.dart';
 import '../widgets/snackbars/exit_snackbar.dart';
 
 /// Navigation style types based on device behavior
-enum NavigationType {
-  gestureNavigation,
-  buttonNavigation,
-  mixed,
-}
+enum NavigationType { gestureNavigation, buttonNavigation, mixed }
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({super.key});
@@ -77,65 +73,78 @@ class _NavigationMenuState extends State<NavigationMenu> {
     final mediaQuery = MediaQuery.of(context);
     final safeAreaBottom = mediaQuery.padding.bottom;
 
-    return WillPopScope(
-      onWillPop: () async {
-        final navigationController = Get.find<NavigationController>();
-        
-        // If not on home screen (index 0), navigate to home screen
-        if (navigationController.selected.value != 0) {
-          navigationController.selected.value = 0;
-          return false; // Prevent default back action
-        }
-        
-        // On home screen - handle double back press
-        final now = DateTime.now();
-        final shouldExit = _lastBackPressTime != null &&
-            now.difference(_lastBackPressTime!) < const Duration(seconds: 2);
-        
-        if (shouldExit) {
-          // Exit the app
-          SystemNavigator.pop();
-          return false;
-        } else {
-          // Show snackbar and update last back press time
-          _lastBackPressTime = now;
-          ExitSnackBar.show();
-          return false; // Prevent default back action
-        }
-      },
-      child: Scaffold(
-        body: Obx(() => AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0.1, 0.0),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeInOut,
-                )),
-                child: child,
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: () async {
+          final navigationController = Get.find<NavigationController>();
+
+          // If not on home screen (index 0), navigate to home screen
+          if (navigationController.selected.value != 0) {
+            navigationController.selected.value = 0;
+            return false; // Prevent default back action
+          }
+
+          // On home screen - handle double back press
+          final now = DateTime.now();
+          final shouldExit =
+              _lastBackPressTime != null &&
+              now.difference(_lastBackPressTime!) < const Duration(seconds: 2);
+
+          if (shouldExit) {
+            // Exit the app
+            SystemNavigator.pop();
+            return false;
+          } else {
+            // Show snackbar and update last back press time
+            _lastBackPressTime = now;
+            ExitSnackBar.show();
+            return false; // Prevent default back action
+          }
+        },
+        child: Scaffold(
+          body: Obx(
+            () => AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.1, 0.0),
+                      end: Offset.zero,
+                    ).animate(
+                      CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: child,
+                  ),
+                );
+              },
+              child: Container(
+                key: ValueKey<int>(navigationController.selected.value),
+                child:
+                    navigationController.screens[navigationController
+                        .selected
+                        .value],
               ),
-            );
-          },
-          child: Container(
-            key: ValueKey<int>(navigationController.selected.value),
-            child: navigationController.screens[navigationController.selected.value],
+            ),
           ),
-        )),
-        extendBody: true,
-        backgroundColor: AppColors.lightColorSec,
-        bottomNavigationBar: Obx(() =>
-            _buildBottomNavigation(navigationController, safeAreaBottom)),
+          extendBody: true,
+          backgroundColor: AppColors.lightColorSec,
+          bottomNavigationBar: Obx(
+            () => _buildBottomNavigation(navigationController, safeAreaBottom),
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildBottomNavigation(
-      NavigationController controller, double safeAreaBottom) {
+    NavigationController controller,
+    double safeAreaBottom,
+  ) {
     // Using a consistent height that matches Android gesture navigation style
     final double navBarHeight = 65.0;
 
@@ -143,11 +152,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
     final double bottomMargin = bottomPadding + safeAreaBottom;
 
     return Container(
-      margin: EdgeInsets.only(
-        bottom: bottomMargin,
-        left: 16,
-        right: 16,
-      ),
+      margin: EdgeInsets.only(bottom: bottomMargin, left: 16, right: 16),
       height: navBarHeight,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -210,12 +215,13 @@ class _NavigationMenuState extends State<NavigationMenu> {
           child: Container(
             width: 65, // Slightly smaller for gesture nav style
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-            decoration: isSelected
-                ? BoxDecoration(
-              color: AppColors.fontColor,
-              borderRadius: BorderRadius.circular(18),
-            )
-                : null,
+            decoration:
+                isSelected
+                    ? BoxDecoration(
+                      color: AppColors.fontColor,
+                      borderRadius: BorderRadius.circular(18),
+                    )
+                    : null,
             child: SvgPicture.asset(
               assetPath,
               height: iconSize,

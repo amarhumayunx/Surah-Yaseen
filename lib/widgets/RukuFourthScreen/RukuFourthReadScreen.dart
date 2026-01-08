@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/ReadScreen/ReadScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
 import '../Dividerbar/dividerbar.dart';
 import 'VersePageContainerRukuFourth.dart';
+import 'ruku_fourth_read_banner_ad_widget.dart';
 
 class RukuFourthReadScreen extends StatefulWidget {
   const RukuFourthReadScreen({super.key});
@@ -42,6 +44,15 @@ class _ReadScreenState extends State<RukuFourthReadScreen> {
   void initState() {
     super.initState();
 
+    // Check if we have arguments for initial page (from notification tap)
+    final arguments = Get.arguments;
+    if (arguments != null && arguments is Map) {
+      final initialPage = arguments['initialPage'];
+      if (initialPage != null && initialPage is int) {
+        _currentPage = initialPage.clamp(1, _totalPages);
+      }
+    }
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -75,33 +86,36 @@ class _ReadScreenState extends State<RukuFourthReadScreen> {
                   const SizedBox(height: 70),
 
                   Expanded(
-                    child: Center(
-                      child: VersePageContainerRukuFourth(
-                        rukuNumber: 4, // Updated to Ruku 2
-                        startVerseIndex: (_currentPage - 1) * 4 + 51, // 13th verse is index 12
-                        lastVerseIndex: 67, // 32nd verse is index 31
-                        versesPerPage: 4,
-                        versesPerPageDialogBox: 6,
-                        currentPage: _currentPage,
-                        totalPages: _totalPages,
-                        totalPageDialogBox: _totalPageDialogBox,
-                        onPageChanged: _handlePageChanged,
-                        onPrevPage: _currentPage > 1
-                            ? () {
-                          setState(() {
-                            _currentPage--;
-                          });
-                        }
-                            : null,
-                        onNextPage: _currentPage < _totalPages
-                            ? () {
-                          setState(() {
-                            _currentPage++;
-                          });
-                        }
-                            : null,
-                        isFullScreen: false,
-                        onToggleFullScreen: toggleFullScreen,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 80),
+                      child: Center(
+                        child: VersePageContainerRukuFourth(
+                          rukuNumber: 4, // Updated to Ruku 2
+                          startVerseIndex: (_currentPage - 1) * 4 + 51, // 13th verse is index 12
+                          lastVerseIndex: 67, // 32nd verse is index 31
+                          versesPerPage: 4,
+                          versesPerPageDialogBox: 6,
+                          currentPage: _currentPage,
+                          totalPages: _totalPages,
+                          totalPageDialogBox: _totalPageDialogBox,
+                          onPageChanged: _handlePageChanged,
+                          onPrevPage: _currentPage > 1
+                              ? () {
+                            setState(() {
+                              _currentPage--;
+                            });
+                          }
+                              : null,
+                          onNextPage: _currentPage < _totalPages
+                              ? () {
+                            setState(() {
+                              _currentPage++;
+                            });
+                          }
+                              : null,
+                          isFullScreen: false,
+                          onToggleFullScreen: toggleFullScreen,
+                        ),
                       ),
                     ),
                   ),
@@ -110,6 +124,8 @@ class _ReadScreenState extends State<RukuFourthReadScreen> {
               ),
             ),
           ),
+          // Banner Ad at the bottom
+          const RukuFourthReadBannerAdWidget(),
         ],
       ),
     );

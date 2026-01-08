@@ -8,6 +8,7 @@ import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/RukuAudioPlayerWithTranslation.dart';
 import 'VersePageContainerWithTranslationRukuThird.dart';
+import 'ruku_third_audio_with_translation_banner_ad_widget.dart';
 
 class ListenAudioWithTranslationRukuThird extends StatefulWidget {
   const ListenAudioWithTranslationRukuThird({super.key});
@@ -131,7 +132,9 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
                         ),
                       ]
                   ),
-                ))
+                )),
+            // Banner Ad at the bottom
+            const RukuThirdAudioWithTranslationBannerAdWidget(),
           ]
       ),
     );

@@ -109,7 +109,11 @@ class BookmarkProvider with ChangeNotifier {
       print("Total bookmarks: ${_bookmarkBox.values.length}");
       notifyListeners();
 
-      await NotificationService.showBookmarkNotification(bookmark.title);
+      await NotificationService.showBookmarkNotification(
+        bookmark.title,
+        verseIndex: verseIndex,
+        rukuNumber: rukuNumber,
+      );
 
       return true; // Return true to indicate bookmark was added successfully
     } catch (e) {

@@ -57,6 +57,13 @@ class _AboutScreenState extends State<AboutScreen> {
                 DividerBar(),
                 SurahTitle(),
                 TitleCardAbout(),
+                SizedBox(height: 10),
+                // Banner Ad - Info Screen
+                ReusableBannerAd(
+                  screenType: AdScreenType.about,
+                  minHeight: 50,
+                ),
+                SizedBox(height: 10),
                 Expanded(
                   child: ListView(
                     children: [
@@ -72,12 +79,6 @@ class _AboutScreenState extends State<AboutScreen> {
                       SizedBox(height: 10),
                       QuoteSection(),
                       InfoBoxCard(), // Now this will work correctly because we removed the Expanded from InfoBoxCard
-                      SizedBox(height: 20),
-                      // Banner Ad - Info Screen
-                      ReusableBannerAd(
-                        screenType: AdScreenType.about,
-                        minHeight: 50,
-                      ),
                       SizedBox(height: 20),
                     ],
                   ),

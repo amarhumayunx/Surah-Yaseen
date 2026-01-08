@@ -8,6 +8,7 @@ import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
 import 'VersePageContainerArabicRukuFirst.dart';
+import 'ruku_first_audio_banner_ad_widget.dart';
 
 class ListenAudioRukuFirstScreen extends StatefulWidget {
   const ListenAudioRukuFirstScreen({super.key});
@@ -130,6 +131,8 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
               ),
             ),
           ),
+          // Banner Ad at the bottom
+          const RukuFirstAudioBannerAdWidget(),
         ],
       ),
     );

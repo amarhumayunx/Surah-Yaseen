@@ -24,35 +24,50 @@ class OnboardingPage extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: width * 0.08,
-        vertical: height * 0.1,
+        vertical: height * 0.05,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(
-            image,
-            height: height * 0.3,
-          ),
-          SizedBox(height: height * 0.08),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: height * 0.025,
-              fontWeight: FontWeight.bold,
-              fontFamily: GoogleFonts.merriweather().fontFamily,
-              color: AppColors.darkgreenColor,
+          Flexible(
+            flex: 3,
+            child: Image.asset(
+              image,
+              height: height * 0.25,
+              fit: BoxFit.contain,
             ),
-            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: height * 0.03),
+          Flexible(
+            flex: 1,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: height * 0.022,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.merriweather().fontFamily,
+                color: AppColors.darkgreenColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           SizedBox(height: height * 0.01),
-          Text(
-            desc,
-            style: TextStyle(
-              fontSize: height * 0.02,
-              fontFamily: GoogleFonts.merriweather().fontFamily,
-              color: AppColors.darkgreenColor,
+          Flexible(
+            flex: 1,
+            child: Text(
+              desc,
+              style: TextStyle(
+                fontSize: height * 0.018,
+                fontFamily: GoogleFonts.merriweather().fontFamily,
+                color: AppColors.darkgreenColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

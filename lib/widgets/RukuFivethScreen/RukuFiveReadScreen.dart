@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/ReadScreen/ReadScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/RukuFivethScreen/VersePageContainerRukuFive.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import '../../Colors/colors.dart';
 import '../Dividerbar/dividerbar.dart';
+import 'ruku_fifth_read_banner_ad_widget.dart';
 
 class RukuFiveReadScreen extends StatefulWidget {
   const RukuFiveReadScreen({super.key});
@@ -39,6 +41,16 @@ class _ReadScreenState extends State<RukuFiveReadScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // Check if we have arguments for initial page (from notification tap)
+    final arguments = Get.arguments;
+    if (arguments != null && arguments is Map) {
+      final initialPage = arguments['initialPage'];
+      if (initialPage != null && initialPage is int) {
+        _currentPage = initialPage.clamp(1, _totalPages);
+      }
+    }
+    
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -74,33 +86,36 @@ class _ReadScreenState extends State<RukuFiveReadScreen> {
                   const SizedBox(height: 70),
 
                   Expanded(
-                    child: Center(
-                      child: VersePageContainerRukuFive(
-                        rukuNumber: 5,
-                        startVerseIndex: (_currentPage - 1) * 4 + 68,
-                        lastVerseIndex: 83,
-                        versesPerPage: 4,
-                        versesPerPageDialogBox: 6,
-                        currentPage: _currentPage,
-                        totalPages: _totalPages,
-                        totalPageDialogBox: _totalPageDialogBox,
-                        onPageChanged: _handlePageChanged,
-                        onPrevPage: _currentPage > 1
-                            ? () {
-                          setState(() {
-                            _currentPage--;
-                          });
-                        }
-                            : null,
-                        onNextPage: _currentPage < _totalPages
-                            ? () {
-                          setState(() {
-                            _currentPage++;
-                          });
-                        }
-                            : null,
-                        isFullScreen: false,
-                        onToggleFullScreen: toggleFullScreen,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 80),
+                      child: Center(
+                        child: VersePageContainerRukuFive(
+                          rukuNumber: 5,
+                          startVerseIndex: (_currentPage - 1) * 4 + 68,
+                          lastVerseIndex: 83,
+                          versesPerPage: 4,
+                          versesPerPageDialogBox: 6,
+                          currentPage: _currentPage,
+                          totalPages: _totalPages,
+                          totalPageDialogBox: _totalPageDialogBox,
+                          onPageChanged: _handlePageChanged,
+                          onPrevPage: _currentPage > 1
+                              ? () {
+                            setState(() {
+                              _currentPage--;
+                            });
+                          }
+                              : null,
+                          onNextPage: _currentPage < _totalPages
+                              ? () {
+                            setState(() {
+                              _currentPage++;
+                            });
+                          }
+                              : null,
+                          isFullScreen: false,
+                          onToggleFullScreen: toggleFullScreen,
+                        ),
                       ),
                     ),
                   ),
@@ -108,6 +123,8 @@ class _ReadScreenState extends State<RukuFiveReadScreen> {
               ),
             ),
           ),
+          // Banner Ad at the bottom
+          const RukuFifthReadBannerAdWidget(),
         ],
       ),
     );
