@@ -56,8 +56,8 @@ void main() async {
   // Initialize Google Mobile Ads SDK
   await MobileAds.instance.initialize();
   
-  // Enable test mode for ads during development
-  // Add your test device ID from the logs (e.g., "14C103ADD23A29FFD26DE6E985FD67DF")
+  // Test mode for ads - enabled for testing (not deploying to production yet)
+  // TODO: Remove test device IDs when ready to deploy to production
   // For production, remove or comment out the testDeviceIds line
   final RequestConfiguration requestConfiguration = RequestConfiguration(
     testDeviceIds: [

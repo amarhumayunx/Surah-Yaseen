@@ -1,5 +1,5 @@
 name: surah_yaseen
-description: "A new Flutter project."
+description: "Surah Yaseen Companion - A beautiful Flutter app to read, listen, and reflect on Surah Yaseen, the heart of the Qur'an. Features include Ruku-wise navigation, audio playback, translations, bookmarks, and daily reminders."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -48,7 +48,6 @@ dependencies:
   rxdart: ^0.28.0
   just_audio: ^0.10.2
   audio_session: ^0.2.1
-  text_to_speech: ^0.2.3
   flutter_tts: ^4.2.2
   chewie: ^1.11.3
   video_player: ^2.9.5

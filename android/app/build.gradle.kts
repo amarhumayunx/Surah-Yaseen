@@ -17,8 +17,8 @@ val keystorePropertiesAvailable = keystorePropertiesFile.exists().also {
 }
 
 android {
-    namespace = "com.example.surah_yaseen"
-    compileSdk = flutter.compileSdkVersion
+    namespace = "com.surahyaseen.app"
+    compileSdk = 36
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -31,9 +31,9 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.surah_yaseen"
+        applicationId = "com.surahyaseen.app"
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -58,6 +58,13 @@ android {
             } else {
                 signingConfig = signingConfigs.getByName("debug")
             }
+            
+            // ProGuard rules for suppressing ExoPlayer warnings
+            // R8 is enabled by default in Flutter release builds
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 

@@ -50,3 +50,9 @@ app.*.map.json
 /releases/*.ipa
 /releases/*.app
 !/releases/README.md
+
+# Android keystore files - NEVER commit these!
+*.jks
+*.keystore
+key.properties
+android/key.properties

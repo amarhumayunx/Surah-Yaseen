@@ -57,6 +57,12 @@ class NotificationService {
       if (await Permission.notification.isDenied) {
         await Permission.notification.request();
       }
+      
+      // For Android 12 and higher (SDK 31+), request exact alarm permission
+      // This is required for scheduling exact alarms (notifications)
+      if (await Permission.scheduleExactAlarm.isDenied) {
+        await Permission.scheduleExactAlarm.request();
+      }
     }
   }
 

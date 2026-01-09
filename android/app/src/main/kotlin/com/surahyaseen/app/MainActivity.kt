@@ -1,4 +1,4 @@
-package com.example.surah_yaseen
+package com.surahyaseen.app
 
 import io.flutter.embedding.android.FlutterActivity
 
