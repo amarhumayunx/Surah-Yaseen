@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/amarhumayunx/Surah-Yaseen">
-    <img src="assets/images/poster/surah_yaseen_poster.png" width="650"/>
+    <img src="assets/images/poster/surah_yaseen_poster.png" width="800"/>
   </a>
 </p>
 
