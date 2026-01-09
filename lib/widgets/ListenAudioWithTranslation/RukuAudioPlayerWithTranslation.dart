@@ -19,13 +19,13 @@ class RukuAudioPlayerWithTranslation extends StatefulWidget {
   final Function(int)? onActiveVerseChanged; // Callback to notify parent about active verse
 
   const RukuAudioPlayerWithTranslation({
-    Key? key,
+    super.key,
     this.title,
     required this.verses,
     this.startVerse = 0,
     this.endVerse = 12,
     this.onActiveVerseChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<RukuAudioPlayerWithTranslation> createState() =>

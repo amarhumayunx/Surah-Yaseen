@@ -1,6 +1,7 @@
 /// Ad Unit IDs for Google Mobile Ads
 ///
 /// App ID: ca-app-pub-3425673808153409~2012844185
+library;
 
 /// Enum to identify different screens for ad placement
 enum AdScreenType {

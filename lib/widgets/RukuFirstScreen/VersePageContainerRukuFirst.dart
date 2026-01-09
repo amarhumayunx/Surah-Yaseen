@@ -29,7 +29,7 @@ class VersePageContainer extends StatefulWidget {
   final VoidCallback onToggleFullScreen;
 
   const VersePageContainer({
-    Key? key,
+    super.key,
     required this.rukuNumber,
     required this.startVerseIndex,
     required this.lastVerseIndex,
@@ -43,7 +43,7 @@ class VersePageContainer extends StatefulWidget {
     this.onNextPage,
     required this.isFullScreen,
     required this.onToggleFullScreen,
-  }) : super(key: key);
+  });
 
   @override
   State<VersePageContainer> createState() => _VersePageContainerState();
@@ -237,7 +237,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                                   horizontal: 8,
                                 ),
                                 child: Text(
-                                  '${'page'.tr} ${_currentDialogPage} ${'of'.tr} ${widget.totalPageDialogBox}',
+                                  '${'page'.tr} $_currentDialogPage ${'of'.tr} ${widget.totalPageDialogBox}',
                                   style: GoogleFonts.merriweather(
                                     color: AppColors.PrimaryColor,
                                     fontSize: 14,
@@ -376,7 +376,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
       context,
       listen: true,
     );
-    final _fontSizeValue = fontSizeProvider.fontSizeValue;
+    final fontSizeValue = fontSizeProvider.fontSizeValue;
     final bookmarkProvider = Provider.of<BookmarkProvider>(
       context,
       listen: true,
@@ -474,14 +474,14 @@ class _VersePageContainerState extends State<VersePageContainer> {
                               fontSize:
                                   isInDialog
                                       ? (24 +
-                                          (_fontSizeValue *
+                                          (fontSizeValue *
                                               8)) // For dialog box
                                       : (widget.isFullScreen
                                           ? (24 +
-                                              (_fontSizeValue *
+                                              (fontSizeValue *
                                                   8)) // For fullscreen
                                           : (24 +
-                                              (_fontSizeValue *
+                                              (fontSizeValue *
                                                   8))), // For regular view
                               color: AppColors.PrimaryColor,
                               height: 1,
@@ -498,12 +498,12 @@ class _VersePageContainerState extends State<VersePageContainer> {
                               fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontSize:
                                   isInDialog
-                                      ? (13 + (_fontSizeValue * 8))
+                                      ? (13 + (fontSizeValue * 8))
                                       : // For dialog box
                                       (widget.isFullScreen
-                                          ? (13 + (_fontSizeValue * 8))
+                                          ? (13 + (fontSizeValue * 8))
                                           : // For fullscreen
-                                          (13 + (_fontSizeValue * 8))),
+                                          (13 + (fontSizeValue * 8))),
                               color:
                                   widget.isFullScreen || isInDialog
                                       ? AppColors.BarColor
@@ -561,14 +561,14 @@ class _VersePageContainerState extends State<VersePageContainer> {
       context,
       listen: true,
     );
-    final _fontSizeValue = fontSizeProvider.fontSizeValue;
+    final fontSizeValue = fontSizeProvider.fontSizeValue;
     final bookmarkProvider = Provider.of<BookmarkProvider>(
       context,
       listen: true,
     );
 
     // Track highlighted verse in fullscreen mode
-    int? _dialogLongPressedVerseIndex;
+    int? dialogLongPressedVerseIndex;
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
     Map<String, String> versesEnglish =
@@ -600,7 +600,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
             final actualVerseIndex = startIdx + index;
             final arabicText = arabicEntries[index].value;
             final englishText = englishEntries[index].value;
-            final isSelected = _dialogLongPressedVerseIndex == index;
+            final isSelected = dialogLongPressedVerseIndex == index;
 
             // Check if this verse is already bookmarked
             final isBookmarked = bookmarkProvider.isVerseBookmarked(
@@ -612,7 +612,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
               onLongPress: () {
                 // Update local state for the dialog
                 setState(() {
-                  _dialogLongPressedVerseIndex = index;
+                  dialogLongPressedVerseIndex = index;
                 });
 
                 Future.delayed(Duration(milliseconds: 300), () async {
@@ -642,7 +642,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                   ).then((_) {
                     // Reset the highlight after the dialog is dismissed
                     setState(() {
-                      _dialogLongPressedVerseIndex = null;
+                      dialogLongPressedVerseIndex = null;
                     });
                   });
                 });
@@ -681,7 +681,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                                 arabicText,
                                 style: ArabicTextStyle(
                                   arabicFont: ArabicFont.lateef,
-                                  fontSize: 24 + (_fontSizeValue * 8),
+                                  fontSize: 24 + (fontSizeValue * 8),
                                   color: AppColors.PrimaryColor,
                                   height: 1.5,
                                 ),
@@ -694,7 +694,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                                 style: TextStyle(
                                   fontFamily:
                                       GoogleFonts.merriweather().fontFamily,
-                                  fontSize: 13 + (_fontSizeValue * 8),
+                                  fontSize: 13 + (fontSizeValue * 8),
                                   color: AppColors.BarColor,
                                   height: 1.3,
                                 ),

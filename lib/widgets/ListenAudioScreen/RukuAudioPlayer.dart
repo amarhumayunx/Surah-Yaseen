@@ -18,13 +18,13 @@ class RukuAudioPlayer extends StatefulWidget {
   final Function(int)? onActiveVerseChanged; // Callback to notify parent about active verse
 
   const RukuAudioPlayer({
-    Key? key,
+    super.key,
     this.title,
     required this.verses,
     this.startVerse = 0,
     this.endVerse = 12,
     this.onActiveVerseChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<RukuAudioPlayer> createState() => _RukuAudioPlayerState();
@@ -587,7 +587,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
       _startProgressTimer();
 
       // Add tajweed pause after each verse
-      textToSpeak = textToSpeak + "، ";
+      textToSpeak = "$textToSpeak، ";
 
       // Update state before speaking
       setState(() {

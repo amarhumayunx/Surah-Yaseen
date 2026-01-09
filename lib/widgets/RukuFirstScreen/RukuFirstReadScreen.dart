@@ -18,8 +18,8 @@ class RukuFirstReadScreen extends StatefulWidget {
 
 class _ReadScreenState extends State<RukuFirstReadScreen> {
   int _currentPage = 1;
-  int _totalPages = 4;
-  int _totalPageDialogBox = 3;
+  final int _totalPages = 4;
+  final int _totalPageDialogBox = 3;
   bool _isFullScreen = false;
 
   void toggleFullScreen() {

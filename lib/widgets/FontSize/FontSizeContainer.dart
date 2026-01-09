@@ -15,7 +15,7 @@ class FontSizeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<FontSizeProvider>(
         builder: (context, fontSizeProvider, child) {
-          final _fontSizeValue = fontSizeProvider.fontSizeValue;
+          final fontSizeValue = fontSizeProvider.fontSizeValue;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -70,7 +70,7 @@ class FontSizeContainer extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: ArabicTextStyle(
                               arabicFont: ArabicFont.lateef,
-                              fontSize: 24 + (_fontSizeValue * 8),
+                              fontSize: 24 + (fontSizeValue * 8),
                               color: AppColors.PrimaryColor,
                               height: 1.5
                             ),
@@ -80,7 +80,7 @@ class FontSizeContainer extends StatelessWidget {
                             'bismillah'.tr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 13 + (_fontSizeValue * 8),
+                                fontSize: 13 + (fontSizeValue * 8),
                                 color: AppColors.BarColor,
                                 fontFamily: GoogleFonts.merriweather().fontFamily,
                                 height: 1.3
@@ -105,7 +105,7 @@ class FontSizeContainer extends StatelessWidget {
                               thumbColor: AppColors.PrimaryColor,
                             ),
                             child: Slider(
-                              value: _fontSizeValue,
+                              value: fontSizeValue,
                               min: 0,
                               max: 1,
                               onChanged: (value) {

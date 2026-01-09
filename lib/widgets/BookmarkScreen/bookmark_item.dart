@@ -105,7 +105,7 @@ class BookmarkItem extends StatelessWidget {
               ),
               // Arrow Icon - Only show if not in delete mode
               if (!isInDeleteMode)
-                Container(
+                SizedBox(
                   width: 80,
                   height: 50,
                   child: SvgPicture.asset(

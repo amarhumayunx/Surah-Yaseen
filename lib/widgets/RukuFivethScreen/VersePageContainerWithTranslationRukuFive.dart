@@ -27,7 +27,7 @@ class ArabicVerseWithTranslationContainerRukuFive extends StatefulWidget {
   final VoidCallback? onNextPage;
 
   const ArabicVerseWithTranslationContainerRukuFive({
-    Key? key,
+    super.key,
     required this.rukuNumber,
     required this.startVerseIndex,
     required this.lastVerseIndex,
@@ -39,7 +39,7 @@ class ArabicVerseWithTranslationContainerRukuFive extends StatefulWidget {
     this.onPageChanged,
     this.onPrevPage,
     this.onNextPage,
-  }) : super(key: key);
+  });
 
   @override
   State<ArabicVerseWithTranslationContainerRukuFive> createState() => _ArabicVerseWithTranslationContainerState();
@@ -107,7 +107,7 @@ class _ArabicVerseWithTranslationContainerState extends State<ArabicVerseWithTra
 
   Widget _buildVersesPage(int startIdx) {
     final fontSizeProvider = Provider.of<FontSizeProvider>(context, listen: true);
-    final _fontSizeValue = fontSizeProvider.fontSizeValue;
+    final fontSizeValue = fontSizeProvider.fontSizeValue;
     final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: true);
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
@@ -221,7 +221,7 @@ class _ArabicVerseWithTranslationContainerState extends State<ArabicVerseWithTra
                             arabicText,
                             style: ArabicTextStyle(
                               arabicFont: ArabicFont.lateef,
-                              fontSize: 24 + (_fontSizeValue * 8),
+                              fontSize: 24 + (fontSizeValue * 8),
                               color: AppColors.PrimaryColor,
                               height: 1.5,
                             ),
@@ -237,7 +237,7 @@ class _ArabicVerseWithTranslationContainerState extends State<ArabicVerseWithTra
                             englishText,
                             style: TextStyle(
                               fontFamily: GoogleFonts.merriweather().fontFamily,
-                              fontSize: 13 + (_fontSizeValue * 8),
+                              fontSize: 13 + (fontSizeValue * 8),
                               color: AppColors.BarColor,
                               height: 1.3,
                             ),

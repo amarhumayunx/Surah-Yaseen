@@ -27,7 +27,7 @@ class ArabicVerseContainerRukuFourth extends StatefulWidget {
   final int activeVerseIndex;
 
   const ArabicVerseContainerRukuFourth({
-    Key? key,
+    super.key,
     required this.rukuNumber,
     required this.startVerseIndex,
     required this.lastVerseIndex,
@@ -39,7 +39,7 @@ class ArabicVerseContainerRukuFourth extends StatefulWidget {
     this.onPrevPage,
     this.onNextPage,
     this.activeVerseIndex = 0,
-  }) : super(key: key);
+  });
 
   @override
   State<ArabicVerseContainerRukuFourth> createState() => _ArabicVerseContainerState();
@@ -105,7 +105,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFourth> {
 
   Widget _buildVersesPage(int startIdx) {
     final fontSizeProvider = Provider.of<FontSizeProvider>(context, listen: true);
-    final _fontSizeValue = fontSizeProvider.fontSizeValue;
+    final fontSizeValue = fontSizeProvider.fontSizeValue;
     final bookmarkProvider = Provider.of<BookmarkProvider>(context, listen: true);
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
@@ -206,7 +206,7 @@ class _ArabicVerseContainerState extends State<ArabicVerseContainerRukuFourth> {
                             arabicText,
                             style: ArabicTextStyle(
                               arabicFont: ArabicFont.lateef,
-                              fontSize: 24 + (_fontSizeValue * 8),
+                              fontSize: 24 + (fontSizeValue * 8),
                               color: AppColors.PrimaryColor,
                               height: 1.5,
                             ),

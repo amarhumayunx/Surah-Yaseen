@@ -6,7 +6,7 @@ import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:surah_yaseen/constants/app_assets.dart';
 
 class TitleCardBookmark extends StatelessWidget {
-  TitleCardBookmark({super.key});
+  const TitleCardBookmark({super.key});
 
   @override
   Widget build(BuildContext context) {

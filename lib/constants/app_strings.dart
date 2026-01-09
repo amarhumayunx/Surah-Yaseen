@@ -483,7 +483,7 @@ class AboutScreenStrings {
   final String SandBline1 = 'Known as the "Heart of the Quran."';
   final String SandBline2 = "Reciting it brings blessings and forgiveness.";
   final String SandBline3 = "Often read in times of hardship.";
-  final String SandBline4 = "Helps in seeking Allah\'s mercy.";
+  final String SandBline4 = "Helps in seeking Allah's mercy.";
   final String SandBline5 = "Strengthens faith and connection with Allah.";
 
 }

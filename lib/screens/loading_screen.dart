@@ -8,8 +8,6 @@ import '../constants/app_strings.dart';
 import '../constants/app_assets.dart';
 import '../menu/navigation_menu.dart';
 import '../services/app_open_ad_manager.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import '../constants/ad_unit_ids.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -40,10 +38,7 @@ class _LoadingScreenState extends State<LoadingScreen>
     )..repeat();
 
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
   }
 
@@ -57,10 +52,10 @@ class _LoadingScreenState extends State<LoadingScreen>
 
       final appOpenAdManager = AppOpenAdManager.instance;
       await appOpenAdManager.recordAppLaunch();
-      
+
       // Load app open ad
       appOpenAdManager.loadAd();
-      
+
       setState(() {
         _loadingProgress = 0.3;
         _loadingStatus = 'Preparing content...';
@@ -70,12 +65,12 @@ class _LoadingScreenState extends State<LoadingScreen>
       bool adLoaded = false;
       int attempts = 0;
       const int maxAttempts = 20; // 20 * 200ms = 4 seconds max wait
-      
+
       while (!adLoaded && attempts < maxAttempts) {
         await Future.delayed(const Duration(milliseconds: 200));
         adLoaded = await appOpenAdManager.shouldShowAdOnAppOpen();
         attempts++;
-        
+
         // Update progress while waiting
         if (attempts % 5 == 0) {
           setState(() {
@@ -83,7 +78,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           });
         }
       }
-      
+
       // If ad didn't load, that's okay - we'll proceed anyway
       if (!adLoaded) {
         debugPrint('App Open Ad: Not loaded yet, proceeding anyway');
@@ -183,7 +178,7 @@ class _LoadingScreenState extends State<LoadingScreen>
               ),
             ),
             const SizedBox(height: 30),
-            
+
             // App Name
             Text(
               AppStrings.appnamestrings.appname,
@@ -195,15 +190,11 @@ class _LoadingScreenState extends State<LoadingScreen>
               ),
             ),
             const SizedBox(height: 10),
-            
+
             // Decorative Bar
-            Container(
-              width: 170,
-              height: 2,
-              color: AppColors.BarColor,
-            ),
+            Container(width: 170, height: 2, color: AppColors.BarColor),
             const SizedBox(height: 10),
-            
+
             // Urdu App Name
             Text(
               AppStrings.appnamestrings.appnameUrdu,
@@ -215,7 +206,7 @@ class _LoadingScreenState extends State<LoadingScreen>
               ),
             ),
             const SizedBox(height: 50),
-            
+
             // Loading Animation
             AnimatedBuilder(
               animation: _animation,
@@ -225,10 +216,7 @@ class _LoadingScreenState extends State<LoadingScreen>
                   height: 60,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.BarColor,
-                      width: 3,
-                    ),
+                    border: Border.all(color: AppColors.BarColor, width: 3),
                   ),
                   child: CircularProgressIndicator(
                     value: _loadingProgress,
@@ -242,7 +230,7 @@ class _LoadingScreenState extends State<LoadingScreen>
               },
             ),
             const SizedBox(height: 30),
-            
+
             // Loading Status Text
             Text(
               _loadingStatus,
@@ -253,7 +241,7 @@ class _LoadingScreenState extends State<LoadingScreen>
               ),
             ),
             const SizedBox(height: 10),
-            
+
             // Progress Percentage
             if (_loadingProgress > 0)
               Text(
@@ -270,4 +258,3 @@ class _LoadingScreenState extends State<LoadingScreen>
     );
   }
 }
-

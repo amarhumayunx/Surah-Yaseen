@@ -217,7 +217,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: Text(
-                                  '${'page'.tr} ${_currentDialogPage} ${'of'.tr} ${widget.totalPageDialogBox}',
+                                  '${'page'.tr} $_currentDialogPage ${'of'.tr} ${widget.totalPageDialogBox}',
                                   style: GoogleFonts.merriweather(
                                     color: AppColors.PrimaryColor,
                                     fontSize: 14,

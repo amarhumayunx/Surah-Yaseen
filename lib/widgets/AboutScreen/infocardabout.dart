@@ -6,7 +6,7 @@ import '../../Colors/colors.dart';
 import '../../constants/app_strings.dart';
 
 class InfoBoxCard extends StatelessWidget {
-  const InfoBoxCard({Key? key}) : super(key: key);
+  const InfoBoxCard({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -22,8 +22,8 @@ class _ReadScreenState extends State<RukuSecondReadScreen> {
   final int lastVerseIndex = 32;
 
   int _currentPage = 1;
-  int _totalPages = 5; // 4 verses per page
-  int _totalPageDialogBox = 4; // 6 verses per page
+  final int _totalPages = 5; // 4 verses per page
+  final int _totalPageDialogBox = 4; // 6 verses per page
   bool _isFullScreen = false;
 
   void toggleFullScreen() {
