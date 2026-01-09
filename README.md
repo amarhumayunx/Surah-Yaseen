@@ -4,6 +4,12 @@
 
 **✨ Read. Listen. Reflect. Remember. ✨**
 
+<p align="center">
+  <a href="https://github.com/amarhumayunx/Surah-Yaseen">
+    <img src="assets/images/poster/surah_yaseen_poster.png" width="420"/>
+  </a>
+</p>
+
 *A spiritually enriching Flutter app to engage with Surah Yaseen - the heart of the Qur'an* 🕌
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.7+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
