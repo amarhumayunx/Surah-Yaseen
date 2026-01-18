@@ -13,7 +13,8 @@ import '../SurahTitle/surat_title.dart';
 import 'filter_row.dart';
 import 'title_card.dart';
 import 'bookmark_item.dart';
-import 'banner_ad_widget.dart';
+import '../Ads/reusable_banner_ad.dart';
+import '../../constants/ad_unit_ids.dart';
 
 class BookmarkScreenBody extends StatefulWidget {
   const BookmarkScreenBody({super.key});
@@ -28,11 +29,6 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
   String _searchQuery = '';
   bool _deleteMode = false;
   final Set<int> _selectedForDeletion = {};
-  
-  // Ad unit ID for bookmarks banner ad
-  // Use test ad unit ID for development: 'ca-app-pub-3940256099942544/6300978111'
-  // Production ad unit ID: 'ca-app-pub-3425673808153409/1849192657'
-  static const String _bannerAdUnitId = 'ca-app-pub-3425673808153409/1849192657';
 
   // Method to handle bookmark icon tap
   void _onBookmarkTapped(int index) {
@@ -282,10 +278,9 @@ class _BookmarkScreenBodyState extends State<BookmarkScreenBody> {
 
                   // Banner Ad
                   const SizedBox(height: 16),
-                  Center(
-                    child: BannerAdWidget(
-                      adUnitId: _bannerAdUnitId,
-                    ),
+                  ReusableBannerAd(
+                    screenType: AdScreenType.bookmark,
+                    minHeight: 50,
                   ),
                   const SizedBox(height: 16),
 

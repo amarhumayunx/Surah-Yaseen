@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../Colors/colors.dart';
 import 'package:surah_yaseen/widgets/RukuScreen/ruku_screen_body.dart';
+import 'package:surah_yaseen/widgets/RukuScreen/banner_ad_widget.dart';
 
 import '../widgets/Topbackground/top_background.dart';
 
@@ -39,6 +40,8 @@ class _RukuScreenState extends State<RukuScreen> {
         children: [
           TopBackground(),
           RukuScreenBody(),
+          // Banner ad anchored at the bottom
+          const BannerAdWidget(),
         ],
       ),
     );

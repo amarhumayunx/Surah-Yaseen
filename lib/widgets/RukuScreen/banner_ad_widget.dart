@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../constants/ad_unit_ids.dart';
 
+/// Anchored adaptive banner ad widget for RukuScreen
+/// Follows Google Mobile Ads SDK best practices for anchored adaptive banners
 class BannerAdWidget extends StatefulWidget {
   const BannerAdWidget({super.key});
 
@@ -15,41 +18,71 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   bool _isBannerAdReady = false;
   bool _hasError = false;
   String? _errorMessage;
+  AdSize? _adSize;
 
-  // Use test ad unit ID for development, production ad unit ID for release
-  // Test ad unit IDs always return test ads
+  // Get ad unit ID - use test ads in debug mode, production in release
   String get _adUnitId {
     if (kDebugMode) {
       // Test ad unit IDs - always return test ads
-      // Android: ca-app-pub-3940256099942544/6300978111
-      // iOS: ca-app-pub-3940256099942544/2934735716
       if (Platform.isAndroid) {
-        return 'ca-app-pub-3940256099942544/6300978111';
+        return 'ca-app-pub-3940256099942544/9214589741';
       } else if (Platform.isIOS) {
         return 'ca-app-pub-3940256099942544/2934735716';
       }
     }
-    // Production ad unit ID
-    return 'ca-app-pub-3425673808153409/1354707943';
+    // Production ad unit ID for RukuScreen
+    return AdUnitIds.rukuScreenBanner;
   }
 
   @override
   void initState() {
     super.initState();
-    _loadBannerAd();
+    // Load ad after the first frame to ensure MediaQuery is available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadBannerAd();
+    });
   }
 
-  void _loadBannerAd() {
+  Future<void> _loadBannerAd() async {
+    if (!mounted) return;
+
+    // Get the width of the device's screen in density-independent pixels
+    final width = MediaQuery.sizeOf(context).width.truncate();
+
+    // Get an AnchoredAdaptiveBannerAdSize before loading the ad
+    final size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(width);
+
+    if (size == null) {
+      debugPrint('Unable to get width of anchored banner.');
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+          _errorMessage = 'Unable to get ad size';
+        });
+      }
+      return;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _adSize = size;
+    });
+
+    // Dispose previous ad if exists
     _bannerAd?.dispose();
-    
+
     _bannerAd = BannerAd(
       adUnitId: _adUnitId,
-      size: AdSize.banner,
       request: const AdRequest(),
+      size: size,
       listener: BannerAdListener(
-        onAdLoaded: (_) {
+        onAdLoaded: (ad) {
+          // Called when an ad is successfully received.
+          debugPrint('Ad was loaded.');
           if (mounted) {
             setState(() {
+              _bannerAd = ad as BannerAd;
               _isBannerAdReady = true;
               _hasError = false;
               _errorMessage = null;
@@ -57,7 +90,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           }
         },
         onAdFailedToLoad: (ad, err) {
-          debugPrint('Failed to load a banner ad: ${err.message}');
+          // Called when an ad request failed.
+          debugPrint('Ad failed to load with error: $err');
           debugPrint('Error code: ${err.code}');
           debugPrint('Error domain: ${err.domain}');
           debugPrint('Error response info: ${err.responseInfo}');
@@ -79,11 +113,25 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
             debugPrint('The ad will appear once ads become available in your region.');
           }
         },
-        onAdOpened: (_) {
-          debugPrint('Banner ad opened.');
+        onAdOpened: (Ad ad) {
+          // Called when an ad opens an overlay that covers the screen.
+          debugPrint('Ad was opened.');
         },
-        onAdClosed: (_) {
-          debugPrint('Banner ad closed.');
+        onAdClosed: (Ad ad) {
+          // Called when an ad removes an overlay that covers the screen.
+          debugPrint('Ad was closed.');
+        },
+        onAdImpression: (Ad ad) {
+          // Called when an impression occurs on the ad.
+          debugPrint('Ad recorded an impression.');
+        },
+        onAdClicked: (Ad ad) {
+          // Called when a click event occurs on the ad.
+          debugPrint('Ad was clicked.');
+        },
+        onAdWillDismissScreen: (Ad ad) {
+          // iOS only. Called before dismissing a full screen view.
+          debugPrint('Ad will be dismissed.');
         },
       ),
     );
@@ -110,7 +158,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       // Optionally show a placeholder or retry button in debug mode
       if (kDebugMode) {
         return Container(
-          height: AdSize.banner.height.toDouble(),
+          height: _adSize?.height.toDouble() ?? AdSize.banner.height.toDouble(),
           alignment: Alignment.center,
           child: Text(
             'Ad unavailable\n(Error: ${_errorMessage ?? "Unknown"})',
@@ -122,12 +170,20 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       return const SizedBox.shrink();
     }
 
-    return Container(
-      alignment: Alignment.center,
-      width: _bannerAd!.size.width.toDouble(),
-      height: _bannerAd!.size.height.toDouble(),
-      child: AdWidget(ad: _bannerAd!),
-    );
+    // Display the banner ad
+    if (_bannerAd != null && _adSize != null) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: SafeArea(
+          child: SizedBox(
+            width: _adSize!.width.toDouble(),
+            height: _adSize!.height.toDouble(),
+            child: AdWidget(ad: _bannerAd!),
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }
-

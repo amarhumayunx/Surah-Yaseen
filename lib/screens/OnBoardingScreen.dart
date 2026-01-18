@@ -39,24 +39,24 @@ class Onboardingscreen extends StatelessWidget {
 
             // Page Indicator
             Obx(() => Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  onboardingData.length,
-                  (index) => Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
-                    width: onboardingController.currentPage.value == index ? 32 : 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5), // Fully rounded pill shape
-                      color: onboardingController.currentPage.value == index
-                          ? AppColors.HeadingColor // Dark forest green for active
-                          : AppColors.OnbaordingScreenDotColor, // Light muted green for inactive
-                    ),
+            padding: const EdgeInsets.symmetric(vertical: 22),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                onboardingData.length,
+                (index) => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  width: 32, // Same width for all dots
+                  height: 10, // Same height for all dots
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), // Fully rounded pill shape
+                    color: onboardingController.currentPage.value == index
+                        ? AppColors.HeadingColor // Dark forest green for active
+                        : AppColors.OnbaordingScreenDotColor, // Light muted green for inactive
                   ),
                 ),
               ),
+            ),
             )),
 
             // Bottom buttons

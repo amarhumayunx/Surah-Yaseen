@@ -7,6 +7,8 @@ import '../widgets/Dividerbar/dividerbar.dart';
 import '../widgets/SurahTitle/surat_title.dart';
 import '../widgets/TopBar/topbartest.dart';
 import '../widgets/Topbackground/top_background.dart';
+import '../widgets/Ads/reusable_banner_ad.dart';
+import '../constants/ad_unit_ids.dart';
 
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -69,7 +71,12 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                       ],
                     ),
                   ),
-                )
+                ),
+                // Banner ad at the bottom
+                const ReusableBannerAd(
+                  screenType: AdScreenType.privacyPolicy,
+                  minHeight: 50,
+                ),
               ],
             ),
           ),
