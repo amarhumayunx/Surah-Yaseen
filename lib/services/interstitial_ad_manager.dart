@@ -46,8 +46,13 @@ class InterstitialAdManager {
         return AdUnitIds.testInterstitialAdIOS;
       }
     }
-    // Use production ad unit ID in release mode
-    return AdUnitIds.interstitialAd;
+    // Use production ad unit ID based on platform
+    if (Platform.isAndroid) {
+      return AdUnitIds.interstitialAd;
+    } else if (Platform.isIOS) {
+      return AdUnitIds.interstitialAdIOS;
+    }
+    return AdUnitIds.interstitialAd; // Fallback
   }
 
   /// Initialize the interstitial ad manager when app opens (fresh start)

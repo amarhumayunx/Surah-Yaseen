@@ -1,6 +1,11 @@
 # ProGuard rules for Surah Yaseen App
 # Add project specific ProGuard rules here.
 
+# Google Mobile Ads / AdMob - Required for release builds
+-keep class com.google.android.gms.ads.** { *; }
+-keep class com.google.ads.** { *; }
+-dontwarn com.google.ads.**
+
 # Keep ExoPlayer classes
 -keep class com.google.android.exoplayer2.** { *; }
 -dontwarn com.google.android.exoplayer2.**

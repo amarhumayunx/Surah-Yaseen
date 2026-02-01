@@ -63,7 +63,7 @@ class _ReusableBannerAdState extends State<ReusableBannerAd> {
 
     // Get the ad unit ID - either from screenType or directly provided
     final String productionAdUnitId = widget.screenType != null
-        ? AdUnitIds.getBannerAdUnitId(widget.screenType!)
+        ? AdUnitIds.getBannerAdUnitIdForPlatform(widget.screenType!) // Platform-aware
         : widget.adUnitId!;
 
     // Use test ad unit ID in debug mode, otherwise use the provided ad unit ID

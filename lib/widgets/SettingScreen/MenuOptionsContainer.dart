@@ -5,6 +5,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../constants/app_constants.dart';
 import '../../screens/HelpScreen.dart';
 import '../../screens/LanguageScreen.dart';
 import '../../screens/NotificationScreen.dart';
@@ -117,10 +118,8 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
 
   // Function for Privacy Policy - opens in custom WebView with floating back button
   void onPrivacyPolicy() {
-    const String privacyPolicyUrl = 'https://v0-surah-yaseenx.vercel.app/';
-    
     Get.to(
-      () => PrivacyPolicyWebViewScreen(url: privacyPolicyUrl),
+      () => PrivacyPolicyWebViewScreen(url: AppConstants.privacyPolicyUrl),
       transition: Transition.rightToLeft,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -129,37 +128,35 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
 
   // Function for Rate Us
   void onRateUs() async {
-    const String playStoreUrl =
-        'https://play.google.com/store/apps/details?id=com.example.yourapp'; // Replace with your app's Play Store URL
-
-    if (await canLaunch(playStoreUrl)) {
-      await launch(playStoreUrl);
-    } else {
-      // Handle error if the URL can't be launched
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Could not open the Play Store.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Close'),
-              ),
-            ],
-          );
-        },
-      );
+    final uri = Uri.parse(AppConstants.playStoreUrl);
+    try {
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched && mounted) {
+        _showPlayStoreError();
+      }
+    } catch (_) {
+      if (mounted) _showPlayStoreError();
     }
+  }
+
+  void _showPlayStoreError() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Error'),
+        content: Text('Could not open the Play Store.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('Close'),
+          ),
+        ],
+      ),
+    );
   }
 
   // Function for Share
   void onShare() {
-    const String appLink =
-        'https://play.google.com/store/apps/details?id=com.example.yourapp'; // Replace with your app's Play Store URL
-    Share.share('Check out this amazing app: $appLink');
+    Share.share('Check out this amazing app: ${AppConstants.playStoreUrl}');
   }
 }

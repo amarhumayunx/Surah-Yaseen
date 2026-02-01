@@ -55,8 +55,13 @@ class AppOpenAdManager {
         return AdUnitIds.testAppOpenAdIOS;
       }
     }
-    // Use production ad unit ID in release mode
-    return AdUnitIds.appOpenAd;
+    // Use production ad unit ID based on platform
+    if (Platform.isAndroid) {
+      return AdUnitIds.appOpenAd;
+    } else if (Platform.isIOS) {
+      return AdUnitIds.appOpenAdIOS;
+    }
+    return AdUnitIds.appOpenAd; // Fallback
   }
 
   /// Load an App Open Ad

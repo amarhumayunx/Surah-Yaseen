@@ -1,0 +1,54 @@
+iOS Ad Unit IDs - AdMob Console se copy karke yahan paste karein
+================================================================
+
+Banner Ads - Main Screens:
+---------------------------
+homeScreenBannerIOS = 
+rukuScreenBannerIOS = 
+bookmarkScreenBannerIOS = 
+settingsScreenBannerIOS = 
+
+Banner Ads - Ruku Detail Screens:
+----------------------------------
+rukuFirstScreenBannerIOS = 
+rukuFirstReadScreenBannerIOS = 
+rukuFirstAudioScreenBannerIOS = 
+rukuFirstAudioWithTranslationScreenBannerIOS = 
+rukuSecondScreenBannerIOS = 
+rukuSecondReadScreenBannerIOS = 
+rukuSecondAudioScreenBannerIOS = 
+rukuSecondAudioWithTranslationScreenBannerIOS = 
+rukuThirdScreenBannerIOS = 
+rukuThirdReadScreenBannerIOS = 
+rukuThirdAudioScreenBannerIOS = 
+rukuThirdAudioWithTranslationScreenBannerIOS = 
+rukuFourthScreenBannerIOS = 
+rukuFourthReadScreenBannerIOS = 
+rukuFourthAudioScreenBannerIOS = 
+rukuFourthAudioWithTranslationScreenBannerIOS = 
+rukuFifthScreenBannerIOS = 
+rukuFifthReadScreenBannerIOS = 
+rukuFifthAudioScreenBannerIOS = 
+rukuFifthAudioWithTranslationScreenBannerIOS = 
+
+Banner Ads - Other Screens:
+----------------------------
+aboutScreenBannerIOS = 
+helpScreenBannerIOS = 
+languageScreenBannerIOS = 
+notificationScreenBannerIOS = 
+privacyPolicyScreenBannerIOS = 
+
+App Open Ad:
+------------
+appOpenAdIOS = 
+
+Interstitial Ad:
+----------------
+interstitialAdIOS = 
+
+================================================================
+Instructions:
+1. AdMob Console se iOS ad unit IDs copy karein
+2. Upar wale format mein IDs paste karein (equals sign ke baad)
+3. Jab sab IDs fill ho jayein, mujhe bata dein, main implement kar dunga
