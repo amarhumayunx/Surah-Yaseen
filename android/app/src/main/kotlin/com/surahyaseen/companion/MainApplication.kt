@@ -1,4 +1,4 @@
-package com.surahyaseen.app
+package com.surahyaseen.companion
 
 import android.app.Application
 

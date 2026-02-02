@@ -17,7 +17,7 @@ val keystorePropertiesAvailable = keystorePropertiesFile.exists().also {
 }
 
 android {
-    namespace = "com.surahyaseen.app"
+    namespace = "com.surahyaseen.companion"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -31,10 +31,10 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.surahyaseen.app"
+        applicationId = "com.surahyaseen.companion"
         minSdk = flutter.minSdkVersion
-        targetSdk = 34
-        versionCode = 1
+        targetSdk = 35
+        versionCode = 2
         versionName = "1.0.0"
     }
 

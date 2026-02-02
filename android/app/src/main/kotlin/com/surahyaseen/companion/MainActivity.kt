@@ -1,4 +1,4 @@
-package com.surahyaseen.app
+package com.surahyaseen.companion
 
 import io.flutter.embedding.android.FlutterActivity
 
