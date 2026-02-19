@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:surah_yaseen/bookmark.dart';
 
 import '../../services/notification_service.dart';
+import '../../services/analytics_service.dart';
 
 class BookmarkProvider with ChangeNotifier {
   late Box<Bookmark> _bookmarkBox;
@@ -115,6 +116,13 @@ class BookmarkProvider with ChangeNotifier {
         rukuNumber: rukuNumber,
       );
 
+      // Track bookmark add event
+      await AnalyticsService.logBookmarkAdd(
+        verseIndex: verseIndex,
+        rukuNumber: rukuNumber,
+        iconType: iconType,
+      );
+
       return true; // Return true to indicate bookmark was added successfully
     } catch (e) {
       print("Error adding bookmark: $e");
@@ -124,8 +132,22 @@ class BookmarkProvider with ChangeNotifier {
 
   Future<void> removeBookmark(int index) async {
     try {
+      // Get bookmark info before deleting for analytics
+      Bookmark? bookmark;
+      if (index < _bookmarkBox.length) {
+        bookmark = _bookmarkBox.getAt(index);
+      }
+      
       await _bookmarkBox.deleteAt(index);
       notifyListeners();
+      
+      // Track bookmark remove event
+      if (bookmark != null) {
+        await AnalyticsService.logBookmarkRemove(
+          verseIndex: bookmark.verseIndex,
+          rukuNumber: bookmark.rukuNumber,
+        );
+      }
     } catch (e) {
       print("Error removing bookmark: $e");
     }
@@ -134,8 +156,19 @@ class BookmarkProvider with ChangeNotifier {
   // Additional method to remove bookmark by key
   Future<void> removeBookmarkByKey(String key) async {
     try {
+      // Get bookmark info before deleting for analytics
+      Bookmark? bookmark = _bookmarkBox.get(key);
+      
       await _bookmarkBox.delete(key);
       notifyListeners();
+      
+      // Track bookmark remove event
+      if (bookmark != null) {
+        await AnalyticsService.logBookmarkRemove(
+          verseIndex: bookmark.verseIndex,
+          rukuNumber: bookmark.rukuNumber,
+        );
+      }
     } catch (e) {
       print("Error removing bookmark by key: $e");
     }

@@ -7,6 +7,8 @@ import 'dart:async';
 import 'dart:math';
 import '../../constants/app_assets.dart';
 import '../../constants/app_strings.dart';
+import '../../services/tts_language_manager.dart';
+import '../../services/analytics_service.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 enum ContentType { arabic, english }
@@ -16,6 +18,7 @@ class RukuAudioPlayerWithTranslation extends StatefulWidget {
   final Map<int, String> verses;
   final int startVerse;
   final int endVerse;
+  final int? rukuNumber; // Ruku number for analytics tracking
   final Function(int)? onActiveVerseChanged; // Callback to notify parent about active verse
 
   const RukuAudioPlayerWithTranslation({
@@ -24,6 +27,7 @@ class RukuAudioPlayerWithTranslation extends StatefulWidget {
     required this.verses,
     this.startVerse = 0,
     this.endVerse = 12,
+    this.rukuNumber,
     this.onActiveVerseChanged,
   });
 
@@ -37,6 +41,7 @@ class _RukuAudioPlayerWithTranslationState
     with WidgetsBindingObserver {
   // TTS Engine
   FlutterTts flutterTts = FlutterTts();
+  TtsLanguageManager? languageManager;
   TtsState ttsState = TtsState.stopped;
 
   // TTS Parameters - optimized for Quranic recitation
@@ -75,6 +80,7 @@ class _RukuAudioPlayerWithTranslationState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    languageManager = TtsLanguageManager(flutterTts);
     _initVerses();
     _initTts();
   }
@@ -88,75 +94,44 @@ class _RukuAudioPlayerWithTranslationState
       await flutterTts.setPitch(pitch);
       await flutterTts.setSpeechRate(rate);
 
-      // Get available languages
-      var languages = await flutterTts.getLanguages;
-      print("Available TTS languages: $languages");
-
-      // Try to find Arabic language support
-      bool hasArabic = languages.any(
-        (lang) =>
-            lang.toString().toLowerCase().contains('ar') ||
-            lang.toString().toLowerCase().contains('arab'),
-      );
-
-      // Try to find English language support
-      bool hasEnglish = languages.any(
-        (lang) =>
-            lang.toString().toLowerCase().contains('en') ||
-            lang.toString().toLowerCase().contains('eng'),
-      );
+      // Check if Arabic and English are available and guide user to install if needed
+      bool arabicAvailable = await languageManager!.isArabicAvailable();
+      bool englishAvailable = await languageManager!.isEnglishAvailable();
+      
+      if (!arabicAvailable && mounted) {
+        // Show dialog to guide user to install Arabic
+        await languageManager!.showArabicInstallDialog(context);
+        // Check again after user might have installed it
+        await Future.delayed(Duration(seconds: 1));
+        arabicAvailable = await languageManager!.isArabicAvailable();
+      }
 
       // Set Arabic language preference
-      if (hasArabic) {
-        var arabicLangs = languages
-            .where(
-              (lang) =>
-                  lang.toString().toLowerCase().contains('ar') ||
-                  lang.toString().toLowerCase().contains('arab'),
-            )
-            .toList();
-
-        // Prefer full Arabic over dialect variants if available
-        String arabicCode = arabicLangs.firstWhere(
-          (lang) =>
-              lang.toString().toLowerCase() == 'ar' ||
-              lang.toString().toLowerCase() == 'ara',
-          orElse: () => arabicLangs.first.toString(),
-        );
-
-        arabicLanguage = arabicCode;
-        print("Setting Arabic language to: $arabicLanguage");
-        hasArabicLanguageSupport = true;
+      if (arabicAvailable) {
+        arabicLanguage = await languageManager!.getBestArabicLanguage();
+        if (arabicLanguage != null) {
+          print("Setting Arabic language to: $arabicLanguage");
+          hasArabicLanguageSupport = true;
+        } else {
+          hasArabicLanguageSupport = false;
+        }
       } else {
-        // Use default language if Arabic not available
         print("Arabic not found");
         hasArabicLanguageSupport = false;
       }
 
       // Set English language preference
-      if (hasEnglish) {
-        var englishLangs = languages
-            .where(
-              (lang) =>
-                  lang.toString().toLowerCase().contains('en') ||
-                  lang.toString().toLowerCase().contains('eng'),
-            )
-            .toList();
-
-        // Prefer US or UK English if available
-        String englishCode = englishLangs.firstWhere(
-          (lang) =>
-              lang.toString().toLowerCase() == 'en-us' ||
-              lang.toString().toLowerCase() == 'en-gb' ||
-              lang.toString().toLowerCase() == 'en',
-          orElse: () => englishLangs.first.toString(),
-        );
-
-        englishLanguage = englishCode;
-        print("Setting English language to: $englishLanguage");
-        hasEnglishLanguageSupport = true;
+      if (englishAvailable) {
+        englishLanguage = await languageManager!.getBestEnglishLanguage();
+        if (englishLanguage != null) {
+          print("Setting English language to: $englishLanguage");
+          hasEnglishLanguageSupport = true;
+        } else {
+          hasEnglishLanguageSupport = false;
+        }
       } else {
         // Use default language if English not available
+        var languages = await flutterTts.getLanguages;
         englishLanguage = languages.isNotEmpty ? languages.first.toString() : null;
         print("English not found specifically, using default language: $englishLanguage");
         hasEnglishLanguageSupport = englishLanguage != null;
@@ -196,14 +171,25 @@ class _RukuAudioPlayerWithTranslationState
           showTroubleshooting = true;
         });
 
+        // Check if error is related to language support
+        if (msg.toString().toLowerCase().contains('language') ||
+            msg.toString().toLowerCase().contains('arabic')) {
+          // Show dialog to guide user to install Arabic
+          if (mounted) {
+            languageManager?.showArabicInstallDialog(context);
+          }
+        }
+
         // Show error message to user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Speech error: $msg"),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 5),
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Speech error: $msg"),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 5),
+            ),
+          );
+        }
       });
 
       flutterTts.setCancelHandler(() {
@@ -614,6 +600,10 @@ class _RukuAudioPlayerWithTranslationState
       _resume();
     } else {
       print("Starting playback from beginning");
+      // Track audio play event
+      if (widget.rukuNumber != null) {
+        AnalyticsService.logAudioPlay(rukuNumber: widget.rukuNumber!);
+      }
       _speakFromStart();
     }
   }
@@ -647,6 +637,10 @@ class _RukuAudioPlayerWithTranslationState
         _speakCurrentContent();
       } else {
         // We've completed all verses and translations
+        // Track recitation complete event
+        if (widget.rukuNumber != null) {
+          AnalyticsService.logRecitationComplete(rukuNumber: widget.rukuNumber!);
+        }
         setState(() {
           ttsState = TtsState.stopped;
           isSpeaking = false;
@@ -741,6 +735,10 @@ class _RukuAudioPlayerWithTranslationState
   Future<void> _pause() async {
     var result = await flutterTts.pause();
     print("Pause result: $result");
+    // Track audio pause event
+    if (widget.rukuNumber != null) {
+      AnalyticsService.logAudioPause(rukuNumber: widget.rukuNumber!);
+    }
     _stopProgressTimer();
     setState(() {
       isProcessing = false;
@@ -961,6 +959,18 @@ class _RukuAudioPlayerWithTranslationState
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 360;
+    final horizontalPadding = isSmallScreen ? 15.0 : 20.0;
+    final sliderPadding = isSmallScreen ? 10.0 : 15.0;
+    final titleFontSize = isSmallScreen ? 18.0 : 20.0;
+    final indicatorFontSize = isSmallScreen ? 11.0 : 12.0;
+    final iconSize = isSmallScreen ? 24.0 : 30.0;
+    final playButtonSize = isSmallScreen ? 45.0 : 50.0;
+    final buttonSpacing = isSmallScreen ? 20.0 : 25.0;
+    final thumbRadius = isSmallScreen ? 6.0 : 8.0;
+    final trackHeight = isSmallScreen ? 3.0 : 4.0;
+
     double sliderValue = totalDuration > 0
         ? (currentPosition / totalDuration).clamp(0.0, 1.0)
         : 0.0;
@@ -970,13 +980,13 @@ class _RukuAudioPlayerWithTranslationState
       children: [
         // Title Text
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
               widget.title ?? AppStrings.listenAudioWithTranslationScreenString.Ruku1title,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: titleFontSize,
                 fontFamily: GoogleFonts.merriweather().fontFamily,
                 fontWeight: FontWeight.bold,
                 color: AppColors.PrimaryColor,
@@ -988,25 +998,35 @@ class _RukuAudioPlayerWithTranslationState
         // Language support indicator
         if (!hasArabicLanguageSupport && isTtsInitialized)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             child: Text(
               "Arabic TTS not available on this device",
-              style: TextStyle(color: Colors.red, fontSize: 12),
+              style: TextStyle(color: Colors.red, fontSize: indicatorFontSize),
             ),
           ),
 
         // TTS initialization status
         if (!isTtsInitialized)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(color: AppColors.PrimaryColor),
-                SizedBox(width: 10),
-                Text(
-                  "Initializing speech engine...",
-                  style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+                SizedBox(
+                  width: isSmallScreen ? 16 : 20,
+                  height: isSmallScreen ? 16 : 20,
+                  child: CircularProgressIndicator(
+                    color: AppColors.PrimaryColor,
+                    strokeWidth: 2,
+                  ),
+                ),
+                SizedBox(width: isSmallScreen ? 8 : 10),
+                Flexible(
+                  child: Text(
+                    "Initializing speech engine...",
+                    style: TextStyle(color: Colors.grey.shade700, fontSize: indicatorFontSize),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -1014,14 +1034,14 @@ class _RukuAudioPlayerWithTranslationState
 
         // Slider + Time Row
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          padding: EdgeInsets.symmetric(horizontal: sliderPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SliderTheme(
                 data: SliderThemeData(
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
-                  trackHeight: 4.0,
+                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: thumbRadius),
+                  trackHeight: trackHeight,
                 ),
                 child: Slider(
                   value: sliderValue,
@@ -1035,17 +1055,23 @@ class _RukuAudioPlayerWithTranslationState
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                padding: EdgeInsets.symmetric(horizontal: isSmallScreen ? 12.0 : 18.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       _formatDuration(currentPosition),
-                      style: TextStyle(color: Colors.grey.shade700),
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        fontSize: isSmallScreen ? 11.0 : 12.0,
+                      ),
                     ),
                     Text(
                       _formatDuration(totalDuration),
-                      style: TextStyle(color: Colors.grey.shade700),
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        fontSize: isSmallScreen ? 11.0 : 12.0,
+                      ),
                     ),
                   ],
                 ),
@@ -1059,29 +1085,38 @@ class _RukuAudioPlayerWithTranslationState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _iconControlButton(
-              SvgPicture.asset(AppAssets.backwardarrow, width: 30, height: 30),
+              SvgPicture.asset(AppAssets.backwardarrow, width: iconSize, height: iconSize),
               _skipBackward,
               tooltip: "Previous verse",
+              iconSize: iconSize,
             ),
-            const SizedBox(width: 25),
+            SizedBox(width: buttonSpacing),
             _roundPlayButton(
               ttsState == TtsState.playing || ttsState == TtsState.continued,
               _handlePlayPause,
+              buttonSize: playButtonSize,
             ),
-            const SizedBox(width: 25),
+            SizedBox(width: buttonSpacing),
             _iconControlButton(
-              SvgPicture.asset(AppAssets.forwardarrow, width: 30, height: 30),
+              SvgPicture.asset(AppAssets.forwardarrow, width: iconSize, height: iconSize),
               _skipForward,
               tooltip: "Next verse",
+              iconSize: iconSize,
             ),
           ],
         ),
 
         // Troubleshooting button
         if (showTroubleshooting)
-          TextButton(
-            onPressed: troubleshootTTS,
-            child: Text("Troubleshoot TTS Engine"),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            child: TextButton(
+              onPressed: troubleshootTTS,
+              child: Text(
+                "Troubleshoot TTS Engine",
+                style: TextStyle(fontSize: isSmallScreen ? 12.0 : 14.0),
+              ),
+            ),
           ),
       ],
     );
@@ -1091,22 +1126,26 @@ class _RukuAudioPlayerWithTranslationState
     Widget icon,
     Function() onPressed, {
     String? tooltip,
+    double iconSize = 30,
   }) {
     return Tooltip(
       message: tooltip ?? "",
       child: IconButton(
         icon: icon,
         onPressed: isProcessing ? null : onPressed,
-        iconSize: 30,
+        iconSize: iconSize,
       ),
     );
   }
 
-  Widget _roundPlayButton(bool isPlaying, Function() onPressed) {
+  Widget _roundPlayButton(bool isPlaying, Function() onPressed, {double buttonSize = 50}) {
+    final iconSize = buttonSize * 0.4;
+    final borderWidth = buttonSize * 0.06;
+    
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.BarColor, width: 3),
+        border: Border.all(color: AppColors.BarColor, width: borderWidth),
         color: AppColors.PrimaryColor,
       ),
       child: IconButton(
@@ -1115,8 +1154,8 @@ class _RukuAudioPlayerWithTranslationState
           children: [
             isProcessing
                 ? SizedBox(
-                    width: 20,
-                    height: 20,
+                    width: iconSize,
+                    height: iconSize,
                     child: CircularProgressIndicator(
                       color: Colors.white,
                       strokeWidth: 2,
@@ -1124,14 +1163,14 @@ class _RukuAudioPlayerWithTranslationState
                   )
                 : SvgPicture.asset(
                     isPlaying ? AppAssets.pause_button : AppAssets.play_button,
-                    width: 20,
-                    height: 20,
+                    width: iconSize,
+                    height: iconSize,
                     fit: BoxFit.contain,
                   ),
           ],
         ),
         onPressed: isProcessing ? null : onPressed,
-        iconSize: 50,
+        iconSize: buttonSize,
         tooltip: isPlaying ? "Pause" : "Play",
       ),
     );

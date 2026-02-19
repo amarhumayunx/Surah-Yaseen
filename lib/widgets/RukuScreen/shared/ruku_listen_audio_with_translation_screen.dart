@@ -119,6 +119,7 @@ class _RukuListenAudioWithTranslationScreenState
                     verses: widget.verses,
                     startVerse: widget.config.startVerseIndex,
                     endVerse: widget.config.lastVerseIndex,
+                    rukuNumber: widget.config.rukuNumber,
                     onActiveVerseChanged: _handleActiveVerseChanged,
                   ),
                 ],

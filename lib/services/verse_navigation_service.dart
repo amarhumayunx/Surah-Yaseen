@@ -5,6 +5,7 @@ import 'package:surah_yaseen/widgets/RukuSecondScreen/RukuSecondReadScreen.dart'
 import 'package:surah_yaseen/widgets/RukuThirdScreen/RukuThirdReadScreen.dart';
 import 'package:surah_yaseen/widgets/RukuFourthScreen/RukuFourthReadScreen.dart';
 import 'package:surah_yaseen/widgets/RukuFivethScreen/RukuFiveReadScreen.dart';
+import 'package:surah_yaseen/services/analytics_service.dart';
 
 /// Service to handle navigation to specific verses in Ruku screens
 class VerseNavigationService {
@@ -31,6 +32,9 @@ class VerseNavigationService {
       'initialPage': targetPage,
       'targetVerseIndex': verseIndex,
     };
+
+    // Track ruku open event
+    AnalyticsService.logRukuOpen(rukuNumber: rukuNumber);
 
     // Navigate to the appropriate Ruku Read Screen
     switch (rukuNumber) {

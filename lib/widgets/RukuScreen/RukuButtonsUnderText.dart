@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Colors/colors.dart';
+import '../../services/analytics_service.dart';
 
 // Reusable Buttons Under Text for all Ruku Screens
 class RukuButtonsUnderText extends StatelessWidget {
   final Widget readScreen;
   final Widget listenAudioScreen;
   final Widget listenAudioWithTranslationScreen;
+  final int rukuNumber;
 
   const RukuButtonsUnderText({
     super.key,
     required this.readScreen,
     required this.listenAudioScreen,
     required this.listenAudioWithTranslationScreen,
+    required this.rukuNumber,
   });
 
   @override
@@ -39,7 +42,10 @@ class RukuButtonsUnderText extends StatelessWidget {
         // Listen Audio with translation Button
         _buildButton(
           'listen_audio_with_translation'.tr,
-          () => Get.to(() => listenAudioWithTranslationScreen),
+          () {
+            AnalyticsService.logTranslationEnabled(rukuNumber: rukuNumber);
+            Get.to(() => listenAudioWithTranslationScreen);
+          },
         ),
       ],
     );

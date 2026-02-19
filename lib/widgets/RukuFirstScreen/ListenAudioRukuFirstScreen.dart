@@ -125,6 +125,7 @@ class _ListenAudioScreenState extends State<ListenAudioRukuFirstScreen> {
                     verses: yaseen_verses,
                     startVerse: 0,
                     endVerse: 12,
+                    rukuNumber: 1,
                     onActiveVerseChanged: _handleActiveVerseChanged, // New callback
                   ),
                 ],

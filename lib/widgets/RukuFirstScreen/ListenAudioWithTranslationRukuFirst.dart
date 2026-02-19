@@ -124,6 +124,7 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
                           verses: yaseen_verses,
                           startVerse: 0,  // Start from the first verse
                           endVerse: 12,    // End at verse 3
+                          rukuNumber: 1,
                           onActiveVerseChanged: _handleActiveVerseChanged,
                         ),
                       ]

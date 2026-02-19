@@ -68,6 +68,7 @@ class _RukuFirstScreenState extends State<RukuFirstScreen> {
                   RukuQuoteSection(translationKey: 'text_under_card_ruku1'),
                   SizedBox(height: 10),
                   RukuButtonsUnderText(
+                    rukuNumber: 1,
                     readScreen: const RukuFirstReadScreen(),
                     listenAudioScreen: const ListenAudioRukuFirstScreen(),
                     listenAudioWithTranslationScreen: const ListenAudioWithTranslationRukuFirst(),

@@ -70,6 +70,7 @@ class _RukuSecondScreenState extends State<RukuSecondScreen> {
                   RukuQuoteSection(translationKey: 'text_under_card_ruku2'),
                   SizedBox(height: 10),
                   RukuButtonsUnderText(
+                    rukuNumber: 2,
                     readScreen: const RukuSecondReadScreen(),
                     listenAudioScreen: const ListenAudioRukuSecondScreen(),
                     listenAudioWithTranslationScreen: const ListenAudioWithTranslationRukuSecond(),

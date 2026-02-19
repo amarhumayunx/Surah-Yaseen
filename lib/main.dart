@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:surah_yaseen/bookmark.dart';
 import 'package:surah_yaseen/screens/loading_screen.dart';
 import 'package:surah_yaseen/services/notification_service.dart';
@@ -15,6 +16,7 @@ import 'package:surah_yaseen/widgets/FontSize/FontSizeProvider.dart';
 import 'package:surah_yaseen/widgets/Language/Language.dart';
 import 'package:surah_yaseen/services/app_open_ad_manager.dart';
 import 'package:surah_yaseen/services/interstitial_ad_manager.dart';
+import 'package:surah_yaseen/services/analytics_service.dart';
 
 // Local Notifications plugin instance
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -26,6 +28,12 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+  
+  // Initialize Analytics Service
+  AnalyticsService.initialize();
 
   // Initialize Hive
   await Hive.initFlutter();

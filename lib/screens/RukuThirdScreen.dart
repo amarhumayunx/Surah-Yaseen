@@ -67,6 +67,7 @@ class _RukuFirstScreenState extends State<RukuThirdScreen> {
                   RukuQuoteSection(translationKey: 'text_under_card_ruku3'),
                   SizedBox(height: 10),
                   RukuButtonsUnderText(
+                    rukuNumber: 3,
                     readScreen: const RukuThirdReadScreen(),
                     listenAudioScreen: const ListenAudioRukuThirdScreen(),
                     listenAudioWithTranslationScreen: const ListenAudioWithTranslationRukuThird(),

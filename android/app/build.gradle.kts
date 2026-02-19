@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services")
 }
 
 
@@ -17,7 +18,7 @@ val keystorePropertiesAvailable = keystorePropertiesFile.exists().also {
 }
 
 android {
-    namespace = "com.surahyaseen.companion"
+    namespace = "com.amarhumayun.surahyaseen"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -31,11 +32,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.surahyaseen.companion"
+        applicationId = "com.amarhumayun.surahyaseen"
         minSdk = flutter.minSdkVersion
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.0"
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
 
     signingConfigs {
@@ -77,6 +78,12 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.10.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4") // Correct Kotlin DSL syntax
+    
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
+    
+    // Firebase Analytics
+    implementation("com.google.firebase:firebase-analytics")
 }
 
 flutter {

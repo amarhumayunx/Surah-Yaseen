@@ -7,27 +7,47 @@ class ExitDialog extends StatelessWidget {
   const ExitDialog({super.key});
 
   Future<bool> showExitDialog(BuildContext context) async {
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 360;
+    final dialogWidth = screenSize.width * 0.85;
+    final dialogMaxWidth = 400.0;
+    final padding = isSmallScreen ? 16.0 : 20.0;
+    final iconSize = isSmallScreen ? 32.0 : 40.0;
+    final titleFontSize = isSmallScreen ? 18.0 : 20.0;
+    final buttonFontSize = isSmallScreen ? 14.0 : 16.0;
+    final spacing1 = isSmallScreen ? 12.0 : 15.0;
+    final spacing2 = isSmallScreen ? 20.0 : 25.0;
+    final buttonPadding = isSmallScreen ? 10.0 : 12.0;
+    final buttonSpacing = isSmallScreen ? 12.0 : 15.0;
+
     return await showDialog<bool>(
       context: context,
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: AppColors.lightColorapp,
         child: Container(
-          padding: const EdgeInsets.all(20),
-          width: 280,
-          height: 200,
+          constraints: BoxConstraints(
+            maxWidth: dialogMaxWidth,
+            maxHeight: screenSize.height * 0.5,
+          ),
+          padding: EdgeInsets.all(padding),
+          width: dialogWidth.clamp(280.0, dialogMaxWidth),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.exit_to_app, size: 40, color: AppColors.PrimaryColor),
-              const SizedBox(height: 15),
-              Text('exit_dialog_title'.tr,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: GoogleFonts.merriweather().fontFamily,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.PrimaryColor)),
-              const SizedBox(height: 25),
+              Icon(Icons.exit_to_app, size: iconSize, color: AppColors.PrimaryColor),
+              SizedBox(height: spacing1),
+              Flexible(
+                child: Text('exit_dialog_title'.tr,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: titleFontSize,
+                        fontFamily: GoogleFonts.merriweather().fontFamily,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.PrimaryColor)),
+              ),
+              SizedBox(height: spacing2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -39,15 +59,15 @@ class ExitDialog extends StatelessWidget {
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: buttonPadding),
                       ),
                       child: Text('yes'.tr,
-                          style: TextStyle(fontSize: 16,
+                          style: TextStyle(fontSize: buttonFontSize,
                               fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontWeight: FontWeight.bold)),
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  SizedBox(width: buttonSpacing),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(false),
@@ -56,10 +76,10 @@ class ExitDialog extends StatelessWidget {
                         side: BorderSide(color: AppColors.colorone),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: buttonPadding),
                       ),
                       child: Text('no'.tr,
-                          style: TextStyle(fontSize: 16,
+                          style: TextStyle(fontSize: buttonFontSize,
                               fontFamily: GoogleFonts.merriweather().fontFamily,
                               fontWeight: FontWeight.bold)),
                     ),

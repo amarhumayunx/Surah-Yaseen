@@ -135,8 +135,14 @@ class _VersePageContainerState extends State<VersePageContainerRukuSecond> {
                 // Main container
                 Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    height: MediaQuery.of(context).size.height * 0.78,
+                    width: (MediaQuery.of(context).size.width * 0.9).clamp(300.0, MediaQuery.of(context).size.width * 0.95),
+                    height: (MediaQuery.of(context).size.height * 0.85).clamp(400.0, MediaQuery.of(context).size.height * 0.9),
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.95,
+                      maxHeight: MediaQuery.of(context).size.height * 0.9,
+                      minWidth: 300.0,
+                      minHeight: 400.0,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(25),
@@ -165,7 +171,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuSecond> {
                             '${'ruku_line_bookmark'.tr} ${widget.rukuNumber}',
                             style: GoogleFonts.merriweather(
                               color: AppColors.PrimaryColor,
-                              fontSize: 28,
+                              fontSize: MediaQuery.of(context).size.width < 360 ? 22 : 28,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
