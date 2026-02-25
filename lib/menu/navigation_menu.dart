@@ -82,14 +82,16 @@ class _NavigationMenuState extends State<NavigationMenu> {
     final mediaQuery = MediaQuery.of(context);
     final safeAreaBottom = mediaQuery.padding.bottom;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) return;
         final navigationController = Get.find<NavigationController>();
 
         // If not on home screen (index 0), navigate to home screen
         if (navigationController.selected.value != 0) {
           navigationController.selected.value = 0;
-          return false; // Prevent default back action
+          return;
         }
 
         // On home screen - handle double back press
@@ -99,14 +101,10 @@ class _NavigationMenuState extends State<NavigationMenu> {
             now.difference(_lastBackPressTime!) < const Duration(seconds: 2);
 
         if (shouldExit) {
-          // Exit the app
           SystemNavigator.pop();
-          return false;
         } else {
-          // Show snackbar and update last back press time
           _lastBackPressTime = now;
           ExitSnackBar.show();
-          return false; // Prevent default back action
         }
       },
       child: Scaffold(
@@ -163,7 +161,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         borderRadius: BorderRadius.circular(50),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 12,
             spreadRadius: 2,
             offset: const Offset(0, 8),

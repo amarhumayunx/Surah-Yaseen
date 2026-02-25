@@ -2,6 +2,10 @@
 class AppConstants {
   AppConstants._();
 
+  /// Bottom padding to prevent content from being hidden behind banner ads.
+  /// Banner ad height (~50-60px) + SafeArea bottom (~16-34px).
+  static const double bannerAdBottomPadding = 55;
+
   /// Google Play Store URL for this app
   static const String playStoreUrl =
       'https://play.google.com/store/apps/details?id=com.amarhumayun.surahyaseen';

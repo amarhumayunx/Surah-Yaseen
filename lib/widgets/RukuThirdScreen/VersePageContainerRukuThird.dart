@@ -113,7 +113,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                   right: Directionality.of(context) == TextDirection.rtl ? 30 : null,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(dialogContext).pop();
+                      Get.back();
                       widget.onToggleFullScreen();
                     },
                     child: Container(
@@ -146,7 +146,7 @@ class _VersePageContainerState extends State<VersePageContainerRukuThird> {
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           spreadRadius: 1,
                           blurRadius: 10,
                         ),

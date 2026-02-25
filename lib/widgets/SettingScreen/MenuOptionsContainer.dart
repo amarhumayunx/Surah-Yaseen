@@ -34,7 +34,7 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
           border: Border.all(color: AppColors.BarColor, width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withValues(alpha: 0.3),
               spreadRadius: 2,
               blurRadius: 5,
               offset: Offset(0, 3),
@@ -87,9 +87,12 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
         if (onAction != null) {
           onAction(); // Trigger the action directly if it's provided (Rate Us or Share)
         } else if (screen != null) {
-          // Navigate to the screen if no action is provided with custom animation
+          // Navigate with GetX - wrap in background to prevent black flash during transition
           Get.to(
-            () => screen,
+            () => Material(
+              color: AppColors.lightColorSec,
+              child: screen,
+            ),
             transition: Transition.rightToLeft,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -119,7 +122,10 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
   // Function for Privacy Policy - opens in custom WebView with floating back button
   void onPrivacyPolicy() {
     Get.to(
-      () => PrivacyPolicyWebViewScreen(url: AppConstants.privacyPolicyUrl),
+      () => Material(
+        color: AppColors.lightColorSec,
+        child: PrivacyPolicyWebViewScreen(url: AppConstants.privacyPolicyUrl),
+      ),
       transition: Transition.rightToLeft,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -147,7 +153,7 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
         content: Text('Could not open the Play Store.'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(ctx),
+            onPressed: () => Get.back(),
             child: Text('Close'),
           ),
         ],

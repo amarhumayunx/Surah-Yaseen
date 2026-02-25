@@ -87,7 +87,7 @@ class _RukuAudioPlayerWithTranslationState
 
   Future<void> _initTts() async {
     try {
-      print("Initializing Flutter TTS engine...");
+      debugPrint("Initializing Flutter TTS engine...");
 
       // Set up TTS parameters
       await flutterTts.setVolume(volume);
@@ -110,13 +110,13 @@ class _RukuAudioPlayerWithTranslationState
       if (arabicAvailable) {
         arabicLanguage = await languageManager!.getBestArabicLanguage();
         if (arabicLanguage != null) {
-          print("Setting Arabic language to: $arabicLanguage");
+          debugPrint("Setting Arabic language to: $arabicLanguage");
           hasArabicLanguageSupport = true;
         } else {
           hasArabicLanguageSupport = false;
         }
       } else {
-        print("Arabic not found");
+        debugPrint("Arabic not found");
         hasArabicLanguageSupport = false;
       }
 
@@ -124,7 +124,7 @@ class _RukuAudioPlayerWithTranslationState
       if (englishAvailable) {
         englishLanguage = await languageManager!.getBestEnglishLanguage();
         if (englishLanguage != null) {
-          print("Setting English language to: $englishLanguage");
+          debugPrint("Setting English language to: $englishLanguage");
           hasEnglishLanguageSupport = true;
         } else {
           hasEnglishLanguageSupport = false;
@@ -133,14 +133,14 @@ class _RukuAudioPlayerWithTranslationState
         // Use default language if English not available
         var languages = await flutterTts.getLanguages;
         englishLanguage = languages.isNotEmpty ? languages.first.toString() : null;
-        print("English not found specifically, using default language: $englishLanguage");
+        debugPrint("English not found specifically, using default language: $englishLanguage");
         hasEnglishLanguageSupport = englishLanguage != null;
       }
 
       // Configure TTS event handlers
       flutterTts.setStartHandler(() {
         setState(() {
-          print("TTS started speaking");
+          debugPrint("TTS started speaking");
           ttsState = TtsState.playing;
           isSpeaking = true;
           isProcessing = false;
@@ -149,7 +149,7 @@ class _RukuAudioPlayerWithTranslationState
       });
 
       flutterTts.setCompletionHandler(() {
-        print("TTS completed speaking content for verse $currentVerseIndex, type: $currentContentType");
+        debugPrint("TTS completed speaking content for verse $currentVerseIndex, type: $currentContentType");
 
         // Don't reset isSpeaking flag yet
         setState(() {
@@ -162,7 +162,7 @@ class _RukuAudioPlayerWithTranslationState
 
       flutterTts.setErrorHandler((msg) {
         setState(() {
-          print("TTS error: $msg");
+          debugPrint("TTS error: $msg");
           ttsState = TtsState.stopped;
           isSpeaking = false;
           isProcessing = false;
@@ -194,7 +194,7 @@ class _RukuAudioPlayerWithTranslationState
 
       flutterTts.setCancelHandler(() {
         setState(() {
-          print("TTS cancelled");
+          debugPrint("TTS cancelled");
           ttsState = TtsState.stopped;
           isSpeaking = false;
           isProcessing = false;
@@ -203,7 +203,7 @@ class _RukuAudioPlayerWithTranslationState
 
       flutterTts.setPauseHandler(() {
         setState(() {
-          print("TTS paused");
+          debugPrint("TTS paused");
           ttsState = TtsState.paused;
           isSpeaking = false;
         });
@@ -211,7 +211,7 @@ class _RukuAudioPlayerWithTranslationState
 
       flutterTts.setContinueHandler(() {
         setState(() {
-          print("TTS continued");
+          debugPrint("TTS continued");
           ttsState = TtsState.continued;
           isSpeaking = true;
         });
@@ -227,9 +227,9 @@ class _RukuAudioPlayerWithTranslationState
         isTtsInitialized = true;
       });
 
-      print("TTS initialization complete!");
+      debugPrint("TTS initialization complete!");
     } catch (e) {
-      print("Error initializing TTS: $e");
+      debugPrint("Error initializing TTS: $e");
       setState(() {
         isTtsInitialized = false;
         hasArabicLanguageSupport = false;
@@ -240,11 +240,11 @@ class _RukuAudioPlayerWithTranslationState
   }
 
   void _initVerses() {
-    print("Initializing verses from map with ${widget.verses.length} entries");
+    debugPrint("Initializing verses from map with ${widget.verses.length} entries");
 
     // Guard against empty verses map
     if (widget.verses.isEmpty) {
-      print("WARNING: Empty verses map provided!");
+      debugPrint("WARNING: Empty verses map provided!");
       verseKeys = [];
       arabicVerseTexts = [];
       return;
@@ -252,11 +252,11 @@ class _RukuAudioPlayerWithTranslationState
 
     // Get all verse keys and sort them
     verseKeys = widget.verses.keys.toList();
-    print("Raw verse keys: $verseKeys");
+    debugPrint("Raw verse keys: $verseKeys");
 
     // Sort keys based on verse number
     verseKeys.sort();
-    print("Sorted verse keys: $verseKeys");
+    debugPrint("Sorted verse keys: $verseKeys");
 
     // Get the verse texts in order
     arabicVerseTexts = verseKeys.map((key) => widget.verses[key]!).toList();
@@ -264,7 +264,7 @@ class _RukuAudioPlayerWithTranslationState
     // Validate verse texts aren't empty
     bool hasEmptyVerses = arabicVerseTexts.any((verse) => verse.trim().isEmpty);
     if (hasEmptyVerses) {
-      print("WARNING: Some verses have empty text!");
+      debugPrint("WARNING: Some verses have empty text!");
     }
 
     // Set starting verse based on widget parameter
@@ -275,7 +275,7 @@ class _RukuAudioPlayerWithTranslationState
     if (endVerse >= verseKeys.length) {
       endVerse = verseKeys.length - 1;
     }
-    print("Ending verse index: $endVerse");
+    debugPrint("Ending verse index: $endVerse");
 
     // Keep only the verses within the range
     if (widget.startVerse > 0 || widget.endVerse >= 0) {
@@ -288,11 +288,11 @@ class _RukuAudioPlayerWithTranslationState
           widget.startVerse,
           min(endVerse + 1, arabicVerseTexts.length),
         );
-        print(
+        debugPrint(
           "Filtered to ${verseKeys.length} verses from index ${widget.startVerse} to $endVerse",
         );
       } else {
-        print(
+        debugPrint(
           "WARNING: Start verse index ${widget.startVerse} is out of bounds!",
         );
       }
@@ -300,7 +300,7 @@ class _RukuAudioPlayerWithTranslationState
 
     // Print the actual verses for debugging
     for (int i = 0; i < arabicVerseTexts.length; i++) {
-      print(
+      debugPrint(
         "Verse $i: ${arabicVerseTexts[i].substring(0, min(30, arabicVerseTexts[i].length))}...",
       );
     }
@@ -323,9 +323,9 @@ class _RukuAudioPlayerWithTranslationState
         String translation = AppStrings.yasinSurahStrings.versesEnglish[translationKey] ?? "Translation not available";
 
         englishTranslations[i] = translation;
-        print("Loaded translation for verse $verseKey: ${englishTranslations[i].substring(0, min(30, englishTranslations[i].length))}...");
+        debugPrint("Loaded translation for verse $verseKey: ${englishTranslations[i].substring(0, min(30, englishTranslations[i].length))}...");
       } catch (e) {
-        print("Error loading translation for verse_$verseKey: $e");
+        debugPrint("Error loading translation for verse_$verseKey: $e");
         englishTranslations[i] = "Translation not available";
       }
     }
@@ -364,7 +364,7 @@ class _RukuAudioPlayerWithTranslationState
 
     // Set the total duration (for both Arabic and English)
     totalDuration = max(10.0, totalEstimatedDuration);
-    print("Total estimated duration (all verses + translations): $totalDuration seconds");
+    debugPrint("Total estimated duration (all verses + translations): $totalDuration seconds");
   }
 
   void _startProgressTimer() {
@@ -464,106 +464,58 @@ class _RukuAudioPlayerWithTranslationState
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      // Pause TTS when app is in background
       flutterTts.pause();
+    } else if (state == AppLifecycleState.resumed && !hasArabicLanguageSupport) {
+      _recheckArabicAfterReturn();
+    }
+  }
+
+  Future<void> _recheckArabicAfterReturn() async {
+    if (languageManager == null) return;
+    bool available = await languageManager!.isArabicAvailable();
+    if (available && mounted) {
+      arabicLanguage = await languageManager!.getBestArabicLanguage();
+      if (arabicLanguage != null) {
+        await flutterTts.setLanguage(arabicLanguage!);
+        setState(() {
+          hasArabicLanguageSupport = true;
+          isTtsInitialized = true;
+        });
+        debugPrint("Arabic now available after returning from settings: $arabicLanguage");
+      }
     }
   }
 
   Future<void> troubleshootTTS() async {
     try {
-      print("=== TTS TROUBLESHOOTING ===");
+      debugPrint("=== TTS TROUBLESHOOTING ===");
+      debugPrint("TTS initialized: $isTtsInitialized");
+      debugPrint("Arabic language: $arabicLanguage");
+      debugPrint("English language: $englishLanguage");
 
-      // Check if TTS is initialized
-      print("TTS initialized: $isTtsInitialized");
+      if (languageManager != null && mounted) {
+        await languageManager!.showTroubleshootDialog(
+          context,
+          isTtsInitialized: isTtsInitialized,
+          hasLanguageSupport: hasArabicLanguageSupport,
+          currentLanguage: arabicLanguage ?? englishLanguage,
+        );
+      }
 
-      // Check available languages
-      var languages = await flutterTts.getLanguages;
-      print("Available languages: $languages");
-
-      // Check available voices
-      var voices = await flutterTts.getVoices;
-      print("Available voices: $voices");
-
-      // Check engine
-      var engine = await flutterTts.getDefaultEngine;
-      print("Default engine: $engine");
-
-      // Get current languages
-      print("Arabic language: $arabicLanguage");
-      print("English language: $englishLanguage");
-
-      // Show troubleshooting dialog to user
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("TTS Troubleshooting"),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("TTS Engine: $engine"),
-                Text("Arabic Language: $arabicLanguage"),
-                Text("English Language: $englishLanguage"),
-                Text("Arabic Support: $hasArabicLanguageSupport"),
-                Text("English Support: $hasEnglishLanguageSupport"),
-                SizedBox(height: 10),
-                Text("Available Languages:"),
-                Text(languages.join(", "), style: TextStyle(fontSize: 12)),
-                SizedBox(height: 10),
-                Text(
-                  "If Arabic is not available, please install Arabic language pack in your device's text-to-speech settings.",
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                // Test with simple Arabic text before closing
-                if (hasArabicLanguageSupport) {
-                  await flutterTts.setLanguage(arabicLanguage!);
-                  await flutterTts.speak("بسم الله الرحمن الرحيم");
-                }
-                Navigator.of(context).pop();
-              },
-              child: Text("Test Arabic"),
-            ),
-            TextButton(
-              onPressed: () async {
-                // Test with simple English text
-                if (hasEnglishLanguageSupport) {
-                  await flutterTts.setLanguage(englishLanguage!);
-                  await flutterTts.speak("In the name of Allah, the Most Compassionate, the Most Merciful");
-                }
-                Navigator.of(context).pop();
-              },
-              child: Text("Test English"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Close"),
-            ),
-          ],
-        ),
-      );
-
-      print("=== END TROUBLESHOOTING ===");
+      debugPrint("=== END TROUBLESHOOTING ===");
     } catch (e) {
-      print("Error during troubleshooting: $e");
+      debugPrint("Error during troubleshooting: $e");
     }
   }
 
   void _handlePlayPause() {
     if (isProcessing) {
-      print("TTS is currently processing, please wait");
+      debugPrint("TTS is currently processing, please wait");
       return;
     }
 
     if (!isTtsInitialized) {
-      print("TTS not initialized, cannot play/pause");
+      debugPrint("TTS not initialized, cannot play/pause");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -576,7 +528,7 @@ class _RukuAudioPlayerWithTranslationState
     }
 
     if (arabicVerseTexts.isEmpty) {
-      print("No verses to play");
+      debugPrint("No verses to play");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("No verses available to play."),
@@ -586,20 +538,20 @@ class _RukuAudioPlayerWithTranslationState
       return;
     }
 
-    print("Play button pressed. Current state: $ttsState");
+    debugPrint("Play button pressed. Current state: $ttsState");
 
     setState(() {
       isProcessing = true;
     });
 
     if (ttsState == TtsState.playing) {
-      print("Pausing playback");
+      debugPrint("Pausing playback");
       _pause();
     } else if (ttsState == TtsState.paused) {
-      print("Resuming playback");
+      debugPrint("Resuming playback");
       _resume();
     } else {
-      print("Starting playback from beginning");
+      debugPrint("Starting playback from beginning");
       // Track audio play event
       if (widget.rukuNumber != null) {
         AnalyticsService.logAudioPlay(rukuNumber: widget.rukuNumber!);
@@ -652,7 +604,7 @@ class _RukuAudioPlayerWithTranslationState
   }
 
   Future<void> _speakFromStart() async {
-    print("Speaking from start");
+    debugPrint("Speaking from start");
 
     // Reset verse index and content type
     setState(() {
@@ -671,7 +623,7 @@ class _RukuAudioPlayerWithTranslationState
 
   Future<void> _speakCurrentContent() async {
     if (!isTtsInitialized) {
-      print("TTS not initialized, cannot speak");
+      debugPrint("TTS not initialized, cannot speak");
       setState(() {
         isProcessing = false;
       });
@@ -685,16 +637,16 @@ class _RukuAudioPlayerWithTranslationState
       // Speaking Arabic verse
       textToSpeak = arabicVerseTexts[currentVerseIndex];
       languageToUse = arabicLanguage;
-      print("Speaking Arabic verse $currentVerseIndex: ${textToSpeak.substring(0, min(20, textToSpeak.length))}...");
+      debugPrint("Speaking Arabic verse $currentVerseIndex: ${textToSpeak.substring(0, min(20, textToSpeak.length))}...");
     } else {
       // Speaking English translation
       textToSpeak = englishTranslations[currentVerseIndex];
       languageToUse = englishLanguage;
-      print("Speaking English translation $currentVerseIndex: ${textToSpeak.substring(0, min(20, textToSpeak.length))}...");
+      debugPrint("Speaking English translation $currentVerseIndex: ${textToSpeak.substring(0, min(20, textToSpeak.length))}...");
     }
 
     if (textToSpeak.trim().isEmpty) {
-      print("WARNING: Empty text, skipping...");
+      debugPrint("WARNING: Empty text, skipping...");
       _handleContentCompletion(); // Skip to next content
       return;
     }
@@ -703,7 +655,7 @@ class _RukuAudioPlayerWithTranslationState
     if (languageToUse != null) {
       await flutterTts.setLanguage(languageToUse);
     } else {
-      print("WARNING: No language available for ${currentContentType.toString()}, using default");
+      debugPrint("WARNING: No language available for ${currentContentType.toString()}, using default");
     }
 
     // Start progress timer before speaking
@@ -719,10 +671,10 @@ class _RukuAudioPlayerWithTranslationState
 
     // Actually speak the text
     var result = await flutterTts.speak(textToSpeak);
-    print("Speak result: $result");
+    debugPrint("Speak result: $result");
 
     if (result != 1) {
-      print("Failed to speak, error code: $result");
+      debugPrint("Failed to speak, error code: $result");
       setState(() {
         isProcessing = false;
         ttsState = TtsState.stopped;
@@ -734,7 +686,7 @@ class _RukuAudioPlayerWithTranslationState
 
   Future<void> _pause() async {
     var result = await flutterTts.pause();
-    print("Pause result: $result");
+    debugPrint("Pause result: $result");
     // Track audio pause event
     if (widget.rukuNumber != null) {
       AnalyticsService.logAudioPause(rukuNumber: widget.rukuNumber!);
@@ -761,7 +713,7 @@ class _RukuAudioPlayerWithTranslationState
         : englishTranslations[currentVerseIndex];
 
     var result = await flutterTts.speak(textToSpeak);
-    print("Resume result: $result");
+    debugPrint("Resume result: $result");
 
     setState(() {
       isProcessing = false;
@@ -770,7 +722,7 @@ class _RukuAudioPlayerWithTranslationState
 
   Future<void> _stop() async {
     var result = await flutterTts.stop();
-    print("Stop result: $result");
+    debugPrint("Stop result: $result");
     _stopProgressTimer();
 
     // Notify parent about resetting to the first verse
@@ -1110,11 +1062,15 @@ class _RukuAudioPlayerWithTranslationState
         if (showTroubleshooting)
           Padding(
             padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            child: TextButton(
+            child: TextButton.icon(
               onPressed: troubleshootTTS,
-              child: Text(
+              icon: Icon(Icons.build_circle_rounded, size: 16, color: AppColors.colorone),
+              label: Text(
                 "Troubleshoot TTS Engine",
-                style: TextStyle(fontSize: isSmallScreen ? 12.0 : 14.0),
+                style: TextStyle(
+                  fontSize: isSmallScreen ? 12.0 : 14.0,
+                  color: AppColors.colorone,
+                ),
               ),
             ),
           ),

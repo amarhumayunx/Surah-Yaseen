@@ -13,7 +13,7 @@ class DividerBar extends StatelessWidget {
       height: 2,
       width: barWidth,
       color: AppColors.BarColor,
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 10),
     );
   }
 }

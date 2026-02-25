@@ -42,14 +42,19 @@ class OnboardingPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: height * 0.01),
-          Text(
-            desc,
-            style: TextStyle(
-              fontSize: height * 0.02,
-              fontFamily: GoogleFonts.merriweather().fontFamily,
-              color: AppColors.darkgreenColor,
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Text(
+                desc,
+                style: TextStyle(
+                  fontSize: height * 0.02,
+                  fontFamily: GoogleFonts.merriweather().fontFamily,
+                  color: AppColors.darkgreenColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

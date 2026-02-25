@@ -109,7 +109,7 @@ class FilterRow extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Get.back(),
             child: Text(
               'cancel'.tr,
               style: TextStyle(color: AppColors.PrimaryColor),
@@ -124,7 +124,7 @@ class FilterRow extends StatelessWidget {
             ),
             onPressed: () {
               onSearch(searchController.text);
-              Navigator.pop(context);
+              Get.back();
             },
             child: Text('search'.tr, style: TextStyle(color: Colors.white)),
           ),
@@ -169,7 +169,7 @@ class FilterRow extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
+                  Get.back();
                   onShowDeleteMode();
                 },
               ),

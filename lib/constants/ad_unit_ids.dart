@@ -2,6 +2,7 @@
 ///
 /// App ID: ca-app-pub-3425673808153409~2012844185
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 /// Enum to identify different screens for ad placement
 enum AdScreenType {
@@ -27,6 +28,51 @@ class AdUnitIds {
   static const String testBannerAndroid =
       'ca-app-pub-3940256099942544/6300978111';
   static const String testBannerIOS = 'ca-app-pub-3940256099942544/2934735716';
+
+  // Test Native Ad unit IDs (used in debug mode for native-style layout)
+  static const String testNativeAdAndroid =
+      'ca-app-pub-3940256099942544/2247696110';
+  static const String testNativeAdIOS =
+      'ca-app-pub-3940256099942544/3985874917';
+
+  // Production Native Ad unit IDs - replace with your AdMob Native ad unit IDs
+  // Create "Native" format ad units in AdMob console, then paste IDs here
+  /// Native Advanced ad unit for Home screen (from AdMob)
+  static const String nativeAdHome = 'ca-app-pub-3425673808153409/9670363343';
+  static const String nativeAdBookmark =
+      'ca-app-pub-3425673808153409/8357281673';
+  static const String nativeAdAbout = 'ca-app-pub-3425673808153409/7510599288';
+  static const String nativeAdNotification =
+      'ca-app-pub-3425673808153409/2095125653';
+  static const String nativeAdRukuList =
+      'ca-app-pub-3425673808153409/7044200001';
+  static const String nativeAdRukuFirstRead =
+      'ca-app-pub-3425673808153409/7051434281';
+  static const String nativeAdRukuSecondRead =
+      'ca-app-pub-3425673808153409/6197517615';
+  static const String nativeAdRukuThirdRead =
+      'ca-app-pub-3425673808153409/1149563856';
+  static const String nativeAdRukuFourthRead =
+      'ca-app-pub-3425673808153409/8836482183';
+  static const String nativeAdRukuFifthRead =
+      'ca-app-pub-3425673808153409/9725699082';
+  static const String nativeAdRukuFirst =
+      'ca-app-pub-3425673808153409/8412617411';
+  static const String nativeAdRukuSecond =
+      'ca-app-pub-3425673808153409/9179408758';
+  static const String nativeAdRukuThird =
+      'ca-app-pub-3425673808153409/2258272606';
+  static const String nativeAdRukuFourth =
+      'ca-app-pub-3425673808153409/9945190938';
+  static const String nativeAdRukuFifth =
+      'ca-app-pub-3425673808153409/5240163742';
+  static const String nativeAdSettings =
+      'ca-app-pub-3425673808153409/3104954992';
+  static const String nativeAdHelp = 'ca-app-pub-3425673808153409/7523400512';
+  static const String nativeAdPrivacyPolicy =
+      'ca-app-pub-3425673808153409/6724131222';
+  static const String nativeAdLanguage =
+      'ca-app-pub-3425673808153409/6210318843';
 
   // Production ad unit IDs for different screens (Android)
   static const String homeScreenBanner =
@@ -94,7 +140,7 @@ class AdUnitIds {
 
   // ========== iOS Production Banner Ad Unit IDs ==========
   // AdMob Console se iOS IDs copy karein aur yahan paste karein
-  
+
   // Main screens - iOS IDs
   static const String homeScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
@@ -105,23 +151,28 @@ class AdUnitIds {
   static const String rukuFirstScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFirstReadScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFirstAudioScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
-  static const String rukuFirstAudioWithTranslationScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
+  static const String rukuFirstAudioWithTranslationScreenBannerIOS =
+      'ca-app-pub-XXXXX/XXXXX';
   static const String rukuSecondScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuSecondReadScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuSecondAudioScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
-  static const String rukuSecondAudioWithTranslationScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
+  static const String rukuSecondAudioWithTranslationScreenBannerIOS =
+      'ca-app-pub-XXXXX/XXXXX';
   static const String rukuThirdScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuThirdReadScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuThirdAudioScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
-  static const String rukuThirdAudioWithTranslationScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
+  static const String rukuThirdAudioWithTranslationScreenBannerIOS =
+      'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFourthScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFourthReadScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFourthAudioScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
-  static const String rukuFourthAudioWithTranslationScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
+  static const String rukuFourthAudioWithTranslationScreenBannerIOS =
+      'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFifthScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFifthReadScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
   static const String rukuFifthAudioScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
-  static const String rukuFifthAudioWithTranslationScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
+  static const String rukuFifthAudioWithTranslationScreenBannerIOS =
+      'ca-app-pub-XXXXX/XXXXX';
 
   // Other screens - iOS IDs
   static const String aboutScreenBannerIOS = 'ca-app-pub-XXXXX/XXXXX';
@@ -137,8 +188,10 @@ class AdUnitIds {
       'ca-app-pub-3940256099942544/5575463023';
 
   // Production App Open Ad Unit IDs
-  static const String appOpenAd = 'ca-app-pub-3425673808153409/6355413874'; // Android
-  static const String appOpenAdIOS = 'ca-app-pub-XXXXX/XXXXX'; // iOS - AdMob se ID add karein
+  static const String appOpenAd =
+      'ca-app-pub-3425673808153409/6355413874'; // Android
+  static const String appOpenAdIOS =
+      'ca-app-pub-XXXXX/XXXXX'; // iOS - AdMob se ID add karein
 
   // Test Interstitial Ad Unit IDs (official Google test IDs from documentation)
   static const String testInterstitialAdAndroid =
@@ -147,8 +200,10 @@ class AdUnitIds {
       'ca-app-pub-3940256099942544/4411468910';
 
   // Production Interstitial Ad Unit IDs
-  static const String interstitialAd = 'ca-app-pub-3425673808153409/3872543153'; // Android
-  static const String interstitialAdIOS = 'ca-app-pub-XXXXX/XXXXX'; // iOS - AdMob se ID add karein
+  static const String interstitialAd =
+      'ca-app-pub-3425673808153409/3872543153'; // Android
+  static const String interstitialAdIOS =
+      'ca-app-pub-XXXXX/XXXXX'; // iOS - AdMob se ID add karein
 
   /// Get ad unit ID for a specific screen type (Android)
   /// Returns the appropriate ad unit ID based on the screen type
@@ -183,6 +238,55 @@ class AdUnitIds {
       case AdScreenType.privacyPolicy:
         return privacyPolicyScreenBanner;
     }
+  }
+
+  /// Get Native ad unit ID for a specific screen type (for native-style ad layout).
+  /// Returns test ID in debug; in release, returns the constant (replace XXXXX with your Native ad unit IDs from AdMob).
+  static String? getNativeAdUnitId(AdScreenType screenType) {
+    if (Platform.isIOS) {
+      return kDebugMode ? testNativeAdIOS : _nativeAdIdIOS(screenType);
+    }
+    return kDebugMode ? testNativeAdAndroid : _nativeAdIdAndroid(screenType);
+  }
+
+  static String? _nativeAdIdAndroid(AdScreenType screenType) {
+    switch (screenType) {
+      case AdScreenType.home:
+        return nativeAdHome;
+      case AdScreenType.bookmark:
+        return nativeAdBookmark;
+      case AdScreenType.about:
+        return nativeAdAbout;
+      case AdScreenType.notification:
+        return nativeAdNotification;
+      case AdScreenType.ruku:
+        return nativeAdRukuList;
+      case AdScreenType.rukuFirst:
+        return nativeAdRukuFirst;
+      case AdScreenType.rukuSecond:
+        return nativeAdRukuSecond;
+      case AdScreenType.rukuThird:
+        return nativeAdRukuThird;
+      case AdScreenType.rukuFourth:
+        return nativeAdRukuFourth;
+      case AdScreenType.rukuFifth:
+        return nativeAdRukuFifth;
+      case AdScreenType.settings:
+        return nativeAdSettings;
+      case AdScreenType.help:
+        return nativeAdHelp;
+      case AdScreenType.privacyPolicy:
+        return nativeAdPrivacyPolicy;
+      case AdScreenType.language:
+        return nativeAdLanguage;
+      default:
+        return nativeAdHome;
+    }
+  }
+
+  static String? _nativeAdIdIOS(AdScreenType screenType) {
+    // Use same as Android when you add iOS native ad unit IDs
+    return _nativeAdIdAndroid(screenType);
   }
 
   /// Get ad unit ID for a specific screen type based on platform

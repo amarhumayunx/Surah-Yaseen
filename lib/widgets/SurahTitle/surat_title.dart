@@ -11,7 +11,8 @@ class SurahTitle extends StatelessWidget {
 
     // Dynamic font sizes based on screen width
     final double fontSizeTitle = screenWidth * 0.08; // ~32 on a 400px screen
-    final double fontSizeSubtitle = screenWidth * 0.045; // ~18 on a 400px screen
+    final double fontSizeSubtitle =
+        screenWidth * 0.045; // ~18 on a 400px screen
 
     return Column(
       children: [
@@ -32,9 +33,6 @@ class SurahTitle extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-
-
-
       ],
     );
   }

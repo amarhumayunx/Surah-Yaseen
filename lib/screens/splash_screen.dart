@@ -81,8 +81,9 @@ class _SurahYaseenSplashScreenState extends State<SurahYaseenSplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.PrimaryColor,
-      body: Center(
-        child: Column(
+      body: SafeArea(
+        child: Center(
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ClipRRect(
@@ -120,6 +121,7 @@ class _SurahYaseenSplashScreenState extends State<SurahYaseenSplashScreen> {
               ),
             )
           ],
+        ),
         ),
       ),
     );

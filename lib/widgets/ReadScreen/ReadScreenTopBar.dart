@@ -20,9 +20,7 @@ class TopBarReadScreen extends StatelessWidget {
               AppAssets.backarrow,
               fit: iconFit,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Get.back(),
           ),
         ),
         Expanded(

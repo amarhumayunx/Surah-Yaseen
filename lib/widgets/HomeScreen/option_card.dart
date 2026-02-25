@@ -32,7 +32,7 @@ class OptionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 5,
             offset: const Offset(0, 1.5),
             spreadRadius: 0.2,
@@ -53,36 +53,30 @@ class OptionCard extends StatelessWidget {
               fit: BoxFit.fill,
             ),
 
-            // Content
+            // Content - FittedBox scales down when content would overflow (no ScrollView)
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center, // Center content horizontally
-                children: [
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.HeadingColor,
-                      fontFamily: GoogleFonts.merriweather().fontFamily,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    subtitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.PrimaryColor,
-                      fontFamily: GoogleFonts.merriweather().fontFamily,
-                    ),
-                  ),
-                  if (verses.isNotEmpty)
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
                     Text(
-                      verses,
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.HeadingColor,
+                        fontFamily: GoogleFonts.merriweather().fontFamily,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      subtitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,
@@ -90,13 +84,24 @@ class OptionCard extends StatelessWidget {
                         fontFamily: GoogleFonts.merriweather().fontFamily,
                       ),
                     ),
-                  const SizedBox(height: 15),
-                  SvgPicture.asset(
-                    AppAssets.homescreenbutton,
-                    width: 40,
-                    height: 40,
-                  ),
-                ],
+                    if (verses.isNotEmpty)
+                      Text(
+                        verses,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.PrimaryColor,
+                          fontFamily: GoogleFonts.merriweather().fontFamily,
+                        ),
+                      ),
+                    const SizedBox(height: 15),
+                    SvgPicture.asset(
+                      AppAssets.homescreenbutton,
+                      width: 40,
+                      height: 40,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

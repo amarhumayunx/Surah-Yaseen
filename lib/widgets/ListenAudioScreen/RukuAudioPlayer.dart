@@ -79,7 +79,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
   Future<void> _initTts() async {
     try {
-      print("Initializing Flutter TTS engine...");
+      debugPrint("Initializing Flutter TTS engine...");
 
       // Set up TTS parameters
       await flutterTts.setVolume(volume);
@@ -101,7 +101,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
       if (arabicAvailable) {
         language = await languageManager!.getBestArabicLanguage();
         if (language != null) {
-          print("Setting language to: $language");
+          debugPrint("Setting language to: $language");
           await flutterTts.setLanguage(language!);
           hasLanguageSupport = true;
         } else {
@@ -111,7 +111,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
         // Use default language if Arabic not available
         var languages = await flutterTts.getLanguages;
         language = languages.isNotEmpty ? languages.first.toString() : null;
-        print("Arabic not found, using default language: $language");
+        debugPrint("Arabic not found, using default language: $language");
         if (language != null) {
           await flutterTts.setLanguage(language!);
         }
@@ -121,7 +121,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
       // Configure TTS event handlers
       flutterTts.setStartHandler(() {
         setState(() {
-          print("TTS started speaking");
+          debugPrint("TTS started speaking");
           ttsState = TtsState.playing;
           isSpeaking = true;
           isProcessing = false;
@@ -130,7 +130,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
       });
 
       flutterTts.setCompletionHandler(() {
-        print("TTS completed speaking verse $currentVerseIndex");
+        debugPrint("TTS completed speaking verse $currentVerseIndex");
 
         // Don't reset isSpeaking flag yet if moving to next verse
         bool isLastVerse = currentVerseIndex >= verseTexts.length - 1;
@@ -166,7 +166,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
       flutterTts.setErrorHandler((msg) {
         setState(() {
-          print("TTS error: $msg");
+          debugPrint("TTS error: $msg");
           ttsState = TtsState.stopped;
           isSpeaking = false;
           isProcessing = false;
@@ -198,7 +198,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
       flutterTts.setCancelHandler(() {
         setState(() {
-          print("TTS cancelled");
+          debugPrint("TTS cancelled");
           ttsState = TtsState.stopped;
           isSpeaking = false;
           isProcessing = false;
@@ -207,7 +207,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
       flutterTts.setPauseHandler(() {
         setState(() {
-          print("TTS paused");
+          debugPrint("TTS paused");
           ttsState = TtsState.paused;
           isSpeaking = false;
         });
@@ -215,7 +215,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
       flutterTts.setContinueHandler(() {
         setState(() {
-          print("TTS continued");
+          debugPrint("TTS continued");
           ttsState = TtsState.continued;
           isSpeaking = true;
         });
@@ -228,9 +228,9 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
         isTtsInitialized = true;
       });
 
-      print("TTS initialization complete!");
+      debugPrint("TTS initialization complete!");
     } catch (e) {
-      print("Error initializing TTS: $e");
+      debugPrint("Error initializing TTS: $e");
       setState(() {
         isTtsInitialized = false;
         hasLanguageSupport = false;
@@ -240,11 +240,11 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
   }
 
   void _initVerses() {
-    print("Initializing verses from map with ${widget.verses.length} entries");
+    debugPrint("Initializing verses from map with ${widget.verses.length} entries");
 
     // Guard against empty verses map
     if (widget.verses.isEmpty) {
-      print("WARNING: Empty verses map provided!");
+      debugPrint("WARNING: Empty verses map provided!");
       verseKeys = [];
       verseTexts = [];
       return;
@@ -252,11 +252,11 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
     // Get all verse keys and sort them
     verseKeys = widget.verses.keys.toList();
-    print("Raw verse keys: $verseKeys");
+    debugPrint("Raw verse keys: $verseKeys");
 
     // Sort keys based on verse number
     verseKeys.sort();
-    print("Sorted verse keys: $verseKeys");
+    debugPrint("Sorted verse keys: $verseKeys");
 
     // Get the verse texts in order
     verseTexts = verseKeys.map((key) => widget.verses[key]!).toList();
@@ -264,7 +264,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
     // Validate verse texts aren't empty
     bool hasEmptyVerses = verseTexts.any((verse) => verse.trim().isEmpty);
     if (hasEmptyVerses) {
-      print("WARNING: Some verses have empty text!");
+      debugPrint("WARNING: Some verses have empty text!");
     }
 
     // Set starting verse based on widget parameter
@@ -275,7 +275,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
     if (endVerse >= verseKeys.length) {
       endVerse = verseKeys.length - 1;
     }
-    print("Ending verse index: $endVerse");
+    debugPrint("Ending verse index: $endVerse");
 
     // Keep only the verses within the range
     if (widget.startVerse > 0 || widget.endVerse >= 0) {
@@ -288,11 +288,11 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
           widget.startVerse,
           min(endVerse + 1, verseTexts.length),
         );
-        print(
+        debugPrint(
           "Filtered to ${verseKeys.length} verses from index ${widget.startVerse} to $endVerse",
         );
       } else {
-        print(
+        debugPrint(
           "WARNING: Start verse index ${widget.startVerse} is out of bounds!",
         );
       }
@@ -300,7 +300,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
     // Print the actual verses for debugging
     for (int i = 0; i < verseTexts.length; i++) {
-      print(
+      debugPrint(
         "Verse $i: ${verseTexts[i].substring(0, min(30, verseTexts[i].length))}...",
       );
     }
@@ -334,7 +334,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
     // Set the total duration
     totalDuration = max(10.0, totalEstimatedDuration);
-    print("Total estimated duration: $totalDuration seconds");
+    debugPrint("Total estimated duration: $totalDuration seconds");
   }
 
   void _startProgressTimer() {
@@ -413,89 +413,57 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      // Pause TTS when app is in background
       flutterTts.pause();
+    } else if (state == AppLifecycleState.resumed && !hasLanguageSupport) {
+      _recheckArabicAfterReturn();
+    }
+  }
+
+  Future<void> _recheckArabicAfterReturn() async {
+    if (languageManager == null) return;
+    bool available = await languageManager!.isArabicAvailable();
+    if (available && mounted) {
+      language = await languageManager!.getBestArabicLanguage();
+      if (language != null) {
+        await flutterTts.setLanguage(language!);
+        setState(() {
+          hasLanguageSupport = true;
+          isTtsInitialized = true;
+        });
+        debugPrint("Arabic now available after returning from settings: $language");
+      }
     }
   }
 
   Future<void> troubleshootTTS() async {
     try {
-      print("=== TTS TROUBLESHOOTING ===");
+      debugPrint("=== TTS TROUBLESHOOTING ===");
+      debugPrint("TTS initialized: $isTtsInitialized");
+      debugPrint("Current language: $language");
 
-      // Check if TTS is initialized
-      print("TTS initialized: $isTtsInitialized");
+      if (languageManager != null && mounted) {
+        await languageManager!.showTroubleshootDialog(
+          context,
+          isTtsInitialized: isTtsInitialized,
+          hasLanguageSupport: hasLanguageSupport,
+          currentLanguage: language,
+        );
+      }
 
-      // Check available languages
-      var languages = await flutterTts.getLanguages;
-      print("Available languages: $languages");
-
-      // Check available voices
-      var voices = await flutterTts.getVoices;
-      print("Available voices: $voices");
-
-      // Check engine
-      var engine = await flutterTts.getDefaultEngine;
-      print("Default engine: $engine");
-
-      // Get current language
-      print("Current language: $language");
-
-      // Show troubleshooting dialog to user
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("TTS Troubleshooting"),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("TTS Engine: $engine"),
-                Text("Current Language: $language"),
-                Text("Arabic Support: $hasLanguageSupport"),
-                SizedBox(height: 10),
-                Text("Available Languages:"),
-                Text(languages.join(", "), style: TextStyle(fontSize: 12)),
-                SizedBox(height: 10),
-                Text(
-                  "If Arabic is not available, please install Arabic language pack in your device's text-to-speech settings.",
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                // Test with simple Arabic text before closing
-                await flutterTts.speak("بسم الله الرحمن الرحيم");
-                Navigator.of(context).pop();
-              },
-              child: Text("Test Arabic"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Close"),
-            ),
-          ],
-        ),
-      );
-
-      print("=== END TROUBLESHOOTING ===");
+      debugPrint("=== END TROUBLESHOOTING ===");
     } catch (e) {
-      print("Error during troubleshooting: $e");
+      debugPrint("Error during troubleshooting: $e");
     }
   }
 
   void _handlePlayPause() {
     if (isProcessing) {
-      print("TTS is currently processing, please wait");
+      debugPrint("TTS is currently processing, please wait");
       return;
     }
 
     if (!isTtsInitialized) {
-      print("TTS not initialized, cannot play/pause");
+      debugPrint("TTS not initialized, cannot play/pause");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -508,7 +476,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
     }
 
     if (verseTexts.isEmpty) {
-      print("No verses to play");
+      debugPrint("No verses to play");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("No verses available to play."),
@@ -518,20 +486,20 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
       return;
     }
 
-    print("Play button pressed. Current state: $ttsState");
+    debugPrint("Play button pressed. Current state: $ttsState");
 
     setState(() {
       isProcessing = true;
     });
 
     if (ttsState == TtsState.playing) {
-      print("Pausing playback");
+      debugPrint("Pausing playback");
       _pause();
     } else if (ttsState == TtsState.paused) {
-      print("Resuming playback");
+      debugPrint("Resuming playback");
       _resume();
     } else {
-      print("Starting playback from beginning");
+      debugPrint("Starting playback from beginning");
       // Track audio play event
       if (widget.rukuNumber != null) {
         AnalyticsService.logAudioPlay(rukuNumber: widget.rukuNumber!);
@@ -560,7 +528,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
   }
 
   Future<void> _speakFromStart() async {
-    print("Speaking from start");
+    debugPrint("Speaking from start");
 
     // FIRST set currentVerseIndex to 0
     setState(() {
@@ -578,7 +546,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
   Future<void> _speakCurrentVerse() async {
     if (!isTtsInitialized) {
-      print("TTS not initialized, cannot speak verse");
+      debugPrint("TTS not initialized, cannot speak verse");
       setState(() {
         isProcessing = false;
       });
@@ -587,12 +555,12 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
     if (currentVerseIndex < verseTexts.length) {
       String textToSpeak = verseTexts[currentVerseIndex];
-      print(
+      debugPrint(
         "Speaking verse $currentVerseIndex: ${textToSpeak.substring(0, min(20, textToSpeak.length))}...",
       );
 
       if (textToSpeak.trim().isEmpty) {
-        print("WARNING: Empty verse text, skipping...");
+        debugPrint("WARNING: Empty verse text, skipping...");
         _speakNextVerse(); // Use our new method
         return;
       }
@@ -610,10 +578,10 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
       // Actually speak the text
       var result = await flutterTts.speak(textToSpeak);
-      print("Speak result: $result");
+      debugPrint("Speak result: $result");
 
       if (result != 1) {
-        print("Failed to speak, error code: $result");
+        debugPrint("Failed to speak, error code: $result");
         setState(() {
           isProcessing = false;
           ttsState = TtsState.stopped;
@@ -622,7 +590,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
         });
       }
     } else {
-      print(
+      debugPrint(
         "Attempted to speak verse $currentVerseIndex but only have ${verseTexts.length} verses",
       );
       setState(() {
@@ -634,7 +602,7 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
 
   Future<void> _pause() async {
     var result = await flutterTts.pause();
-    print("Pause result: $result");
+    debugPrint("Pause result: $result");
     // Track audio pause event
     if (widget.rukuNumber != null) {
       AnalyticsService.logAudioPause(rukuNumber: widget.rukuNumber!);
@@ -649,9 +617,9 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
     // FlutterTts has a continue method
     if (await flutterTts.isLanguageAvailable(language ?? "en-US")) {
       var result = await flutterTts.speak(verseTexts[currentVerseIndex]);
-      print("Resume result: $result");
+      debugPrint("Resume result: $result");
     } else {
-      print("Language not available for resume");
+      debugPrint("Language not available for resume");
     }
     setState(() {
       isProcessing = false;
@@ -954,11 +922,15 @@ class _RukuAudioPlayerState extends State<RukuAudioPlayer>
         if (showTroubleshooting)
           Padding(
             padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            child: TextButton(
+            child: TextButton.icon(
               onPressed: troubleshootTTS,
-              child: Text(
+              icon: Icon(Icons.build_circle_rounded, size: 16, color: AppColors.colorone),
+              label: Text(
                 "Troubleshoot TTS Engine",
-                style: TextStyle(fontSize: isSmallScreen ? 12.0 : 14.0),
+                style: TextStyle(
+                  fontSize: isSmallScreen ? 12.0 : 14.0,
+                  color: AppColors.colorone,
+                ),
               ),
             ),
           ),

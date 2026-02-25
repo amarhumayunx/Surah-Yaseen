@@ -56,7 +56,7 @@ class FontSizeContainer extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: Colors.grey.withValues(alpha: 0.5),
                             spreadRadius: 0.5,
                             blurRadius: 5,
                             offset: Offset(0, 3),

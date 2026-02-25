@@ -16,7 +16,8 @@ class TopBar extends StatelessWidget {
     // Dynamic font sizes and icon sizes
     final double fontSizeTitle = screenWidth * 0.06; // ~24 on a 400px screen
     final double fontSizeSubtitle = screenWidth * 0.04; // ~16 on a 400px screen
-    final double iconSize = screenWidth * 0.09; // ~40 for a standard screen width
+    final double iconSize =
+        screenWidth * 0.09; // ~40 for a standard screen width
 
     // Adjusting padding based on screen size
     final double horizontalPadding = screenWidth * 0.05;
@@ -37,7 +38,9 @@ class TopBar extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: screenHeight * 0.01), // Adjust padding for better alignment
+            padding: EdgeInsets.only(
+              top: screenHeight * 0.03,
+            ), // Adjust padding for better alignment
             child: Column(
               children: [
                 Text(

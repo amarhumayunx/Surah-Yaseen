@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Colors/colors.dart';
+import '../../constants/ad_unit_ids.dart';
 import '../../services/analytics_service.dart';
+import '../Ads/native_style_ad_widget.dart';
 
 // Reusable Buttons Under Text for all Ruku Screens
 class RukuButtonsUnderText extends StatelessWidget {
@@ -10,6 +12,7 @@ class RukuButtonsUnderText extends StatelessWidget {
   final Widget listenAudioScreen;
   final Widget listenAudioWithTranslationScreen;
   final int rukuNumber;
+  final AdScreenType screenType;
 
   const RukuButtonsUnderText({
     super.key,
@@ -17,6 +20,7 @@ class RukuButtonsUnderText extends StatelessWidget {
     required this.listenAudioScreen,
     required this.listenAudioWithTranslationScreen,
     required this.rukuNumber,
+    required this.screenType,
   });
 
   @override
@@ -27,6 +31,17 @@ class RukuButtonsUnderText extends StatelessWidget {
         _buildButton(
           'read'.tr,
           () => Get.to(() => readScreen),
+        ),
+
+        const SizedBox(height: 12),
+
+        // Native ad between Read and Listen Audio
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: NativeStyleAdWidget(
+            screenType: screenType,
+            minHeight: 60,
+          ),
         ),
 
         const SizedBox(height: 12),

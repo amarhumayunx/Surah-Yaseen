@@ -74,7 +74,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                 margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                 borderRadius: 40,
                                 snackStyle: SnackStyle.FLOATING,
-                                overlayColor: Colors.black.withOpacity(0.2),
+                                overlayColor: Colors.black.withValues(alpha: 0.2),
                                 messageText: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   decoration: BoxDecoration(
@@ -121,7 +121,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                 margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                 borderRadius: 40,
                                 snackStyle: SnackStyle.FLOATING,
-                                overlayColor: Colors.black.withOpacity(0.2),
+                                overlayColor: Colors.black.withValues(alpha: 0.2),
                                 messageText: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   decoration: BoxDecoration(

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:surah_yaseen/Colors/colors.dart';
+import 'package:surah_yaseen/constants/app_constants.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/ListenAudioWithTranslastionScreenTopbar.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
+import 'package:surah_yaseen/widgets/TopBar/topbartest.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 
+import 'package:surah_yaseen/widgets/AdaptiveScrollView/adaptive_scroll_view.dart';
 import 'package:surah_yaseen/widgets/ListenAudioWithTranslation/RukuAudioPlayerWithTranslation.dart';
 import 'VersePageContainerWithTranslationRukuFive.dart';
 import 'ruku_fifth_audio_with_translation_banner_ad_widget.dart';
@@ -15,28 +18,39 @@ class ListenAudioWithTranslationRukuFive extends StatefulWidget {
   const ListenAudioWithTranslationRukuFive({super.key});
 
   @override
-  State<ListenAudioWithTranslationRukuFive> createState() => _ListenAudioWithTranslationState();
+  State<ListenAudioWithTranslationRukuFive> createState() =>
+      _ListenAudioWithTranslationState();
 }
 
-class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationRukuFive> {
-
+class _ListenAudioWithTranslationState
+    extends State<ListenAudioWithTranslationRukuFive> {
   final Map<int, String> yaseen_verses = {
-    68: "وَمَنْ نُعَمِّرْهُ نُنَكِّسْهُ فِي الْخَلْقِ ۖ أَفَلَا يَعْقِلُونَ",
-    69: "وَمَا عَلَّمْنَاهُ الشِّعْرَ وَمَا يَنْبَغِي لَهُ ۚ إِنْ هُوَ إِلَّا ذِكْرٌ وَقُرْآنٌ مُبِينٌ",
-    70: "لِيُنْذِرَ مَنْ كَانَ حَيًّا وَيَحِقَّ الْقَوْلُ عَلَى الْكَافِرِينَ",
-    71: "أَوَلَمْ يَرَوْا أَنَّا خَلَقْنَا لَهُمْ مِمَّا عَمِلَتْ أَيْدِينَا أَنْعَامًا فَهُمْ لَهَا مَالِكُونَ",
-    72: "وَذَلَّلْنَاهَا لَهُمْ فَمِنْهَا رَكُوبُهُمْ وَمِنْهَا يَأْكُلُونَ",
-    73: "وَلَهُمْ فِيهَا مَنَافِعُ وَمَشَارِبُ ۖ أَفَلَا يَشْكُرُونَ",
-    74: "وَاتَّخَذُوا مِنْ دُونِ اللَّهِ آلِهَةً لَعَلَّهُمْ يُنْصَرُونَ",
-    75: "لَا يَسْتَطِيعُونَ نَصْرَهُمْ وَهُمْ لَهُمْ جُنْدٌ مُحْضَرُونَ",
-    76: "فَلَا يَحْزُنْكَ قَوْلُهُمْ ۘ إِنَّا نَعْلَمُ مَا يُسِرُّونَ وَمَا يُعْلِنُونَ",
-    77: "أَوَلَمْ يَرَ الْإِنْسَانُ أَنَّا خَلَقْنَاهُ مِنْ نُطْفَةٍ فَإِذَا هُوَ خَصِيمٌ مُبِينٌ",
-    78: "وَضَرَبَ لَنَا مَثَلًا وَنَسِيَ خَلْقَهُ ۖ قَالَ مَنْ يُحْيِي الْعِظَامَ وَهِيَ رَمِيمٌ",
-    79: "قُلْ يُحْيِيهَا الَّذِي أَنْشَأَهَا أَوَّلَ مَرَّةٍ ۖ وَهُوَ بِكُلِّ خَلْقٍ عَلِيمٌ",
-    80: "الَّذِي جَعَلَ لَكُمْ مِنَ الشَّجَرِ الْأَخْضَرِ نَارًا فَإِذَا أَنْتُمْ مِنْهُ تُوقِدُونَ",
-    81: "أَوَلَيْسَ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ بِقَادِرٍ عَلَىٰ أَنْ يَخْلُقَ مِثْلَهُمْ ۚ بَلَىٰ وَهُوَ الْخَلَّاقُ الْعَلِيمُ",
-    82: "إِنَّمَا أَمْرُهُ إِذَا أَرَادَ شَيْئًا أَنْ يَقُولَ لَهُ كُنْ فَيَكُونُ",
-    83: "فَسُبْحَانَ الَّذِي بِيَدِهِ مَلَكُوتُ كُلِّ شَيْءٍ وَإِلَيْهِ تُرْجَعُونَ"
+    68: "وَمَنْ نُعَمِّرْهُ نُنَكِّسْهُ فِي الْخَلْقِ ۖ أَفَلَا يَعْقِلُونَ ۝",
+    69:
+        "وَمَا عَلَّمْنَاهُ الشِّعْرَ وَمَا يَنْبَغِي لَهُ ۚ إِنْ هُوَ إِلَّا ذِكْرٌ وَقُرْآنٌ مُبِينٌ ۝",
+    70: "لِيُنْذِرَ مَنْ كَانَ حَيًّا وَيَحِقَّ الْقَوْلُ عَلَى الْكَافِرِينَ ۝",
+    71:
+        "أَوَلَمْ يَرَوْا أَنَّا خَلَقْنَا لَهُمْ مِمَّا عَمِلَتْ أَيْدِينَا أَنْعَامًا فَهُمْ لَهَا مَالِكُونَ ۝",
+    72: "وَذَلَّلْنَاهَا لَهُمْ فَمِنْهَا رَكُوبُهُمْ وَمِنْهَا يَأْكُلُونَ ۝",
+    73: "وَلَهُمْ فِيهَا مَنَافِعُ وَمَشَارِبُ ۖ أَفَلَا يَشْكُرُونَ ۝",
+    74: "وَاتَّخَذُوا مِنْ دُونِ اللَّهِ آلِهَةً لَعَلَّهُمْ يُنْصَرُونَ ۝",
+    75: "لَا يَسْتَطِيعُونَ نَصْرَهُمْ وَهُمْ لَهُمْ جُنْدٌ مُحْضَرُونَ ۝",
+    76:
+        "فَلَا يَحْزُنْكَ قَوْلُهُمْ ۘ إِنَّا نَعْلَمُ مَا يُسِرُّونَ وَمَا يُعْلِنُونَ ۝",
+    77:
+        "أَوَلَمْ يَرَ الْإِنْسَانُ أَنَّا خَلَقْنَاهُ مِنْ نُطْفَةٍ فَإِذَا هُوَ خَصِيمٌ مُبِينٌ ۝",
+    78:
+        "وَضَرَبَ لَنَا مَثَلًا وَنَسِيَ خَلْقَهُ ۖ قَالَ مَنْ يُحْيِي الْعِظَامَ وَهِيَ رَمِيمٌ ۝",
+    79:
+        "قُلْ يُحْيِيهَا الَّذِي أَنْشَأَهَا أَوَّلَ مَرَّةٍ ۖ وَهُوَ بِكُلِّ خَلْقٍ عَلِيمٌ ۝",
+    80:
+        "الَّذِي جَعَلَ لَكُمْ مِنَ الشَّجَرِ الْأَخْضَرِ نَارًا فَإِذَا أَنْتُمْ مِنْهُ تُوقِدُونَ ۝",
+    81:
+        "أَوَلَيْسَ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ بِقَادِرٍ عَلَىٰ أَنْ يَخْلُقَ مِثْلَهُمْ ۚ بَلَىٰ وَهُوَ الْخَلَّاقُ الْعَلِيمُ ۝",
+    82:
+        "إِنَّمَا أَمْرُهُ إِذَا أَرَادَ شَيْئًا أَنْ يَقُولَ لَهُ كُنْ فَيَكُونُ ۝",
+    83:
+        "فَسُبْحَانَ الَّذِي بِيَدِهِ مَلَكُوتُ كُلِّ شَيْءٍ وَإِلَيْهِ تُرْجَعُونَ ۝",
   };
 
   int _currentPage = 1;
@@ -68,7 +82,9 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
       int versesPerPage = 6;
       int targetPage = (verseIndex / versesPerPage).floor() + 1;
 
-      if (_currentPage != targetPage && targetPage <= _totalPages && targetPage > 0) {
+      if (_currentPage != targetPage &&
+          targetPage <= _totalPages &&
+          targetPage > 0) {
         _currentPage = targetPage;
       }
     });
@@ -89,52 +105,67 @@ class _ListenAudioWithTranslationState extends State<ListenAudioWithTranslationR
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.lightColorSec,
       body: Stack(
-          children: [
-            const TopBackground(),
-            SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 25,
-                    vertical: 20,
+        children: [
+          const TopBackground(),
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.065,
+                vertical: screenHeight * 0.02,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const TopBarSet(),
+                  SizedBox(height: screenHeight * 0.02),
+                  const DividerBar(),
+                  SizedBox(height: screenHeight * 0.02),
+                  const SurahTitle(),
+                  SizedBox(height: screenHeight * 0.055),
+                  Expanded(
+                    child: AdaptiveScrollView(
+                      hasAd: true,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ArabicVerseWithTranslationContainerRukuFive(
+                            rukuNumber: 5,
+                            startVerseIndex: 68 + ((_currentPage - 1) * 6),
+                            lastVerseIndex: 83,
+                            versesPerPage: 6,
+                            currentPage: _currentPage,
+                            totalPages: _totalPages,
+                            isListeningAudio: true,
+                            onPrevPage: _goToPrevPage,
+                            onNextPage: _goToNextPage,
+                            activeVerseIndex: _activeVerseIndex,
+                          ),
+                          SizedBox(height: screenHeight * 0.015),
+                          RukuAudioPlayerWithTranslation(
+                            title: 'ruku_title_audio_trans5'.tr,
+                            verses: yaseen_verses,
+                            startVerse: 68,
+                            endVerse: 83,
+                            onActiveVerseChanged: _handleActiveVerseChanged,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  child: Column(
-                      children:
-                      [
-                        TopBarListenAudioWithTranslationScreen(),
-                        DividerBar(),
-                        SurahTitle(),
-                        const SizedBox(height: 90),
-                        ArabicVerseWithTranslationContainerRukuFive(
-                          rukuNumber: 5,
-                          startVerseIndex: 68 + ((_currentPage - 1) * 6),
-                          lastVerseIndex: 83,
-                          versesPerPage: 6,
-                          currentPage: _currentPage,
-                          totalPages: _totalPages,
-                          isListeningAudio: true,
-                          onPrevPage: _goToPrevPage,
-                          onNextPage: _goToNextPage,
-                          activeVerseIndex: _activeVerseIndex,
-
-                        ),
-                        SizedBox(height: 10),
-                        RukuAudioPlayerWithTranslation(
-                          title: 'ruku_title_audio_trans5'.tr,
-                          verses: yaseen_verses,
-                          startVerse: 68,
-                          endVerse: 83,
-                          onActiveVerseChanged: _handleActiveVerseChanged,
-                        ),
-                      ]
-                  ),
-                )),
-            // Banner Ad at the bottom
-            const RukuFifthAudioWithTranslationBannerAdWidget(),
-          ]
+                ],
+              ),
+            ),
+          ),
+          // Banner Ad at the bottom
+          const RukuFifthAudioWithTranslationBannerAdWidget(),
+        ],
       ),
     );
   }

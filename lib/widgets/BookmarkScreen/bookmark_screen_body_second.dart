@@ -169,7 +169,7 @@ class _BookmarkScreenBodySecondState extends State<BookmarkScreenBodySecond> {
                     child: ElevatedButton(
                       onPressed: () {
                         _deleteSelectedBookmarks(); // your deletion logic
-                        Navigator.of(context).pop();
+                        Get.back();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4CAF87),
@@ -191,7 +191,7 @@ class _BookmarkScreenBodySecondState extends State<BookmarkScreenBodySecond> {
                   const SizedBox(width: 15),
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () => Get.back(),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: const Color(0xFF4CAF87),
                         side: const BorderSide(color: Color(0xFF4CAF87)),

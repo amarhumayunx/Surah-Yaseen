@@ -6,6 +6,11 @@
 -keep class com.google.ads.** { *; }
 -dontwarn com.google.ads.**
 
+# Flutter Google Mobile Ads plugin – Native Ad Templates
+# R8 can strip/obfuscate the template views causing native ads to fail silently
+-keep class io.flutter.plugins.googlemobileads.** { *; }
+-keep class com.google.android.gms.ads.nativead.** { *; }
+
 # Keep ExoPlayer classes
 -keep class com.google.android.exoplayer2.** { *; }
 -dontwarn com.google.android.exoplayer2.**

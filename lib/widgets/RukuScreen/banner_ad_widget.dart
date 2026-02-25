@@ -170,16 +170,16 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       return const SizedBox.shrink();
     }
 
-    // Display the banner ad
+    // Display the banner ad - exact size only, no extra space
+    // Key prevents "AdWidget is already in the Widget tree" when widget rebuilds
     if (_bannerAd != null && _adSize != null) {
+      final ad = _bannerAd!;
       return Align(
         alignment: Alignment.bottomCenter,
-        child: SafeArea(
-          child: SizedBox(
-            width: _adSize!.width.toDouble(),
-            height: _adSize!.height.toDouble(),
-            child: AdWidget(ad: _bannerAd!),
-          ),
+        child: SizedBox(
+          width: _adSize!.width.toDouble(),
+          height: _adSize!.height.toDouble(),
+          child: AdWidget(key: ValueKey(ad.hashCode), ad: ad),
         ),
       );
     }

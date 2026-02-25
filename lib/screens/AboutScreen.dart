@@ -10,8 +10,6 @@ import '../constants/app_assets.dart';
 import '../widgets/AboutScreen/quote_section.dart';
 import '../widgets/TopBar/topbartest.dart';
 import '../widgets/Topbackground/top_background.dart';
-import '../widgets/Ads/reusable_banner_ad.dart';
-import '../constants/ad_unit_ids.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -21,27 +19,26 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-
-
-
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     final double imageHeight = screenHeight * 0.17;
-    final double imageWidth = screenWidth;
+    final double spacing = screenHeight * 0.02;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.lightColorSec,
@@ -51,35 +48,55 @@ class _AboutScreenState extends State<AboutScreen> {
           SafeArea(
             child: Column(
               children: [
-                SizedBox(height: 10,),
+                SizedBox(height: spacing),
                 TopBarSet(),
-                SizedBox(height: 5,),
+                SizedBox(height: spacing),
                 DividerBar(),
                 SurahTitle(),
                 TitleCardAbout(),
-                SizedBox(height: 10),
-                // Banner Ad - Info Screen
-                ReusableBannerAd(
-                  screenType: AdScreenType.about,
-                  minHeight: 50,
-                ),
-                SizedBox(height: 10),
+                SizedBox(height: spacing),
                 Expanded(
-                  child: ListView(
+                  child: Stack(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: SvgPicture.asset(
-                          AppAssets.quran,
-                          height: imageHeight,
-                          width: imageWidth,
-                          fit: BoxFit.contain,
+                      // Scrollable content
+                      ListView(
+                        children: [
+                          SizedBox(height: spacing),
+                          SvgPicture.asset(
+                            AppAssets.quran,
+                            height: imageHeight,
+                            width: screenWidth,
+                            fit: BoxFit.contain,
+                          ),
+                          SizedBox(height: spacing),
+                          QuoteSection(),
+                          SizedBox(height: spacing),
+                          InfoBoxCard(),
+                          SizedBox(height: spacing),
+                        ],
+                      ),
+
+                      // ✅ Top fade effect
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: IgnorePointer(
+                          child: Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  AppColors.lightColorSec,
+                                  AppColors.lightColorSec.withOpacity(0.0),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      QuoteSection(),
-                      InfoBoxCard(), // Now this will work correctly because we removed the Expanded from InfoBoxCard
-                      SizedBox(height: 20),
                     ],
                   ),
                 ),

@@ -116,7 +116,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                           : null,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(dialogContext).pop();
+                      Get.back();
                       widget.onToggleFullScreen();
                     },
                     child: Container(
@@ -146,7 +146,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           spreadRadius: 1,
                           blurRadius: 10,
                         ),
@@ -755,7 +755,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
       height: widget.isFullScreen ? double.infinity : 480,
       decoration: BoxDecoration(
         color:
-            widget.isFullScreen ? Colors.white.withOpacity(0.95) : Colors.white,
+            widget.isFullScreen ? Colors.white.withValues(alpha: 0.95) : Colors.white,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
           color: widget.isFullScreen ? Colors.transparent : AppColors.BarColor,

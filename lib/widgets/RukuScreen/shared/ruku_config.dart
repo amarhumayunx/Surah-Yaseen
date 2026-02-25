@@ -103,7 +103,7 @@ class RukuConfig {
       rukuNumber: 5,
       startVerseIndex: 67,
       lastVerseIndex: 83,
-      totalPages: 4,
+      totalPages: 5,
       totalPageDialogBox: 3,
       versesPerPage: 4,
       versesPerPageDialogBox: 6,

@@ -4,18 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../Colors/colors.dart';
 import '../../constants/app_strings.dart';
+import '../../constants/ad_unit_ids.dart';
+import '../Ads/native_style_ad_widget.dart';
 
 class InfoBoxCard extends StatelessWidget {
   const InfoBoxCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Removed the Expanded widget from here
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Chapter Details Card
-          _buildInfoCard(
+    return Column(
+      children: [
+        // Chapter Details Card
+        _buildInfoCard(
             title: 'chapter_details'.tr,
             children: [
               _buildDetailRow('surah_number_text'.tr,'surah_number'.tr),
@@ -27,8 +27,17 @@ class InfoBoxCard extends StatelessWidget {
             ],
           ),
 
-          // Significance & Benefits Card
-          _buildInfoCard(
+        // Native ad between info cards
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: NativeStyleAdWidget(
+            screenType: AdScreenType.about,
+            minHeight: 60,
+          ),
+        ),
+
+        // Significance & Benefits Card
+        _buildInfoCard(
             title: 'significance_and_benefits'.tr,
             children: [
               _buildCenteredText('sandb_line1'.tr),
@@ -58,10 +67,9 @@ class InfoBoxCard extends StatelessWidget {
             ],
           ),
 
-          // Add some padding at the bottom for better scrolling
-          SizedBox(height: 15),
-        ],
-      ),
+        // Add some padding at the bottom for better scrolling
+        SizedBox(height: 15),
+      ],
     );
   }
 

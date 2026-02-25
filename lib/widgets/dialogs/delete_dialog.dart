@@ -53,7 +53,7 @@ class DeleteDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pop(true),
+                      onPressed: () => Get.back(result: true),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.darkgreenColor,
                         foregroundColor: Colors.white,
@@ -71,7 +71,7 @@ class DeleteDialog extends StatelessWidget {
                   SizedBox(width: buttonSpacing),
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(false),
+                      onPressed: () => Get.back(result: false),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.colorone,
                         side: BorderSide(color: AppColors.colorone),

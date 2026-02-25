@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App background color - prevents black flash during navigation transitions -->
+    <color name="scaffold_background">#FFE5F0E7</color>
+</resources>

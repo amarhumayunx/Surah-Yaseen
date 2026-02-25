@@ -14,36 +14,26 @@ class RukuScreen extends StatefulWidget {
 }
 
 class _RukuScreenState extends State<RukuScreen> {
-
-
   @override
   void initState() {
     super.initState();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.lightColorSec,
-      body: Stack(
-        children: [
-          TopBackground(),
-          RukuScreenBody(),
-          // Banner ad anchored at the bottom
-          const BannerAdWidget(),
-        ],
-      ),
+      body: Stack(children: [TopBackground(), RukuScreenBody()]),
     );
   }
 }

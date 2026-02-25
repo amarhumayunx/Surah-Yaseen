@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:surah_yaseen/widgets/OnBoardingScreen/onboarding_data.dart';
 import 'package:surah_yaseen/widgets/OnBoardingScreen/onboarding_page.dart';
 import 'package:surah_yaseen/widgets/OnBoardingScreen/onboarding_bottom_buttons.dart';
-
 import '../Colors/colors.dart';
 import '../controllers/onboarding_controller.dart';
 
@@ -19,8 +19,9 @@ class Onboardingscreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // PageView in an Expanded widget to take available space
+            // PageView
             Expanded(
+              flex: 3,
               child: PageView.builder(
                 controller: onboardingController.pageController,
                 onPageChanged:
@@ -37,29 +38,24 @@ class Onboardingscreen extends StatelessWidget {
               ),
             ),
 
-            // Page Indicator
-            Obx(() => Container(
-            padding: const EdgeInsets.symmetric(vertical: 22),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                onboardingData.length,
-                (index) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  width: 32, // Same width for all dots
-                  height: 10, // Same height for all dots
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Fully rounded pill shape
-                    color: onboardingController.currentPage.value == index
-                        ? AppColors.HeadingColor // Dark forest green for active
-                        : AppColors.OnbaordingScreenDotColor, // Light muted green for inactive
-                  ),
+            // Smooth Page Indicator
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 22),
+              child: SmoothPageIndicator(
+                controller: onboardingController.pageController,
+                count: onboardingData.length,
+                effect: ExpandingDotsEffect(
+                  activeDotColor: AppColors.HeadingColor,
+                  dotColor: AppColors.OnbaordingScreenDotColor,
+                  dotHeight: 10,
+                  dotWidth: 10,
+                  expansionFactor: 3,
+                  spacing: 8,
                 ),
               ),
             ),
-            )),
 
-            // Bottom buttons
+            // Bottom Buttons
             OnboardingBottomButtons(totalPages: onboardingData.length),
           ],
         ),

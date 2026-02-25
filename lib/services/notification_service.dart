@@ -17,8 +17,8 @@ class NotificationService {
   static Function(String? payload)? onNotificationTapped;
 
   static Future<void> initialize() async {
-    // Request notification permissions first
-    await _requestPermissions();
+    // Do NOT request permissions here - defer until after first Flutter frame
+    // to avoid black screen when returning from permission dialog during splash
 
     // Initialize with sound and icon
     const AndroidInitializationSettings androidSettings =
@@ -49,6 +49,12 @@ class NotificationService {
 
     // Create notification channel
     await _createNotificationChannel();
+  }
+
+  /// Request notification & alarm permissions. Call after first Flutter frame
+  /// to avoid black screen when returning from permission dialog.
+  static Future<void> requestPermissionsIfNeeded() async {
+    await _requestPermissions();
   }
 
   static Future<void> _requestPermissions() async {

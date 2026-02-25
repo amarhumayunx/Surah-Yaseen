@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -17,6 +19,7 @@ import 'package:surah_yaseen/widgets/Language/Language.dart';
 import 'package:surah_yaseen/services/app_open_ad_manager.dart';
 import 'package:surah_yaseen/services/interstitial_ad_manager.dart';
 import 'package:surah_yaseen/services/analytics_service.dart';
+import 'package:surah_yaseen/core/theme/app_theme.dart';
 
 // Local Notifications plugin instance
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -24,6 +27,8 @@ FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  GoogleFonts.config.allowRuntimeFetching = false;
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -64,16 +69,15 @@ void main() async {
   // Initialize Google Mobile Ads SDK
   await MobileAds.instance.initialize();
   
-  // Test mode for ads - enabled for testing (not deploying to production yet)
-  // TODO: Remove test device IDs when ready to deploy to production
-  // For production, remove or comment out the testDeviceIds line
-  final RequestConfiguration requestConfiguration = RequestConfiguration(
-    testDeviceIds: [
-      '14C103ADD23A29FFD26DE6E985FD67DF', // Test device ID from logs
-      // Add more test device IDs as needed
-    ],
-  );
-  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  // Register test device only in debug mode so production builds get real ads
+  if (kDebugMode) {
+    final RequestConfiguration requestConfiguration = RequestConfiguration(
+      testDeviceIds: [
+        '14C103ADD23A29FFD26DE6E985FD67DF',
+      ],
+    );
+    MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  }
 
   // App Open Ad will be loaded in LoadingScreen
   // Don't load here to avoid blocking app startup
@@ -150,12 +154,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       title: 'Surah Yaseen',
       debugShowCheckedModeBanner: false,
       translations: Languages(),
-      locale: Locale('en', 'US'),
-      fallbackLocale: Locale('en','US'),
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      locale: const Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
+      theme: AppTheme.theme,
+      defaultTransition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 300),
       home: const LoadingScreen(),
     );
   }

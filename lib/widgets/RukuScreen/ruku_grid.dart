@@ -8,43 +8,46 @@ import '../../screens/RukuFivethScreen.dart';
 import '../../screens/RukuFourthScreen.dart';
 import '../../services/analytics_service.dart';
 import 'ruku_card.dart';
+import 'package:surah_yaseen/core/utils/responsive.dart';
 
 class RukuGrid extends StatelessWidget {
   const RukuGrid({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = Responsive.isTablet(context);
+    final horizontalPadding = isTablet ? 40.0 : 30.0;
+    final crossAxisCount = isTablet ? 3 : 2;
+    const double spacing = 5;
+
+    // Use MediaQuery so grid always has valid width (LayoutBuilder inside scroll can get 0)
+    final gridWidth = (MediaQuery.sizeOf(context).width - (horizontalPadding * 2)).clamp(200.0, double.infinity);
+
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              double screenWidth = constraints.minWidth;
-              int crossAxisCount = screenWidth > 600 ? 3 : 2;
-              double mainAxisSpacing = screenWidth > 600 ? 5 : 5;
-              double crossAxisSpacing = screenWidth > 600 ? 5 : 5;
-              double childAspectRatio = screenWidth > 600 ? 1.0 : 1.0;
-
-              return GridView.count(
-                crossAxisCount: crossAxisCount,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: mainAxisSpacing,
-                crossAxisSpacing: crossAxisSpacing,
-                childAspectRatio: childAspectRatio,
-                children: [
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: SizedBox(
+            width: gridWidth,
+            child: GridView.count(
+              crossAxisCount: crossAxisCount,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: spacing,
+              crossAxisSpacing: spacing,
+              childAspectRatio: 1.0,
+              children: [
                   GestureDetector(
-                    onTap:
-                        () {
-                          AnalyticsService.logRukuOpen(rukuNumber: 1);
-                          Get.to(
-                            () => RukuFirstScreen(),
-                            transition: Transition.rightToLeft,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
+                    onTap: () {
+                      AnalyticsService.logRukuOpen(rukuNumber: 1);
+                      Get.to(
+                        () => RukuFirstScreen(),
+                        transition: Transition.rightToLeft,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
                     behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
@@ -53,16 +56,15 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap:
-                        () {
-                          AnalyticsService.logRukuOpen(rukuNumber: 2);
-                          Get.to(
-                            () => RukuSecondScreen(),
-                            transition: Transition.rightToLeft,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
+                    onTap: () {
+                      AnalyticsService.logRukuOpen(rukuNumber: 2);
+                      Get.to(
+                        () => RukuSecondScreen(),
+                        transition: Transition.rightToLeft,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
                     behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
@@ -71,16 +73,15 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap:
-                        () {
-                          AnalyticsService.logRukuOpen(rukuNumber: 3);
-                          Get.to(
-                            () => RukuThirdScreen(),
-                            transition: Transition.rightToLeft,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
+                    onTap: () {
+                      AnalyticsService.logRukuOpen(rukuNumber: 3);
+                      Get.to(
+                        () => RukuThirdScreen(),
+                        transition: Transition.rightToLeft,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
                     behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
@@ -89,16 +90,15 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap:
-                        () {
-                          AnalyticsService.logRukuOpen(rukuNumber: 4);
-                          Get.to(
-                            () => RukuFourthScreen(),
-                            transition: Transition.rightToLeft,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
+                    onTap: () {
+                      AnalyticsService.logRukuOpen(rukuNumber: 4);
+                      Get.to(
+                        () => RukuFourthScreen(),
+                        transition: Transition.rightToLeft,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
                     behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
@@ -107,16 +107,15 @@ class RukuGrid extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap:
-                        () {
-                          AnalyticsService.logRukuOpen(rukuNumber: 5);
-                          Get.to(
-                            () => RukuFiveScreen(),
-                            transition: Transition.rightToLeft,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        },
+                    onTap: () {
+                      AnalyticsService.logRukuOpen(rukuNumber: 5);
+                      Get.to(
+                        () => RukuFiveScreen(),
+                        transition: Transition.rightToLeft,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
                     behavior: HitTestBehavior.opaque,
                     child: RukuCard(
                       backgroundSvgPath: AppAssets.rukucard,
@@ -124,12 +123,10 @@ class RukuGrid extends StatelessWidget {
                       verseRange: 'verse_title_sixtyeight_to_eightythree'.tr,
                     ),
                   ),
-                ],
-              );
-            },
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 20), // Space at the end
       ],
     );
   }

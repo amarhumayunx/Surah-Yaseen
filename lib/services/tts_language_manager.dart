@@ -1,47 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
+import '../Colors/colors.dart';
 
-/// Manages TTS language availability and provides utilities to check and install languages
 class TtsLanguageManager {
   final FlutterTts flutterTts;
+  static const _channel = MethodChannel('com.amarhumayun.surahyaseen/tts');
 
   TtsLanguageManager(this.flutterTts);
 
-  /// Check if Arabic language is available on the device
   Future<bool> isArabicAvailable() async {
     try {
       var languages = await flutterTts.getLanguages;
-      bool hasArabic = languages.any(
+      return languages.any(
         (lang) =>
             lang.toString().toLowerCase().contains('ar') ||
             lang.toString().toLowerCase().contains('arab'),
       );
-      return hasArabic;
     } catch (e) {
-      print("Error checking Arabic availability: $e");
+      debugPrint("Error checking Arabic availability: $e");
       return false;
     }
   }
 
-  /// Check if English language is available on the device
   Future<bool> isEnglishAvailable() async {
     try {
       var languages = await flutterTts.getLanguages;
-      bool hasEnglish = languages.any(
+      return languages.any(
         (lang) =>
             lang.toString().toLowerCase().contains('en') ||
             lang.toString().toLowerCase().contains('eng'),
       );
-      return hasEnglish;
     } catch (e) {
-      print("Error checking English availability: $e");
+      debugPrint("Error checking English availability: $e");
       return false;
     }
   }
 
-  /// Get the best available Arabic language code
   Future<String?> getBestArabicLanguage() async {
     try {
       var languages = await flutterTts.getLanguages;
@@ -55,7 +53,6 @@ class TtsLanguageManager {
 
       if (arabicLangs.isEmpty) return null;
 
-      // Prefer full Arabic over dialect variants if available
       try {
         String arabicCode = arabicLangs.firstWhere(
           (lang) =>
@@ -70,12 +67,11 @@ class TtsLanguageManager {
         return arabicLangs.first.toString();
       }
     } catch (e) {
-      print("Error getting Arabic language: $e");
+      debugPrint("Error getting Arabic language: $e");
       return null;
     }
   }
 
-  /// Get the best available English language code
   Future<String?> getBestEnglishLanguage() async {
     try {
       var languages = await flutterTts.getLanguages;
@@ -89,7 +85,6 @@ class TtsLanguageManager {
 
       if (englishLangs.isEmpty) return null;
 
-      // Prefer US or UK English if available
       try {
         String englishCode = englishLangs.firstWhere(
           (lang) =>
@@ -103,30 +98,25 @@ class TtsLanguageManager {
         return englishLangs.first.toString();
       }
     } catch (e) {
-      print("Error getting English language: $e");
+      debugPrint("Error getting English language: $e");
       return null;
     }
   }
 
-  /// Check if a specific language is installed (Android only)
   Future<bool> isLanguageInstalled(String languageCode) async {
     if (Platform.isAndroid) {
       try {
-        // Use the Android-specific method if available
         bool? installed = await flutterTts.isLanguageInstalled(languageCode);
         return installed ?? false;
       } catch (e) {
-        print("Error checking if language is installed: $e");
-        // Fallback to checking if it's in available languages
+        debugPrint("Error checking if language is installed: $e");
         return await _isLanguageInAvailableList(languageCode);
       }
     } else {
-      // For iOS, just check if it's in available languages
       return await _isLanguageInAvailableList(languageCode);
     }
   }
 
-  /// Helper method to check if language is in available languages list
   Future<bool> _isLanguageInAvailableList(String languageCode) async {
     try {
       var languages = await flutterTts.getLanguages;
@@ -138,107 +128,211 @@ class TtsLanguageManager {
     }
   }
 
-  /// Show dialog to guide user to install Arabic language
+  /// Triggers Android's native TTS data install activity
+  Future<bool> _installTtsData() async {
+    if (!Platform.isAndroid) return false;
+    try {
+      final result = await _channel.invokeMethod('installTtsData');
+      return result == true;
+    } catch (e) {
+      debugPrint("Error launching TTS install: $e");
+      return false;
+    }
+  }
+
+  /// Opens device TTS settings directly via platform channel (Android) or url_launcher (iOS)
+  Future<bool> _openTtsSettings() async {
+    try {
+      if (Platform.isAndroid) {
+        final result = await _channel.invokeMethod('openTtsSettings');
+        return result == true;
+      } else if (Platform.isIOS) {
+        // iOS doesn't have a direct TTS settings intent
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Error opening TTS settings: $e");
+    }
+    return false;
+  }
+
+  /// Show themed dialog to guide user to install Arabic TTS language
   Future<void> showArabicInstallDialog(BuildContext context) async {
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 360;
-    final fontSize = isSmallScreen ? 14.0 : 16.0;
-    final titleFontSize = isSmallScreen ? 18.0 : 20.0;
+    final dialogWidth = screenSize.width * 0.85;
+    const dialogMaxWidth = 420.0;
+    final padding = isSmallScreen ? 16.0 : 24.0;
+    final iconSize = isSmallScreen ? 40.0 : 48.0;
+    final titleFontSize = isSmallScreen ? 17.0 : 19.0;
+    final bodyFontSize = isSmallScreen ? 13.0 : 14.5;
+    final buttonFontSize = isSmallScreen ? 13.0 : 15.0;
+    final merriweather = GoogleFonts.merriweather().fontFamily;
 
     return showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (BuildContext ctx) {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          backgroundColor: AppColors.lightColorapp,
           child: Container(
             constraints: BoxConstraints(
-              maxWidth: screenSize.width * 0.9,
-              maxHeight: screenSize.height * 0.7,
+              maxWidth: dialogMaxWidth,
+              maxHeight: screenSize.height * 0.72,
             ),
-            padding: EdgeInsets.all(isSmallScreen ? 16.0 : 20.0),
+            padding: EdgeInsets.all(padding),
+            width: dialogWidth.clamp(280.0, dialogMaxWidth),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
-                  Text(
-                    'Arabic Language Required',
-                    style: TextStyle(
-                      fontSize: titleFontSize,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red.shade700,
+                  Container(
+                    width: iconSize + 20,
+                    height: iconSize + 20,
+                    decoration: BoxDecoration(
+                      color: AppColors.PrimaryColor.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.record_voice_over_rounded,
+                      size: iconSize,
+                      color: AppColors.darkgreenColor,
                     ),
                   ),
-                  SizedBox(height: 16),
-                  
-                  // Message
+                  SizedBox(height: isSmallScreen ? 12 : 16),
                   Text(
-                    'Arabic text-to-speech is not available on your device. To use audio playback, please install Arabic language support:',
-                    style: TextStyle(fontSize: fontSize),
+                    'Arabic Voice Required',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: titleFontSize,
+                      fontFamily: merriweather,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.darkgreenColor,
+                    ),
                   ),
-                  SizedBox(height: 16),
-                  
-                  // Instructions
-                  _buildInstructionItem(
-                    context,
-                    '1. Tap "Open Settings" below',
-                    fontSize,
+                  SizedBox(height: isSmallScreen ? 10 : 14),
+                  Text(
+                    'Arabic text-to-speech is not installed on your device. '
+                    'Please download the Arabic voice to listen to Surah Yaseen.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: bodyFontSize,
+                      color: AppColors.textGray,
+                      height: 1.5,
+                    ),
+                  ),
+                  SizedBox(height: isSmallScreen ? 16 : 22),
+
+                  _buildStep(
+                    '1',
+                    'Tap "Download Arabic" below',
+                    bodyFontSize,
                   ),
                   SizedBox(height: 8),
-                  _buildInstructionItem(
-                    context,
-                    '2. Find "Language" or "Text-to-speech" settings',
-                    fontSize,
+                  _buildStep(
+                    '2',
+                    'Select Arabic language from the list',
+                    bodyFontSize,
                   ),
                   SizedBox(height: 8),
-                  _buildInstructionItem(
-                    context,
-                    '3. Install Arabic language pack',
-                    fontSize,
+                  _buildStep(
+                    '3',
+                    'Wait for download to complete',
+                    bodyFontSize,
                   ),
                   SizedBox(height: 8),
-                  _buildInstructionItem(
-                    context,
-                    '4. Return to this app and try again',
-                    fontSize,
+                  _buildStep(
+                    '4',
+                    'Return to this app and play again',
+                    bodyFontSize,
                   ),
-                  SizedBox(height: 24),
-                  
-                  // Buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(fontSize: fontSize),
+
+                  SizedBox(height: isSmallScreen ? 20 : 26),
+
+                  // Primary action: Download Arabic
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        Get.back();
+                        if (Platform.isAndroid) {
+                          bool launched = await _installTtsData();
+                          if (!launched) {
+                            await _openTtsSettings();
+                          }
+                        } else {
+                          await _openTtsSettings();
+                        }
+                      },
+                      icon: Icon(Icons.download_rounded, size: 20),
+                      label: Text(
+                        'Download Arabic',
+                        style: TextStyle(
+                          fontSize: buttonFontSize,
+                          fontFamily: merriweather,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(width: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          openTtsSettings();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isSmallScreen ? 16 : 20,
-                            vertical: isSmallScreen ? 10 : 12,
-                          ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.colorone,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text(
-                          'Open Settings',
-                          style: TextStyle(fontSize: fontSize),
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmallScreen ? 12 : 14,
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+
+                  // Secondary: Open TTS settings
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        Get.back();
+                        await _openTtsSettings();
+                      },
+                      icon: Icon(Icons.settings_rounded, size: 18),
+                      label: Text(
+                        'Open TTS Settings',
+                        style: TextStyle(
+                          fontSize: buttonFontSize,
+                          fontFamily: merriweather,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.colorone,
+                        side: BorderSide(color: AppColors.colorone),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmallScreen ? 10 : 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+
+                  // Cancel
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        fontSize: bodyFontSize,
+                        color: AppColors.textGray,
+                        fontFamily: merriweather,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -249,91 +343,269 @@ class TtsLanguageManager {
     );
   }
 
-  Widget _buildInstructionItem(
-    BuildContext context,
-    String text,
-    double fontSize,
-  ) {
+  Widget _buildStep(String number, String text, double fontSize) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.only(top: 4),
-          width: 6,
-          height: 6,
+          width: 24,
+          height: 24,
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: AppColors.PrimaryColor,
             shape: BoxShape.circle,
           ),
+          child: Center(
+            child: Text(
+              number,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
-        SizedBox(width: 8),
+        SizedBox(width: 10),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(fontSize: fontSize),
+            style: TextStyle(
+              fontSize: fontSize,
+              color: AppColors.textGray,
+            ),
           ),
         ),
       ],
     );
   }
 
-  /// Open TTS settings on the device
-  Future<void> openTtsSettings() async {
+  /// Shows a themed troubleshooting dialog matching the app style
+  Future<void> showTroubleshootDialog(
+    BuildContext context, {
+    required bool isTtsInitialized,
+    required bool hasLanguageSupport,
+    String? currentLanguage,
+  }) async {
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 360;
+    final dialogWidth = screenSize.width * 0.85;
+    const dialogMaxWidth = 420.0;
+    final padding = isSmallScreen ? 16.0 : 24.0;
+    final titleFontSize = isSmallScreen ? 17.0 : 19.0;
+    final bodyFontSize = isSmallScreen ? 13.0 : 14.0;
+    final buttonFontSize = isSmallScreen ? 13.0 : 15.0;
+    final merriweather = GoogleFonts.merriweather().fontFamily;
+
+    var languages = <dynamic>[];
+    String? engine;
     try {
-      if (Platform.isAndroid) {
-        // Android: Open TTS settings
-        const androidTtsSettings = 'android.settings.TTS_SETTINGS';
-        final uri = Uri.parse('app-settings:$androidTtsSettings');
-        
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri, mode: LaunchMode.externalApplication);
-        } else {
-          // Fallback: Try to open general settings
-          final generalSettings = Uri.parse('app-settings:');
-          if (await canLaunchUrl(generalSettings)) {
-            await launchUrl(generalSettings, mode: LaunchMode.externalApplication);
-          }
-        }
-      } else if (Platform.isIOS) {
-        // iOS: Open general settings (user needs to navigate to Accessibility > Spoken Content)
-        final settingsUri = Uri.parse('app-settings:');
-        if (await canLaunchUrl(settingsUri)) {
-          await launchUrl(settingsUri, mode: LaunchMode.externalApplication);
-        }
-      }
-    } catch (e) {
-      print("Error opening TTS settings: $e");
-    }
+      languages = await flutterTts.getLanguages;
+      engine = await flutterTts.getDefaultEngine;
+    } catch (_) {}
+
+    final arabicLangs = languages
+        .where((l) => l.toString().toLowerCase().contains('ar'))
+        .toList();
+
+    if (!context.mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        backgroundColor: AppColors.lightColorapp,
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: dialogMaxWidth,
+            maxHeight: screenSize.height * 0.7,
+          ),
+          padding: EdgeInsets.all(padding),
+          width: dialogWidth.clamp(280.0, dialogMaxWidth),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.build_circle_rounded,
+                  size: isSmallScreen ? 36 : 44,
+                  color: AppColors.PrimaryColor,
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'TTS Diagnostics',
+                  style: TextStyle(
+                    fontSize: titleFontSize,
+                    fontFamily: merriweather,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.darkgreenColor,
+                  ),
+                ),
+                SizedBox(height: 16),
+                _buildInfoRow('Engine', engine ?? 'Unknown', bodyFontSize),
+                _buildInfoRow('Language', currentLanguage ?? 'Not set', bodyFontSize),
+                _buildInfoRow(
+                  'Arabic',
+                  hasLanguageSupport ? 'Available' : 'Not Available',
+                  bodyFontSize,
+                  valueColor: hasLanguageSupport
+                      ? AppColors.colorone
+                      : AppColors.errorRed,
+                ),
+                _buildInfoRow(
+                  'TTS Ready',
+                  isTtsInitialized ? 'Yes' : 'No',
+                  bodyFontSize,
+                  valueColor: isTtsInitialized
+                      ? AppColors.colorone
+                      : AppColors.errorRed,
+                ),
+                if (arabicLangs.isNotEmpty) ...[
+                  SizedBox(height: 8),
+                  _buildInfoRow(
+                    'Arabic Voices',
+                    arabicLangs.join(', '),
+                    bodyFontSize,
+                  ),
+                ],
+                SizedBox(height: 20),
+                if (!hasLanguageSupport) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        Get.back();
+                        if (Platform.isAndroid) {
+                          bool launched = await _installTtsData();
+                          if (!launched) await _openTtsSettings();
+                        } else {
+                          await _openTtsSettings();
+                        }
+                      },
+                      icon: Icon(Icons.download_rounded, size: 18),
+                      label: Text(
+                        'Download Arabic',
+                        style: TextStyle(
+                          fontSize: buttonFontSize,
+                          fontFamily: merriweather,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.colorone,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      await flutterTts.speak("بسم الله الرحمن الرحيم");
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.colorone,
+                      side: BorderSide(color: AppColors.colorone),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                    ),
+                    child: Text(
+                      'Test Arabic Voice',
+                      style: TextStyle(
+                        fontSize: buttonFontSize,
+                        fontFamily: merriweather,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'Close',
+                    style: TextStyle(
+                      fontSize: bodyFontSize,
+                      color: AppColors.textGray,
+                      fontFamily: merriweather,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  /// Initialize and ensure Arabic language is available
-  /// Returns true if Arabic is available, false otherwise
+  Widget _buildInfoRow(
+    String label,
+    String value,
+    double fontSize, {
+    Color? valueColor,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.w600,
+                color: AppColors.darkgreenColor,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: fontSize,
+                color: valueColor ?? AppColors.textGray,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<bool> ensureArabicAvailable(BuildContext context) async {
     bool isAvailable = await isArabicAvailable();
-    
+
     if (!isAvailable) {
-      // Show dialog to guide user
       await showArabicInstallDialog(context);
-      // Check again after user might have installed it
       await Future.delayed(Duration(seconds: 1));
       isAvailable = await isArabicAvailable();
     }
-    
+
     return isAvailable;
   }
 
-  /// Initialize and ensure both Arabic and English languages are available
-  /// Returns a map with availability status
   Future<Map<String, bool>> ensureLanguagesAvailable(BuildContext context) async {
     bool arabicAvailable = await isArabicAvailable();
     bool englishAvailable = await isEnglishAvailable();
-    
+
     if (!arabicAvailable) {
       await showArabicInstallDialog(context);
       await Future.delayed(Duration(seconds: 1));
       arabicAvailable = await isArabicAvailable();
     }
-    
+
     return {
       'arabic': arabicAvailable,
       'english': englishAvailable,

@@ -52,11 +52,11 @@ class BookmarkProvider with ChangeNotifier {
       if (_isBoxLoaded) {
         // Clear all bookmarks from the Hive box
         await _bookmarkBox.clear();
-        print("All bookmarks deleted successfully");
+        debugPrint('BookmarkProvider: All bookmarks deleted successfully');
         notifyListeners();
       }
     } catch (e) {
-      print("Error deleting all bookmarks: $e");
+      debugPrint('BookmarkProvider: Error deleting all bookmarks: $e');
     }
   }
 
@@ -72,7 +72,7 @@ class BookmarkProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      print("Error loading bookmarks: $e");
+      debugPrint('BookmarkProvider: Error loading bookmarks: $e');
       _isLoading = false;
       notifyListeners();
     }
@@ -87,7 +87,7 @@ class BookmarkProvider with ChangeNotifier {
   }) async {
     // Check if bookmark already exists
     if (isVerseBookmarked(verseIndex, rukuNumber)) {
-      print("Bookmark already exists!");
+      debugPrint('BookmarkProvider: Bookmark already exists for verse $verseIndex ruku $rukuNumber');
       return false; // Return false to indicate bookmark wasn't added
     }
 
@@ -106,9 +106,11 @@ class BookmarkProvider with ChangeNotifier {
 
     try {
       await _bookmarkBox.put('$verseIndex-$rukuNumber', bookmark);
-      print("Bookmark added: ${bookmark.title} with icon type: ${bookmark.iconType}");
-      print("Total bookmarks: ${_bookmarkBox.values.length}");
+      debugPrint('BookmarkProvider: Bookmark added: ${bookmark.title}');
       notifyListeners();
+
+      // Request notification permission when user bookmarks (needed for bookmark notifications)
+      await NotificationService.requestPermissionsIfNeeded();
 
       await NotificationService.showBookmarkNotification(
         bookmark.title,
@@ -125,7 +127,7 @@ class BookmarkProvider with ChangeNotifier {
 
       return true; // Return true to indicate bookmark was added successfully
     } catch (e) {
-      print("Error adding bookmark: $e");
+      debugPrint('BookmarkProvider: Error adding bookmark: $e');
       return false; // Return false if there was an error
     }
   }
@@ -149,7 +151,7 @@ class BookmarkProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Error removing bookmark: $e");
+      debugPrint('BookmarkProvider: Error removing bookmark: $e');
     }
   }
 
@@ -170,7 +172,7 @@ class BookmarkProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Error removing bookmark by key: $e");
+      debugPrint('BookmarkProvider: Error removing bookmark by key: $e');
     }
   }
 }

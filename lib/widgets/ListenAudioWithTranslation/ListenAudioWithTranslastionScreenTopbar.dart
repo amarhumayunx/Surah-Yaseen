@@ -18,9 +18,7 @@ class TopBarListenAudioWithTranslationScreen extends StatelessWidget {
             AppAssets.backarrow,
             fit: iconFit,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Get.back(),
         ),
         Expanded(
           child: Center(

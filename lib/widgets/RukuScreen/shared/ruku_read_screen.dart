@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:surah_yaseen/widgets/ReadScreen/ReadScreenTopBar.dart';
+import 'package:get/get.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
+import 'package:surah_yaseen/widgets/TopBar/topbartest.dart';
 import 'package:surah_yaseen/widgets/Topbackground/top_background.dart';
 import 'package:surah_yaseen/widgets/Dividerbar/dividerbar.dart';
 import '../../../Colors/colors.dart';
+import '../../../constants/app_constants.dart';
 import 'ruku_config.dart';
 import 'verse_page_container.dart';
 
-/// Generic reusable Ruku Read Screen widget
-/// Replaces all individual Ruku*ReadScreen files
-/// 
-/// Usage:
-/// ```dart
-/// RukuReadScreen(config: RukuConfig.getRukuConfig(1))
-/// ```
 class RukuReadScreen extends StatefulWidget {
   final RukuConfig config;
+  final Widget? bannerAd;
 
-  const RukuReadScreen({
-    super.key,
-    required this.config,
-  });
+  const RukuReadScreen({super.key, required this.config, this.bannerAd});
 
   @override
   State<RukuReadScreen> createState() => _RukuReadScreenState();
@@ -44,9 +37,6 @@ class _RukuReadScreenState extends State<RukuReadScreen> {
   }
 
   int _calculateStartVerseIndex() {
-    // Calculate start verse index based on current page
-    // For Ruku 1: starts at 0, each page has 4 verses
-    // For other Rukus: add the offset
     int baseOffset = widget.config.startVerseIndex;
     int pageOffset = (_currentPage - 1) * widget.config.versesPerPage;
     return baseOffset + pageOffset;
@@ -55,6 +45,13 @@ class _RukuReadScreenState extends State<RukuReadScreen> {
   @override
   void initState() {
     super.initState();
+    final arguments = Get.arguments;
+    if (arguments != null && arguments is Map) {
+      final initialPage = arguments['initialPage'];
+      if (initialPage != null && initialPage is int) {
+        _currentPage = initialPage.clamp(1, widget.config.totalPages);
+      }
+    }
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -67,57 +64,73 @@ class _RukuReadScreenState extends State<RukuReadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.lightColorSec,
       body: Stack(
         children: [
-          // Background
           const TopBackground(),
-          // Main Content
+
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 16,
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.04,
+                vertical: screenHeight * 0.02,
               ),
               child: Column(
                 children: [
-                  const TopBarReadScreen(),
-                  const SizedBox(height: 10),
+                  const TopBarSet(),
+                  SizedBox(height: screenHeight * 0.02),
                   const DividerBar(),
+                  SizedBox(height: screenHeight * 0.02),
                   const SurahTitle(),
-                  const SizedBox(height: 70),
+                  SizedBox(height: screenHeight * 0.07),
 
                   Expanded(
-                    child: Center(
-                      child: VersePageContainer(
-                        rukuNumber: widget.config.rukuNumber,
-                        startVerseIndex: _calculateStartVerseIndex(),
-                        lastVerseIndex: widget.config.lastVerseIndex,
-                        versesPerPage: widget.config.versesPerPage,
-                        versesPerPageDialogBox: widget.config.versesPerPageDialogBox,
-                        currentPage: _currentPage,
-                        totalPages: widget.config.totalPages,
-                        totalPageDialogBox: widget.config.totalPageDialogBox,
-                        dialogStartVerseOffset: widget.config.dialogStartVerseOffset,
-                        onPageChanged: _handlePageChanged,
-                        onPrevPage: _currentPage > 1
-                            ? () {
-                                setState(() {
-                                  _currentPage--;
-                                });
-                              }
-                            : null,
-                        onNextPage: _currentPage < widget.config.totalPages
-                            ? () {
-                                setState(() {
-                                  _currentPage++;
-                                });
-                              }
-                            : null,
-                        isFullScreen: false,
-                        onToggleFullScreen: toggleFullScreen,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        bottom:
+                            widget.bannerAd != null
+                                ? AppConstants.bannerAdBottomPadding +
+                                    screenHeight * 0.02
+                                : 0,
+                      ),
+                      child: Center(
+                        child: VersePageContainer(
+                          rukuNumber: widget.config.rukuNumber,
+                          startVerseIndex: _calculateStartVerseIndex(),
+                          lastVerseIndex: widget.config.lastVerseIndex,
+                          versesPerPage: widget.config.versesPerPage,
+                          versesPerPageDialogBox:
+                              widget.config.versesPerPageDialogBox,
+                          currentPage: _currentPage,
+                          totalPages: widget.config.totalPages,
+                          totalPageDialogBox: widget.config.totalPageDialogBox,
+                          dialogStartVerseOffset:
+                              widget.config.dialogStartVerseOffset,
+                          onPageChanged: _handlePageChanged,
+                          onPrevPage:
+                              _currentPage > 1
+                                  ? () {
+                                    setState(() {
+                                      _currentPage--;
+                                    });
+                                  }
+                                  : null,
+                          onNextPage:
+                              _currentPage < widget.config.totalPages
+                                  ? () {
+                                    setState(() {
+                                      _currentPage++;
+                                    });
+                                  }
+                                  : null,
+                          isFullScreen: false,
+                          onToggleFullScreen: toggleFullScreen,
+                        ),
                       ),
                     ),
                   ),
@@ -125,6 +138,9 @@ class _RukuReadScreenState extends State<RukuReadScreen> {
               ),
             ),
           ),
+
+          if (widget.bannerAd != null)
+            Positioned(bottom: 0, left: 0, right: 0, child: widget.bannerAd!),
         ],
       ),
     );

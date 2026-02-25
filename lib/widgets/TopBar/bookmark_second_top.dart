@@ -44,9 +44,7 @@ class TopBarBookmark extends StatelessWidget {
               fit: iconFit,
               height: 20,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Get.back(),
           ),
           Padding(
             padding: EdgeInsets.only(top: screenHeight * 0.01), // Adjust padding for better alignment
