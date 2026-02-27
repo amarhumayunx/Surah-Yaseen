@@ -17,6 +17,7 @@ import 'package:surah_yaseen/widgets/RukuScreen/RukuScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/RukuFivethScreen/ListenAudioRukuFiveScreen.dart';
 import 'package:surah_yaseen/widgets/RukuFivethScreen/ListenAudioWithTranslationRukuFive.dart';
 import 'package:surah_yaseen/widgets/RukuFivethScreen/RukuFiveReadScreen.dart';
+import 'package:surah_yaseen/widgets/RukuFivethScreen/RukuFiveReadScreenUrdu.dart';
 import 'package:surah_yaseen/widgets/AdaptiveScrollView/adaptive_scroll_view.dart';
 import 'package:surah_yaseen/widgets/RukuFivethScreen/ruku_fifth_banner_ad_widget.dart';
 
@@ -90,6 +91,7 @@ class _RukuFirstScreenState extends State<RukuFiveScreen> {
                               rukuNumber: 5,
                               screenType: AdScreenType.rukuFifth,
                               readScreen: const RukuFiveReadScreen(),
+                              readScreenWithUrdu: const RukuFiveReadScreenUrdu(),
                               listenAudioScreen:
                                   const ListenAudioRukuFiveScreen(),
                               listenAudioWithTranslationScreen:

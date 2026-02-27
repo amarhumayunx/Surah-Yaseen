@@ -114,6 +114,7 @@ class Languages extends Translations {
     'sandb_line5': 'Strengthens faith and connection with Allah.',
 
     'read': 'Read',
+    'read_with_urdu_translation': 'Read With Urdu Translation',
     'listen_audio_with_translation': 'Listen Audio With Translation',
 
     // Settings Screen Strings
@@ -125,6 +126,7 @@ class Languages extends Translations {
     'share': 'Share',
     'help': 'Help',
     'privacy_policy': 'Privacy Policy',
+    'manage_ad_consent': 'Manage ad consent',
     'font_size':'Font Size',
     'bismillah':'In the name of Allah, the Most Compassionate, the Most Merciful',
     'privacy_line': 'This is a sample privacy policy. Your privacy is important to us. We collect your data to improve our services and experience. By using this app, you agree to the terms of our privacy policy.',
@@ -359,6 +361,7 @@ class Languages extends Translations {
     'share': 'شئیر کریں',
     'help': 'مدد',
     'privacy_policy': 'رازداری کی پالیسی',
+    'manage_ad_consent': 'اشتہار کی رضامندی میں تبدیلی',
     'text_under_the_image': 'قرآن کا دل، حکمت اور ہدایت کا سرچشمہ',
     'font_size':'فونٹ سائز',
     'bismillah':'اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے۔',
@@ -386,6 +389,7 @@ class Languages extends Translations {
     'ruku_title_audio4': 'رکوع 4 آڈیو',
     'ruku_title_audio5': 'رکوع 5 آڈیو',
     'read': 'پڑھیں',
+    'read_with_urdu_translation': 'اردو ترجمہ کے ساتھ پڑھیں',
     'listen_audio_with_translation': 'ترجمہ کے ساتھ آڈیو سنیں۔',
     // Listen Audio With Translation Screen Strings
     'ruku_title_audio_trans1': 'رکوع 1 آڈیو بمع ترجمہ',

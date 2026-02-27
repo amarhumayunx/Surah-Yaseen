@@ -9,6 +9,7 @@ import '../Ads/native_style_ad_widget.dart';
 // Reusable Buttons Under Text for all Ruku Screens
 class RukuButtonsUnderText extends StatelessWidget {
   final Widget readScreen;
+  final Widget readScreenWithUrdu;
   final Widget listenAudioScreen;
   final Widget listenAudioWithTranslationScreen;
   final int rukuNumber;
@@ -17,6 +18,7 @@ class RukuButtonsUnderText extends StatelessWidget {
   const RukuButtonsUnderText({
     super.key,
     required this.readScreen,
+    required this.readScreenWithUrdu,
     required this.listenAudioScreen,
     required this.listenAudioWithTranslationScreen,
     required this.rukuNumber,
@@ -31,6 +33,14 @@ class RukuButtonsUnderText extends StatelessWidget {
         _buildButton(
           'read'.tr,
           () => Get.to(() => readScreen),
+        ),
+
+        const SizedBox(height: 12),
+
+        // Read with Urdu translation Button
+        _buildButton(
+          'read_with_urdu_translation'.tr,
+          () => Get.to(() => readScreenWithUrdu),
         ),
 
         const SizedBox(height: 12),

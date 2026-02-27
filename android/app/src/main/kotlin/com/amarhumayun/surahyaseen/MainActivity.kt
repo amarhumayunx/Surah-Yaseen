@@ -1,13 +1,20 @@
 package com.amarhumayun.surahyaseen
 
 import android.content.Intent
+import android.os.Bundle
 import android.provider.Settings
 import android.speech.tts.TextToSpeech
-import io.flutter.embedding.android.FlutterActivity
+import androidx.activity.enableEdgeToEdge
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
+    }
     private val CHANNEL = "com.amarhumayun.surahyaseen/tts"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

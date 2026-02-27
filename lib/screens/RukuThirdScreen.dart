@@ -9,6 +9,7 @@ import 'package:surah_yaseen/widgets/RukuScreen/RukuScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/RukuThirdScreen/ListenAudioRukuThirdScreen.dart';
 import 'package:surah_yaseen/widgets/RukuThirdScreen/ListenAudioWithTranslationRukuThird.dart';
 import 'package:surah_yaseen/widgets/RukuThirdScreen/RukuThirdReadScreen.dart';
+import 'package:surah_yaseen/widgets/RukuThirdScreen/RukuThirdReadScreenUrdu.dart';
 import 'package:surah_yaseen/widgets/AdaptiveScrollView/adaptive_scroll_view.dart';
 import 'package:surah_yaseen/widgets/RukuThirdScreen/ruku_third_banner_ad_widget.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
@@ -90,6 +91,7 @@ class _RukuFirstScreenState extends State<RukuThirdScreen> {
                               rukuNumber: 3,
                               screenType: AdScreenType.rukuThird,
                               readScreen: const RukuThirdReadScreen(),
+                              readScreenWithUrdu: const RukuThirdReadScreenUrdu(),
                               listenAudioScreen:
                                   const ListenAudioRukuThirdScreen(),
                               listenAudioWithTranslationScreen:

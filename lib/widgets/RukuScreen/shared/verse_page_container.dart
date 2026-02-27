@@ -39,6 +39,7 @@ class VersePageContainer extends StatefulWidget {
   final VoidCallback? onNextPage;
   final bool isFullScreen;
   final VoidCallback onToggleFullScreen;
+  final bool useUrduTranslation;
 
   const VersePageContainer({
     super.key,
@@ -56,6 +57,7 @@ class VersePageContainer extends StatefulWidget {
     this.onNextPage,
     required this.isFullScreen,
     required this.onToggleFullScreen,
+    this.useUrduTranslation = false,
   });
 
   @override
@@ -389,11 +391,12 @@ class _VersePageContainerState extends State<VersePageContainer> {
     );
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
-    Map<String, String> versesEnglish =
-        AppStrings.yasinSurahStrings.versesEnglish;
+    Map<String, String> versesTranslation = widget.useUrduTranslation
+        ? AppStrings.yasinSurahStrings.versesUrdu
+        : AppStrings.yasinSurahStrings.versesEnglish;
 
     List<MapEntry<String, String>> arabicEntries = [];
-    List<MapEntry<String, String>> englishEntries = [];
+    List<MapEntry<String, String>> translationEntries = [];
 
     int versesToShow =
         isInDialog ? widget.versesPerPageDialogBox : widget.versesPerPage;
@@ -404,9 +407,9 @@ class _VersePageContainerState extends State<VersePageContainer> {
       i++
     ) {
       String key = 'verse_$i';
-      if (versesArabic.containsKey(key) && versesEnglish.containsKey(key)) {
+      if (versesArabic.containsKey(key) && versesTranslation.containsKey(key)) {
         arabicEntries.add(MapEntry(key, versesArabic[key]!));
-        englishEntries.add(MapEntry(key, versesEnglish[key]!));
+        translationEntries.add(MapEntry(key, versesTranslation[key]!));
       }
     }
 
@@ -419,7 +422,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
       itemBuilder: (context, index) {
         final actualVerseIndex = startIdx + index;
         final arabicText = arabicEntries[index].value;
-        final englishText = englishEntries[index].value;
+        final translationText = translationEntries[index].value;
         final isSelected = _longPressedVerseIndex == index;
 
         final isBookmarked = bookmarkProvider.isVerseBookmarked(
@@ -440,7 +443,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
                 buildContext,
                 actualVerseIndex,
                 arabicText,
-                englishText,
+                translationText,
               );
             });
           },
@@ -483,13 +486,25 @@ class _VersePageContainerState extends State<VersePageContainer> {
                             height: widget.isFullScreen || isInDialog ? 14 : 10,
                           ),
                           Text(
-                            englishText.tr,
-                            style: GoogleFonts.merriweather(
-                              fontSize: 13 + (fontSizeValue * 8),
-                              color: AppColors.BarColor,
-                              height: 1.3,
-                            ),
-                            textAlign: TextAlign.left,
+                            translationText,
+                            style: widget.useUrduTranslation
+                                ? ArabicTextStyle(
+                                    arabicFont: ArabicFont.lateef,
+                                    fontSize: 13 + (fontSizeValue * 8),
+                                    color: AppColors.BarColor,
+                                    height: 1.3,
+                                  )
+                                : GoogleFonts.merriweather(
+                                    fontSize: 13 + (fontSizeValue * 8),
+                                    color: AppColors.BarColor,
+                                    height: 1.3,
+                                  ),
+                            textAlign: widget.useUrduTranslation
+                                ? TextAlign.right
+                                : TextAlign.left,
+                            textDirection: widget.useUrduTranslation
+                                ? TextDirection.rtl
+                                : TextDirection.ltr,
                           ),
                           if (index < arabicEntries.length - 1)
                             SizedBox(
@@ -543,11 +558,12 @@ class _VersePageContainerState extends State<VersePageContainer> {
     int? dialogLongPressedVerseIndex;
 
     Map<String, String> versesArabic = AppStrings.yasinSurahStrings.verses;
-    Map<String, String> versesEnglish =
-        AppStrings.yasinSurahStrings.versesEnglish;
+    Map<String, String> versesTranslation = widget.useUrduTranslation
+        ? AppStrings.yasinSurahStrings.versesUrdu
+        : AppStrings.yasinSurahStrings.versesEnglish;
 
     List<MapEntry<String, String>> arabicEntries = [];
-    List<MapEntry<String, String>> englishEntries = [];
+    List<MapEntry<String, String>> translationEntries = [];
 
     int versesToShow = widget.versesPerPageDialogBox;
 
@@ -557,9 +573,9 @@ class _VersePageContainerState extends State<VersePageContainer> {
       i++
     ) {
       String key = 'verse_$i';
-      if (versesArabic.containsKey(key) && versesEnglish.containsKey(key)) {
+      if (versesArabic.containsKey(key) && versesTranslation.containsKey(key)) {
         arabicEntries.add(MapEntry(key, versesArabic[key]!));
-        englishEntries.add(MapEntry(key, versesEnglish[key]!));
+        translationEntries.add(MapEntry(key, versesTranslation[key]!));
       }
     }
 
@@ -571,7 +587,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
           itemBuilder: (context, index) {
             final actualVerseIndex = startIdx + index;
             final arabicText = arabicEntries[index].value;
-            final englishText = englishEntries[index].value;
+            final translationText = translationEntries[index].value;
             final isSelected = dialogLongPressedVerseIndex == index;
 
             final isBookmarked = bookmarkProvider.isVerseBookmarked(
@@ -594,7 +610,7 @@ class _VersePageContainerState extends State<VersePageContainer> {
 
                   bool wasAdded = await bookmarkProvider.addVerseBookmark(
                     arabicText: arabicText,
-                    englishText: englishText,
+                    englishText: translationText,
                     verseIndex: actualVerseIndex,
                     rukuNumber: widget.rukuNumber,
                   );
@@ -653,13 +669,25 @@ class _VersePageContainerState extends State<VersePageContainer> {
                               ),
                               SizedBox(height: 14),
                               Text(
-                                englishText,
-                                style: GoogleFonts.merriweather(
-                                  fontSize: 13 + (fontSizeValue * 8),
-                                  color: AppColors.BarColor,
-                                  height: 1.3,
-                                ),
-                                textAlign: TextAlign.left,
+                                translationText,
+                                style: widget.useUrduTranslation
+                                    ? ArabicTextStyle(
+                                        arabicFont: ArabicFont.lateef,
+                                        fontSize: 13 + (fontSizeValue * 8),
+                                        color: AppColors.BarColor,
+                                        height: 1.3,
+                                      )
+                                    : GoogleFonts.merriweather(
+                                        fontSize: 13 + (fontSizeValue * 8),
+                                        color: AppColors.BarColor,
+                                        height: 1.3,
+                                      ),
+                                textAlign: widget.useUrduTranslation
+                                    ? TextAlign.right
+                                    : TextAlign.left,
+                                textDirection: widget.useUrduTranslation
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
                               ),
                               if (index < arabicEntries.length - 1)
                                 SizedBox(height: 20),

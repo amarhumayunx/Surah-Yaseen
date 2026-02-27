@@ -10,6 +10,7 @@ import '../../screens/HelpScreen.dart';
 import '../../screens/LanguageScreen.dart';
 import '../../screens/NotificationScreen.dart';
 import '../../screens/PrivacyPolicyWebViewScreen.dart';
+import '../../services/consent_manager.dart';
 
 class MenuOptionsContainer extends StatefulWidget {
   const MenuOptionsContainer({super.key});
@@ -62,6 +63,13 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
                 'privacy_policy'.tr,
                 null,
                 onPrivacyPolicy,
+              ),
+              // Privacy options entry point - required for EEA (GDPR) & US state regulations (CCPA, etc.)
+              _buildMenuItem(
+                Icons.tune,
+                'manage_ad_consent'.tr,
+                null,
+                onManageAdConsent,
               ),
               // Handle the Rate Us button directly here
               _buildMenuItem(Icons.star_border, 'rate_us'.tr, null, onRateUs),
@@ -117,6 +125,11 @@ class _MenuOptionsContainerState extends State<MenuOptionsContainer> {
         ),
       ),
     );
+  }
+
+  // Function for Manage ad consent - opens UMP privacy options form (GDPR revocation)
+  void onManageAdConsent() {
+    ConsentManager.instance.showPrivacyOptionsForm();
   }
 
   // Function for Privacy Policy - opens in custom WebView with floating back button

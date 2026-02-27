@@ -7,6 +7,7 @@ import 'dart:io' show Platform;
 import '../Colors/colors.dart';
 import '../constants/app_assets.dart';
 import '../controllers/navigation_controller.dart';
+import '../widgets/dialogs/exit_dialog.dart';
 import '../widgets/snackbars/exit_snackbar.dart';
 
 /// Navigation style types based on device behavior
@@ -101,7 +102,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
             now.difference(_lastBackPressTime!) < const Duration(seconds: 2);
 
         if (shouldExit) {
-          SystemNavigator.pop();
+          ExitDialog().showExitDialog(context).then((confirmed) {
+            if (confirmed == true) {
+              SystemNavigator.pop();
+            }
+          });
         } else {
           _lastBackPressTime = now;
           ExitSnackBar.show();

@@ -11,6 +11,7 @@ import 'package:surah_yaseen/widgets/RukuScreen/RukuQuoteSection.dart';
 import 'package:surah_yaseen/widgets/RukuSecondScreen/ListenAudioRukuSecondScreen.dart';
 import 'package:surah_yaseen/widgets/RukuSecondScreen/ListenAudioWithTranslationRukuSecond.dart';
 import 'package:surah_yaseen/widgets/RukuSecondScreen/RukuSecondReadScreen.dart';
+import 'package:surah_yaseen/widgets/RukuSecondScreen/RukuSecondReadScreenUrdu.dart';
 import 'package:surah_yaseen/widgets/AdaptiveScrollView/adaptive_scroll_view.dart';
 import 'package:surah_yaseen/widgets/RukuSecondScreen/ruku_second_banner_ad_widget.dart';
 import 'package:surah_yaseen/widgets/TopBar/topbartest.dart';
@@ -91,6 +92,7 @@ class _RukuSecondScreenState extends State<RukuSecondScreen> {
                               rukuNumber: 2,
                               screenType: AdScreenType.rukuSecond,
                               readScreen: const RukuSecondReadScreen(),
+                              readScreenWithUrdu: const RukuSecondReadScreenUrdu(),
                               listenAudioScreen:
                                   const ListenAudioRukuSecondScreen(),
                               listenAudioWithTranslationScreen:

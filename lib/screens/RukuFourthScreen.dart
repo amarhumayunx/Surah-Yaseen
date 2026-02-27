@@ -9,6 +9,7 @@ import 'package:surah_yaseen/widgets/RukuScreen/RukuScreenTopBar.dart';
 import 'package:surah_yaseen/widgets/RukuFourthScreen/ListenAudioRukuFourthScreen.dart';
 import 'package:surah_yaseen/widgets/RukuFourthScreen/ListenAudioWithTranslationRukuFourth.dart';
 import 'package:surah_yaseen/widgets/RukuFourthScreen/RukuFourthReadScreen.dart';
+import 'package:surah_yaseen/widgets/RukuFourthScreen/RukuFourthReadScreenUrdu.dart';
 import 'package:surah_yaseen/widgets/AdaptiveScrollView/adaptive_scroll_view.dart';
 import 'package:surah_yaseen/widgets/RukuFourthScreen/ruku_fourth_banner_ad_widget.dart';
 import 'package:surah_yaseen/widgets/SurahTitle/surat_title.dart';
@@ -91,6 +92,7 @@ class _RukuFirstScreenState extends State<RukuFourthScreen> {
                               rukuNumber: 4,
                               screenType: AdScreenType.rukuFourth,
                               readScreen: const RukuFourthReadScreen(),
+                              readScreenWithUrdu: const RukuFourthReadScreenUrdu(),
                               listenAudioScreen:
                                   const ListenAudioRukuFourthScreen(),
                               listenAudioWithTranslationScreen:

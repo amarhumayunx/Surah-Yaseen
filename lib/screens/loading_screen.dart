@@ -44,18 +44,20 @@ class _LoadingScreenState extends State<LoadingScreen> {
         _loadingStatus = 'Preparing content...';
       });
 
+      // Wait up to 2.5s for ad - don't block splash indefinitely
+      const maxWaitDuration = Duration(milliseconds: 2500);
+      const checkInterval = Duration(milliseconds: 200);
+      var elapsed = Duration.zero;
       bool adLoaded = false;
-      int attempts = 0;
-      const int maxAttempts = 20;
 
-      while (!adLoaded && attempts < maxAttempts) {
-        await Future.delayed(const Duration(milliseconds: 200));
+      while (elapsed < maxWaitDuration) {
         adLoaded = await appOpenAdManager.shouldShowAdOnAppOpen();
-        attempts++;
-
-        if (attempts % 5 == 0) {
+        if (adLoaded) break;
+        await Future.delayed(checkInterval);
+        elapsed += checkInterval;
+        if (mounted) {
           setState(() {
-            _loadingProgress = 0.3 + (attempts / maxAttempts) * 0.3;
+            _loadingProgress = 0.3 + (elapsed.inMilliseconds / maxWaitDuration.inMilliseconds) * 0.3;
           });
         }
       }

@@ -16,6 +16,7 @@ import 'package:surah_yaseen/services/verse_navigation_service.dart';
 import 'package:surah_yaseen/widgets/BookmarkScreen/BookmarkProvider.dart';
 import 'package:surah_yaseen/widgets/FontSize/FontSizeProvider.dart';
 import 'package:surah_yaseen/widgets/Language/Language.dart';
+import 'package:surah_yaseen/services/consent_manager.dart';
 import 'package:surah_yaseen/services/app_open_ad_manager.dart';
 import 'package:surah_yaseen/services/interstitial_ad_manager.dart';
 import 'package:surah_yaseen/services/analytics_service.dart';
@@ -65,6 +66,9 @@ void main() async {
   InitializationSettings(android: initializationSettingsAndroid);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  // UMP consent flow (required for personalized ads in EEA/UK/Switzerland)
+  await ConsentManager.instance.initialize();
 
   // Initialize Google Mobile Ads SDK
   await MobileAds.instance.initialize();

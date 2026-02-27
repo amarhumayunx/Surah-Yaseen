@@ -13,8 +13,14 @@ import 'verse_page_container.dart';
 class RukuReadScreen extends StatefulWidget {
   final RukuConfig config;
   final Widget? bannerAd;
+  final bool useUrduTranslation;
 
-  const RukuReadScreen({super.key, required this.config, this.bannerAd});
+  const RukuReadScreen({
+    super.key,
+    required this.config,
+    this.bannerAd,
+    this.useUrduTranslation = false,
+  });
 
   @override
   State<RukuReadScreen> createState() => _RukuReadScreenState();
@@ -111,6 +117,7 @@ class _RukuReadScreenState extends State<RukuReadScreen> {
                           totalPageDialogBox: widget.config.totalPageDialogBox,
                           dialogStartVerseOffset:
                               widget.config.dialogStartVerseOffset,
+                          useUrduTranslation: widget.useUrduTranslation,
                           onPageChanged: _handlePageChanged,
                           onPrevPage:
                               _currentPage > 1
