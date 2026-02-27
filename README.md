@@ -39,6 +39,12 @@ It offers ruku-wise navigation, audio playback, translations, bookmarks, and dai
 
 ---
 
+## Download
+
+- **Google Play Store**: [`Surah Yaseen Companion`](https://play.google.com/store/apps/details?id=com.surahyaseen.companion)
+
+---
+
 ## Tech Stack
 
 - **Framework**: Flutter (`sdk: ^3.7.2`)
